@@ -524,8 +524,8 @@ img { max-width: 100%; height: auto; display: block; }
   50% { opacity: 1; }
 }
 
-/* Interactive particle canvas — above orbs, below content */
-.hero-canvas {
+/* Interactive starfield canvas */
+#hero-canvas {
   position: absolute;
   inset: 0;
   z-index: 1;

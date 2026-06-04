@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>首页 — 亚洲体育健康协会国际会议</title>
   <meta name="description" content="亚洲体育健康协会国际会议官方网站 — 汇聚亚洲体育健康领域专家学者，推动体医融合发展">
-  <link rel="stylesheet" href="../css/style.css?v=9">
+  <link rel="stylesheet" href="../css/style.css?v=10">
   <link rel="preload" href="../images/icons.svg" as="image" type="image/svg+xml">
 </head>
 <body>
@@ -48,7 +48,43 @@
 
   <!-- ====== HERO ====== -->
   <section class="hero" style="background: linear-gradient(to bottom, #040d1a 0%, #0a1f3a 25%, #0f3055 45%, #1e5580 65%, #5a95ba 82%, #ffffff 100%);">
-    <canvas class="hero-canvas"></canvas>
+    <canvas id="hero-canvas"></canvas>
+
+    <script>
+(function(){var c=document.getElementById('hero-canvas');if(!c)return;var ctx=c.getContext('2d');var stars=[],mouse={x:-9999,y:-9999,active:!1},STAR_COUNT=250,animId,frame=0;
+function resize(){var r=c.parentElement.getBoundingClientRect();c.width=r.width||c.parentElement.offsetWidth||1200;c.height=r.height||c.parentElement.offsetHeight||700}
+setTimeout(resize,100);window.addEventListener('resize',resize);
+c.addEventListener('mousemove',function(e){var r=c.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;mouse.active=!0});
+c.addEventListener('mouseleave',function(){mouse.active=!1});
+c.addEventListener('touchmove',function(e){e.preventDefault();var r=c.getBoundingClientRect();mouse.x=e.touches[0].clientX-r.left;mouse.y=e.touches[0].clientY-r.top;mouse.active=!0},{passive:!1});
+c.addEventListener('touchend',function(){mouse.active=!1});
+function Star(){this.x=Math.random()*(c.width||1200);this.y=Math.random()*(c.height||700);this.ox=this.x;this.oy=this.y;
+var t=Math.random();if(t<0.75){this.radius=Math.random()*0.5+0.2;this.baseAlpha=Math.random()*0.25+0.1}else if(t<0.95){this.radius=Math.random()*0.8+0.5;this.baseAlpha=Math.random()*0.35+0.25}else{this.radius=Math.random()*1.2+0.6;this.baseAlpha=Math.random()*0.5+0.4}
+this.twinkleSpeed=Math.random()*0.03+0.005;this.twinkleAmp=Math.random()*0.5+0.3;this.phase=Math.random()*Math.PI*2;
+this.gleamTimer=100+Math.random()*500;this.gleamPower=0;this.gleamDecay=0.02+Math.random()*0.04;
+var temp=Math.random();if(temp<0.08){this.r=255;this.g=220;this.b=150}else if(temp<0.2){this.r=180;this.g=210;this.b=255}else{this.r=235;this.g=245;this.b=255}}
+Star.prototype.update=function(){this.phase+=this.twinkleSpeed;frame+=0.0001;
+this.gleamTimer--;if(this.gleamTimer<=0){this.gleamPower=0.7+Math.random()*0.3;this.gleamTimer=200+Math.random()*600}
+if(this.gleamPower>0.001){this.gleamPower*=1-this.gleamDecay}else this.gleamPower=0;
+if(mouse.active){var dx=mouse.x-this.x,dy=mouse.y-this.y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<200&&dist>2){var g=(200-dist)/200;g=g*g*0.03;this.x+=dx*g;this.y+=dy*g}}
+this.x+=(this.ox-this.x)*0.005;this.y+=(this.oy-this.y)*0.005;
+this.ox+=Math.sin(frame+this.phase)*0.015;this.oy+=Math.cos(frame*0.7+this.phase)*0.01;
+if(this.ox<-20)this.ox=c.width+20;if(this.ox>c.width+20)this.ox=-20;if(this.oy<-20)this.oy=c.height+20;if(this.oy>c.height+20)this.oy=-20;
+var twinkle=0.5+0.5*Math.sin(this.phase);twinkle=this.baseAlpha*(0.6+this.twinkleAmp*twinkle);
+if(this.gleamPower>0.001)twinkle+=this.gleamPower*(0.6+this.baseAlpha*0.4);
+return Math.min(1,twinkle)};
+Star.prototype.draw=function(a){if(a<0.03)return;
+var glow=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.radius*3);
+glow.addColorStop(0,'rgba('+this.r+','+this.g+','+this.b+','+(a*0.9)+')');
+glow.addColorStop(0.4,'rgba('+this.r+','+this.g+','+this.b+','+(a*0.3)+')');
+glow.addColorStop(1,'rgba('+this.r+','+this.g+','+this.b+',0)');
+ctx.beginPath();ctx.arc(this.x,this.y,this.radius*3,0,Math.PI*2);ctx.fillStyle=glow;ctx.fill();
+ctx.beginPath();ctx.arc(this.x,this.y,this.radius*0.7,0,Math.PI*2);ctx.fillStyle='rgba('+this.r+','+this.g+','+this.b+','+a+')';ctx.fill()};
+for(var i=0;i<STAR_COUNT;i++)stars.push(new Star());
+function animate(){ctx.clearRect(0,0,c.width,c.height);for(var i=0;i<stars.length;i++){var a=stars[i].update();stars[i].draw(a)}animId=requestAnimationFrame(animate)}
+var obs=new IntersectionObserver(function(e){if(e[0].isIntersecting){if(!animId)animate()}else{if(animId){cancelAnimationFrame(animId);animId=null}}},{threshold:0});
+obs.observe(c.parentElement);animate()})();
+    </script>
 
     <div class="container">
       <div class="hero-eyebrow">International Conference</div>
@@ -199,6 +235,6 @@
     </div>
   </footer>
 
-  <script src="../js/main.js?v=9"></script>
+  <script src="../js/main.js?v=10"></script>
 </body>
 </html>
