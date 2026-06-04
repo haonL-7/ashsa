@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>首页 — 亚洲体育健康协会国际会议</title>
   <meta name="description" content="亚洲体育健康协会国际会议官方网站 — 汇聚亚洲体育健康领域专家学者，推动体医融合发展">
-  <link rel="stylesheet" href="../css/style.css?v=10">
+  <link rel="stylesheet" href="../css/style.css?v=11">
   <link rel="preload" href="../images/icons.svg" as="image" type="image/svg+xml">
 </head>
 <body>
@@ -49,57 +49,94 @@
   <!-- ====== HERO ====== -->
   <section class="hero" style="background: linear-gradient(to bottom, #040d1a 0%, #0a1f3a 25%, #0f3055 45%, #1e5580 65%, #5a95ba 82%, #ffffff 100%);">
     <canvas id="hero-canvas"></canvas>
+<script>
+(function(){var C=document.getElementById('hero-canvas');if(!C)return;var X=C.getContext('2d');
+var stars=[],M={x:0,y:0,on:0},N=500,A,frame=0,W,H;
 
-    <script>
-(function(){var c=document.getElementById('hero-canvas');if(!c)return;var ctx=c.getContext('2d');
-var stars=[],mouse={x:-9999,y:-9999,active:!1},STAR_COUNT=400,animId,frame=0;
-function resize(){var p=c.parentElement;c.width=p.offsetWidth||p.clientWidth||window.innerWidth;c.height=p.offsetHeight||p.clientHeight||700}
-resize();window.addEventListener('resize',function(){resize();for(var i=0;i<stars.length;i++){stars[i].ox=Math.random()*c.width;stars[i].oy=Math.random()*c.height;stars[i].x=stars[i].ox;stars[i].y=stars[i].oy}});
-function getMouse(e){var r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*(c.width/r.width),y:(e.clientY-r.top)*(c.height/r.height)}}
-c.addEventListener('mousemove',function(e){var m=getMouse(e);mouse.x=m.x;mouse.y=m.y;mouse.active=!0});
-c.addEventListener('mouseleave',function(){mouse.active=!1});
-c.addEventListener('touchmove',function(e){e.preventDefault();var m=getMouse(e.touches[0]);mouse.x=m.x;mouse.y=m.y;mouse.active=!0},{passive:!1});
-c.addEventListener('touchend',function(){mouse.active=!1});
+function R(){var p=C.parentElement;W=p.offsetWidth||window.innerWidth;H=p.offsetHeight||700;
+C.width=W;C.height=H;C.style.width=W+'px';C.style.height=H+'px'}R();window.addEventListener('resize',R);
 
-function Star(){this.ox=Math.random()*c.width;this.oy=Math.random()*c.height;this.x=this.ox;this.y=this.oy;
-var tier=Math.random();
-if(tier<0.6){this.radius=0.3+Math.random()*0.5;this.baseAlpha=0.12+Math.random()*0.18}
-else if(tier<0.88){this.radius=0.6+Math.random()*0.7;this.baseAlpha=0.25+Math.random()*0.3}
-else if(tier<0.97){this.radius=1.0+Math.random()*1.0;this.baseAlpha=0.4+Math.random()*0.35}
-else{this.radius=1.5+Math.random()*1.2;this.baseAlpha=0.6+Math.random()*0.4}
-this.twinkleSpeed=0.003+Math.random()*0.04;this.twinkleAmp=0.3+Math.random()*0.7;this.phase=Math.random()*Math.PI*2;
-this.gleamTimer=80+Math.random()*400;this.gleamPower=0;this.gleamDecay=0.015+Math.random()*0.05;
-var temp=Math.random();var warm=temp<0.06;var hot=temp<0.2;
-this.r=warm?255:hot?170:225;this.g=warm?210:hot?215:240;this.b=warm?140:hot?255:255}
+C.addEventListener('mousemove',function(e){var r=C.getBoundingClientRect();M.x=e.clientX-r.left;M.y=e.clientY-r.top;M.on=1});
+C.addEventListener('mouseleave',function(){M.on=0});
+C.addEventListener('touchmove',function(e){e.preventDefault();var r=C.getBoundingClientRect();M.x=e.touches[0].clientX-r.left;M.y=e.touches[0].clientY-r.top;M.on=1},{passive:0});
+C.addEventListener('touchend',function(){M.on=0});
 
-Star.prototype.update=function(){this.phase+=this.twinkleSpeed;frame+=0.00015;
-this.gleamTimer--;if(this.gleamTimer<=0){this.gleamPower=0.6+Math.random()*0.4;this.gleamTimer=150+Math.random()*500}
-if(this.gleamPower>0.001)this.gleamPower*=1-this.gleamDecay;else this.gleamPower=0;
-if(mouse.active){var dx=mouse.x-this.x,dy=mouse.y-this.y,dist=Math.sqrt(dx*dx+dy*dy);
-if(dist<250&&dist>1){var f=(1-dist/250);f=f*f*0.04;this.x+=dx*f;this.y+=dy*f}}
-this.x+=(this.ox-this.x)*0.003;this.y+=(this.oy-this.y)*0.003;
-this.ox+=Math.sin(frame+this.phase)*0.02;this.oy+=Math.cos(frame*0.6+this.phase)*0.015;
-if(this.ox<-30)this.ox=c.width+30;if(this.ox>c.width+30)this.ox=-30;if(this.oy<-30)this.oy=c.height+30;if(this.oy>c.height+30)this.oy=-30;
-var t=0.5+0.5*Math.sin(this.phase);var a=this.baseAlpha*(0.5+this.twinkleAmp*t);
-if(this.gleamPower>0.001)a+=this.gleamPower*(0.5+this.baseAlpha*0.5);
+var GCX=W*0.5,GCY=H*0.4,ANGLE=-0.55,AXIS_A=W*0.7,AXIS_B=H*0.18,CORE_R=120;
+
+function inGalaxy(x,y){
+  var dx=x-GCX,dy=y-GCY;
+  var rx=dx*Math.cos(-ANGLE)-dy*Math.sin(-ANGLE);
+  var ry=dx*Math.sin(-ANGLE)+dy*Math.cos(-ANGLE);
+  return (rx*rx)/(AXIS_A*AXIS_A)+(ry*ry)/(AXIS_B*AXIS_B)
+}
+
+function Star(){
+  var ok=0,t=0;
+  while(!ok&&t<100){
+    var tx=Math.random()*W,ty=Math.random()*H,d=inGalaxy(tx,ty);
+    if(d<1||(d<4&&Math.random()<0.15)||Math.random()<0.03){this.x=tx;this.y=ty;ok=1}t++
+  }
+  if(!ok){this.x=Math.random()*W;this.y=Math.random()*H}
+  this.ox=this.x;this.oy=this.y;
+  var dx=this.x-GCX,dy=this.y-GCY;var dc=Math.sqrt(dx*dx+dy*dy)/Math.max(W,H);
+  var b=1-Math.min(1,dc*1.5);
+  var tier=Math.random()*(0.3+b*0.7);
+  if(tier<0.5){this.rr=0.3+Math.random()*0.6;this.ba=0.08+Math.random()*0.2}
+  else if(tier<0.8){this.rr=0.6+Math.random()*0.8;this.ba=0.2+Math.random()*0.35}
+  else if(tier<0.95){this.rr=1.0+Math.random()*1.2;this.ba=0.35+Math.random()*0.4}
+  else{this.rr=1.5+Math.random()*1.5;this.ba=0.55+Math.random()*0.45}
+  this.ts=0.002+Math.random()*0.05;this.ta=0.3+Math.random()*0.7;this.ph=Math.random()*Math.PI*2;
+  this.gt=60+Math.random()*350;this.gp=0;this.gd=0.012+Math.random()*0.06;
+  var temp=Math.random(),w=temp<0.05,h=temp<0.18;
+  this.r=w?255:h?170:230;this.g=w?215:h?215:240;this.b=w?145:h?255:255
+}
+
+Star.prototype.up=function(){this.ph+=this.ts;frame+=0.0001;
+this.gt--;if(this.gt<=0){this.gp=0.5+Math.random()*0.5;this.gt=120+Math.random()*450}
+this.gp*=this.gp>0.001?1-this.gd:0;
+if(M.on){var dx=M.x-this.x,dy=M.y-this.y,dist=Math.sqrt(dx*dx+dy*dy);
+if(dist<220&&dist>1){var f=(1-dist/220);f=f*f*0.045;this.x+=dx*f;this.y+=dy*f}}
+this.x+=(this.ox-this.x)*0.002;this.y+=(this.oy-this.y)*0.002;
+this.ox+=Math.sin(frame*1.3+this.ph)*0.025;this.oy+=Math.cos(frame+this.ph)*0.018;
+if(this.ox<-50)this.ox=W+50;if(this.ox>W+50)this.ox=-50;if(this.oy<-50)this.oy=H+50;if(this.oy>H+50)this.oy=-50;
+var t=0.5+0.5*Math.sin(this.ph),a=this.ba*(0.4+this.ta*t);
+if(this.gp>0.001)a+=this.gp*(0.4+this.ba*0.5);
 return Math.min(1,a)};
 
-Star.prototype.draw=function(a){if(a<0.02)return;
-var rr=this.radius,gr=rr*5;
-var g=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,gr);
-var R=this.r,G=this.g,B=this.b;
-g.addColorStop(0,'rgba('+R+','+G+','+B+','+(a*0.95)+')');
-g.addColorStop(0.15,'rgba('+R+','+G+','+B+','+(a*0.5)+')');
-g.addColorStop(0.5,'rgba('+R+','+G+','+B+','+(a*0.1)+')');
-g.addColorStop(1,'rgba('+R+','+G+','+B+',0)');
-ctx.beginPath();ctx.arc(this.x,this.y,gr,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
-if(a>0.15){ctx.beginPath();ctx.arc(this.x,this.y,rr*0.5,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,'+(a*0.7)+')';ctx.fill()}};
+Star.prototype.draw=function(a){if(a<0.015)return;
+var gr=this.rr*6,g=X.createRadialGradient(this.x,this.y,0,this.x,this.y,gr),rr=this.r,gg=this.g,bb=this.b;
+g.addColorStop(0,'rgba('+rr+','+gg+','+bb+','+(a*0.95)+')');
+g.addColorStop(0.12,'rgba('+rr+','+gg+','+bb+','+(a*0.4)+')');
+g.addColorStop(0.45,'rgba('+rr+','+gg+','+bb+','+(a*0.06)+')');
+g.addColorStop(1,'rgba('+rr+','+gg+','+bb+',0)');
+X.beginPath();X.arc(this.x,this.y,gr,0,Math.PI*2);X.fillStyle=g;X.fill();
+if(a>0.12){X.beginPath();X.arc(this.x,this.y,this.rr*0.35,0,Math.PI*2);X.fillStyle='rgba(255,255,255,'+(a*0.75)+')';X.fill()}};
 
-for(var i=0;i<STAR_COUNT;i++)stars.push(new Star());
-function animate(){ctx.clearRect(0,0,c.width,c.height);for(var i=0;i<stars.length;i++){var a=stars[i].update();stars[i].draw(a)}animId=requestAnimationFrame(animate)}
-var obs=new IntersectionObserver(function(e){if(e[0].isIntersecting){if(!animId)animate()}else{if(animId){cancelAnimationFrame(animId);animId=null}}},{threshold:0});
-obs.observe(c.parentElement);animate()})();
-    </script>
+function drawGlow(){
+  X.save();X.translate(GCX,GCY);X.rotate(ANGLE);
+  var g1=X.createRadialGradient(0,0,0,0,0,AXIS_A);
+  g1.addColorStop(0,'rgba(180,200,240,0.07)');g1.addColorStop(0.15,'rgba(150,180,230,0.04)');
+  g1.addColorStop(0.4,'rgba(100,140,200,0.015)');g1.addColorStop(0.7,'rgba(60,90,150,0.005)');
+  g1.addColorStop(1,'rgba(0,0,0,0)');
+  X.beginPath();X.ellipse(0,0,AXIS_A,AXIS_B,0,0,Math.PI*2);X.fillStyle=g1;X.fill();
+  var g2=X.createRadialGradient(0,0,0,0,0,CORE_R*1.8);
+  g2.addColorStop(0,'rgba(255,240,210,0.09)');g2.addColorStop(0.3,'rgba(220,200,170,0.04)');
+  g2.addColorStop(0.7,'rgba(150,140,180,0.01)');g2.addColorStop(1,'rgba(0,0,0,0)');
+  X.beginPath();X.arc(0,0,CORE_R*1.8,0,Math.PI*2);X.fillStyle=g2;X.fill();X.restore()
+}
+
+for(var i=0;i<N;i++)stars.push(new Star());
+function animate(){
+  X.clearRect(0,0,W,H);
+  GCX+=Math.sin(frame*0.02)*0.08;GCY+=Math.cos(frame*0.025)*0.05;
+  GCX=Math.max(W*0.2,Math.min(W*0.8,GCX));GCY=Math.max(H*0.15,Math.min(H*0.6,GCY));
+  drawGlow();
+  for(var i=0;i<stars.length;i++){var a=stars[i].up();stars[i].draw(a)}
+  A=requestAnimationFrame(animate)
+}
+var obs=new IntersectionObserver(function(e){if(e[0].isIntersecting){if(!A)animate()}else{if(A){cancelAnimationFrame(A);A=null}}},{threshold:0});
+obs.observe(C.parentElement);animate()})();
+</script>
 
     <div class="container">
       <div class="hero-eyebrow">International Conference</div>
@@ -250,6 +287,6 @@ obs.observe(c.parentElement);animate()})();
     </div>
   </footer>
 
-  <script src="../js/main.js?v=10"></script>
+  <script src="../js/main.js?v=11"></script>
 </body>
 </html>
