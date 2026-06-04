@@ -38,17 +38,17 @@
     }
 
     // ============================================================
-    // INTERACTIVE PARTICLE FIELD — mouse-responsive cosmic canvas
+    // INTERACTIVE PARTICLE FIELD — subtle cosmic dust, bottom-up emergence
     // ============================================================
     var canvas = document.querySelector('.hero-canvas');
     if (canvas && canvas.getContext) {
       var ctx = canvas.getContext('2d');
       var particles = [];
       var mouse = { x: -9999, y: -9999, active: false };
-      var PARTICLE_COUNT = 120;
-      var MOUSE_RADIUS = 160;
-      var MOUSE_FORCE = 0.025;
-      var CONNECT_DIST = 100;
+      var PARTICLE_COUNT = 100;
+      var INTERACT_RADIUS = 70;
+      var INTERACT_FORCE = 0.008;
+      var CONNECT_DIST = 80;
       var animId;
 
       function resize() {
@@ -59,7 +59,7 @@
       resize();
       window.addEventListener('resize', resize);
 
-      // Track mouse
+      // Mouse tracking
       canvas.addEventListener('mousemove', function (e) {
         var rect = canvas.getBoundingClientRect();
         mouse.x = e.clientX - rect.left;
@@ -69,7 +69,6 @@
       canvas.addEventListener('mouseleave', function () {
         mouse.active = false;
       });
-      // Touch support
       canvas.addEventListener('touchmove', function (e) {
         e.preventDefault();
         var rect = canvas.getBoundingClientRect();
@@ -81,80 +80,89 @@
         mouse.active = false;
       });
 
-      // Particle class
+      // Particle — emerges from bottom, drifts upward
       function Particle() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.vx = (Math.random() - 0.5) * 0.3;
-        this.vy = -(Math.random() * 0.4 + 0.1); // gentle upward drift
-        this.radius = Math.random() * 2.2 + 1;
-        this.baseOpacity = Math.random() * 0.5 + 0.35;
-        this.opacity = this.baseOpacity;
-        this.twinkleSpeed = Math.random() * 0.02 + 0.005;
-        this.twinkleOffset = Math.random() * Math.PI * 2;
-        this.hue = Math.random() < 0.2 ? 42 : 210; // occasional gold, mostly blue-white
+        this.reset(true);
       }
 
-      Particle.prototype.update = function () {
-        // Mouse interaction — repulsion field
-        var dx = this.x - mouse.x;
-        var dy = this.y - mouse.y;
-        var dist = Math.sqrt(dx * dx + dy * dy);
+      Particle.prototype.reset = function (initial) {
+        // Spawn predominantly in the lower portion
+        this.x = Math.random() * canvas.width;
+        this.y = initial
+          ? Math.random() * canvas.height
+          : canvas.height + 5 + Math.random() * 30;
+        this.vx = (Math.random() - 0.5) * 0.25;
+        this.vy = -(Math.random() * 0.45 + 0.2);
+        this.radius = Math.random() * 1.2 + 0.4;
+        this.baseAlpha = Math.random() * 0.35 + 0.15;
+        this.alpha = initial ? this.baseAlpha : 0;
+        this.emerging = !initial;
+        this.twinklePhase = Math.random() * Math.PI * 2;
+        this.twinkleRate = Math.random() * 0.015 + 0.005;
+      };
 
-        if (mouse.active && dist < MOUSE_RADIUS && dist > 0) {
-          var force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
-          force = force * force * MOUSE_FORCE;
-          var angle = Math.atan2(dy, dx);
-          // Push away + tangential swirl for organic feel
-          this.vx += Math.cos(angle) * force * 1.2 + Math.sin(angle) * force * 0.3;
-          this.vy += Math.sin(angle) * force * 1.2 - Math.cos(angle) * force * 0.3;
-          this.opacity = Math.min(1, this.baseOpacity + force * 10);
-        } else {
-          this.opacity += (this.baseOpacity - this.opacity) * 0.05;
+      Particle.prototype.update = function () {
+        this.twinklePhase += this.twinkleRate;
+
+        // Emerge animation — pop into existence at bottom
+        if (this.emerging) {
+          this.alpha += 0.008;
+          if (this.alpha >= this.baseAlpha) {
+            this.alpha = this.baseAlpha;
+            this.emerging = false;
+          }
         }
 
-        // Twinkle
-        this.twinkleOffset += this.twinkleSpeed;
-        var twinkle = 1 + Math.sin(this.twinkleOffset) * 0.3;
+        // Mouse interaction — only nearby particles, gentle orbital nudge
+        if (mouse.active) {
+          var dx = this.x - mouse.x;
+          var dy = this.y - mouse.y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < INTERACT_RADIUS && dist > 1) {
+            var t = 1 - dist / INTERACT_RADIUS;
+            var force = t * t * INTERACT_FORCE;
+            var angle = Math.atan2(dy, dx);
+            // Gentle swirl — tangent dominant, slight repel
+            this.vx += Math.cos(angle) * force * 0.4 + Math.sin(angle) * force * 0.9;
+            this.vy += Math.sin(angle) * force * 0.4 - Math.cos(angle) * force * 0.9;
+          }
+        }
 
         // Move
         this.x += this.vx;
         this.y += this.vy;
 
         // Damping
-        this.vx *= 0.999;
-        this.vy *= 0.999;
+        this.vx *= 0.998;
+        this.vy *= 0.998;
 
-        // Wrap around
-        if (this.y < -10) { this.y = canvas.height + 10; this.x = Math.random() * canvas.width; }
-        if (this.y > canvas.height + 10) { this.y = -10; this.x = Math.random() * canvas.width; }
+        // Recycle — if floated above top, respawn from bottom
+        if (this.y < -15) {
+          this.y = canvas.height + 5 + Math.random() * 20;
+          this.x = Math.random() * canvas.width;
+          this.vx = (Math.random() - 0.5) * 0.25;
+          this.vy = -(Math.random() * 0.45 + 0.2);
+          this.alpha = 0;
+          this.emerging = true;
+        }
+        // If drifted too far down, nudge back up
+        if (this.y > canvas.height + 40) {
+          this.vy = -(Math.random() * 0.45 + 0.2);
+        }
+        // Horizontal wrap
         if (this.x < -10) this.x = canvas.width + 10;
         if (this.x > canvas.width + 10) this.x = -10;
 
-        return twinkle;
+        return this.alpha * (1 + Math.sin(this.twinklePhase) * 0.25);
       };
 
-      Particle.prototype.draw = function (twinkle) {
-        var alpha = this.opacity * twinkle;
+      Particle.prototype.draw = function (alpha) {
+        if (alpha < 0.02) return;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        if (this.hue === 42) {
-          ctx.fillStyle = 'rgba(218,165,32,' + alpha + ')';
-        } else {
-          ctx.fillStyle = 'rgba(180,210,240,' + alpha + ')';
-        }
+        ctx.fillStyle = 'rgba(190,215,245,' + alpha + ')';
         ctx.fill();
-
-        // Glow for larger particles
-        if (this.radius > 1.2 && alpha > 0.4) {
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.radius * 3, 0, Math.PI * 2);
-          var glow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 3);
-          glow.addColorStop(0, 'rgba(200,220,255,' + (alpha * 0.4) + ')');
-          glow.addColorStop(1, 'rgba(200,220,255,0)');
-          ctx.fillStyle = glow;
-          ctx.fill();
-        }
       };
 
       // Init particles
@@ -162,56 +170,42 @@
         particles.push(new Particle());
       }
 
-      // Draw connection lines between nearby particles
+      // Subtle connections between very close particles
       function drawConnections() {
         for (var i = 0; i < particles.length; i++) {
+          if (particles[i].alpha < 0.1) continue;
           for (var j = i + 1; j < particles.length; j++) {
+            if (particles[j].alpha < 0.1) continue;
             var dx = particles[i].x - particles[j].x;
             var dy = particles[i].y - particles[j].y;
             var dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < CONNECT_DIST) {
-              var alpha = (1 - dist / CONNECT_DIST) * 0.08;
+              var lineAlpha = (1 - dist / CONNECT_DIST) * 0.04;
               ctx.beginPath();
               ctx.moveTo(particles[i].x, particles[i].y);
               ctx.lineTo(particles[j].x, particles[j].y);
-              ctx.strokeStyle = 'rgba(180,210,240,' + alpha + ')';
-              ctx.lineWidth = 0.5;
+              ctx.strokeStyle = 'rgba(190,215,245,' + lineAlpha + ')';
+              ctx.lineWidth = 0.3;
               ctx.stroke();
             }
           }
         }
       }
 
-      // Mouse glow ring
-      function drawMouseGlow() {
-        if (!mouse.active) return;
-        var glow = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, MOUSE_RADIUS);
-        glow.addColorStop(0, 'rgba(200,220,255,0.08)');
-        glow.addColorStop(0.5, 'rgba(180,200,240,0.03)');
-        glow.addColorStop(1, 'rgba(180,200,240,0)');
-        ctx.beginPath();
-        ctx.arc(mouse.x, mouse.y, MOUSE_RADIUS, 0, Math.PI * 2);
-        ctx.fillStyle = glow;
-        ctx.fill();
-      }
-
-      console.log('Particle field init: ' + PARTICLE_COUNT + ' particles, canvas ' + canvas.width + 'x' + canvas.height);
-
       // Animation loop
       function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         for (var i = 0; i < particles.length; i++) {
-          var twinkle = particles[i].update();
-          particles[i].draw(twinkle);
+          var alpha = particles[i].update();
+          particles[i].draw(alpha);
         }
 
         drawConnections();
-        drawMouseGlow();
         animId = requestAnimationFrame(animate);
       }
 
-      // Only animate when visible
+      // Pause when off-screen
       var heroObserver = new IntersectionObserver(function (entries) {
         if (entries[0].isIntersecting) {
           if (!animId) animate();

@@ -497,52 +497,37 @@ img { max-width: 100%; height: auto; display: block; }
    HERO
    ============================================================ */
 .hero {
-  background: var(--primary);
+  /* Blue extends downward as the dominant canvas, dissolving gradually */
+  background: linear-gradient(to bottom,
+    var(--primary) 0%,
+    var(--primary) 45%,
+    var(--primary-lt) 70%,
+    #2a5a8a 85%,
+    var(--bg) 100%
+  );
   color: var(--white);
-  padding: var(--space-3xl) 0 200px;
+  padding: var(--space-3xl) 0 240px;
   text-align: center;
   position: relative;
   overflow: hidden;
   isolation: isolate;
 }
 
-/* Cosmic gradient — blue canvas dissolving downward into space */
-.hero::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 320px;
-  background:
-    linear-gradient(to bottom,
-      transparent 0%,
-      transparent 10%,
-      rgba(20,66,114,0.3) 30%,
-      rgba(44,116,179,0.15) 50%,
-      rgba(246,248,251,0.05) 70%,
-      var(--bg) 100%
-    );
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* 4D depth field — layered color washes */
+/* Subtle depth texture — radial washes behind particles */
 .hero::after {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 120% 50% at 30% 50%, rgba(44,116,179,0.15) 0%, transparent 60%),
-    radial-gradient(ellipse 80% 30% at 70% 30%, rgba(196,167,71,0.08) 0%, transparent 50%),
-    radial-gradient(ellipse 60% 100% at 50% 100%, rgba(255,255,255,0.06) 0%, transparent 50%);
+    radial-gradient(ellipse 100% 40% at 25% 45%, rgba(44,116,179,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 25% at 70% 55%, rgba(196,167,71,0.06) 0%, transparent 45%);
   z-index: 0;
   pointer-events: none;
-  animation: depthShift 10s ease-in-out infinite;
+  animation: depthShift 12s ease-in-out infinite;
 }
 
 @keyframes depthShift {
-  0%, 100% { opacity: 0.8; }
+  0%, 100% { opacity: 0.7; }
   50% { opacity: 1; }
 }
 
@@ -1128,30 +1113,17 @@ footer ul li { margin-bottom: 0.4rem; }
    PAGE HEADER (inner pages)
    ============================================================ */
 .page-header {
-  background: var(--primary);
+  background: linear-gradient(to bottom,
+    var(--primary) 0%,
+    var(--primary) 50%,
+    var(--primary-lt) 75%,
+    var(--bg) 100%
+  );
   color: var(--white);
-  padding: var(--space-2xl) 0 120px;
+  padding: var(--space-2xl) 0 140px;
   text-align: center;
   position: relative;
   overflow: hidden;
-}
-
-.page-header::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 200px;
-  background:
-    linear-gradient(to bottom,
-      transparent 0%,
-      rgba(20,66,114,0.3) 40%,
-      rgba(44,116,179,0.12) 65%,
-      var(--bg) 100%
-    );
-  z-index: 1;
-  pointer-events: none;
 }
 
 .page-header::after {
