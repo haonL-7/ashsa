@@ -497,17 +497,7 @@ img { max-width: 100%; height: auto; display: block; }
    HERO
    ============================================================ */
 .hero {
-  /* White base — deep blue bleeds down, thinning gradually into the light below */
-  background: linear-gradient(to bottom,
-    #0a2647 0%,
-    #0a2647 25%,
-    #144272 45%,
-    #1e5488 60%,
-    #2e72a8 75%,
-    #5a9cc8 88%,
-    #a8cce4 95%,
-    #f6f8fb 100%
-  );
+  background: linear-gradient(to bottom, #0a2647 0%, #0a2647 40%, #2c5f8a 70%, #f4f6f9 100%);
   color: var(--white);
   padding: var(--space-3xl) 0 400px;
   text-align: center;
@@ -534,11 +524,11 @@ img { max-width: 100%; height: auto; display: block; }
   50% { opacity: 1; }
 }
 
-/* Interactive particle canvas */
+/* Interactive particle canvas — above orbs, below content */
 .hero-canvas {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
   pointer-events: auto;
   width: 100%;
   height: 100%;
