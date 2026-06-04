@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Asian Sports Health Association | 亚洲体育健康协会</title>
   <meta name="description" content="International Conference Website of the Asian Sports Health Association">
-  <link rel="stylesheet" href="css/style.css?v=15">
+  <meta http-equiv="refresh" content="0;url=en/">
+  <link rel="stylesheet" href="css/style.css?v=30">
 </head>
 <body class="lang-select" style="margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;">
   <div class="lang-geo lang-geo-1"></div>
@@ -21,28 +22,17 @@
       </svg>
     </div>
     <h1>Asian Sports Health Association</h1>
-    <p class="subtitle">International Conference &middot; Bilingual Website</p>
+    <p class="subtitle">International Conference</p>
     <div class="lang-links">
-      <a href="zh/" class="lang-zh">
-        中文
-        <span class="lang-sub">Simplified Chinese</span>
-      </a>
-      <a href="en/" class="lang-en">
-        English
-        <span class="lang-sub">English</span>
-      </a>
+      <a href="en/" class="lang-en" style="background:var(--primary);color:white!important;border-color:var(--primary);">English</a>
+      <a href="zh/" class="lang-zh">中文</a>
+      <a href="ko/" class="lang-zh">한국어</a>
+      <a href="ja/" class="lang-zh">日本語</a>
     </div>
   </div>
 
   <script>
-    (function () {
-      var lang = navigator.language || navigator.userLanguage || '';
-      var target = lang.toLowerCase().startsWith('zh') ? 'zh/' : 'en/';
-      var path = window.location.pathname;
-      if (path === '/' || path.endsWith('/index.html') || path.endsWith('/ashsa/') || path.endsWith('/ashsa/index.html')) {
-        window.location.replace(target);
-      }
-    })();
+    window.location.replace('en/');
   </script>
 </body>
 </html>
