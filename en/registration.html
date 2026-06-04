@@ -10,8 +10,13 @@
 
   <nav class="nav">
     <div class="container">
-      <a href="index.html" class="nav-logo"><span>🌏 ASHSA</span></a>
-      <button class="nav-toggle" aria-label="Menu">☰</button>
+      <a href="index.html" class="nav-logo">
+        <span class="logo-icon">
+          <svg width="20" height="20" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="none" stroke="white" stroke-width="3"/><path d="M14 18h20M14 30h20" stroke="white" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="12" r="6" fill="white" opacity="0.9"/></svg>
+        </span>
+        ASHSA
+      </a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="schedule.html">Program</a></li>
@@ -24,50 +29,55 @@
     </div>
   </nav>
 
+  <section class="page-header">
+    <div class="container">
+      <h1>Registration</h1>
+      <p>Online registration will open prior to the conference</p>
+    </div>
+  </section>
+
   <section class="section">
     <div class="container">
-      <div class="section-hd">
-        <h2>Registration</h2>
-        <p>Online registration will open prior to the conference</p>
-      </div>
-
-      <div class="grid-3" style="max-width:960px; margin:0 auto;">
-        <div class="reg-box">
+      <div class="grid-3" style="max-width:960px;margin:0 auto;">
+        <div class="reg-box reveal">
           <h4>Early Bird</h4>
-          <div class="reg-fee">TBA</div>
-          <p style="color:var(--ink-lt);">Before early bird deadline</p>
-          <p style="font-size:0.9rem;color:var(--ink-xlt);">Includes materials, lunch, coffee breaks</p>
+          <div class="reg-fee"><span class="currency">TBA</span></div>
+          <p class="reg-note">Before early bird deadline</p>
+          <p style="font-size:0.85rem;color:var(--ink-xlt);">Includes materials, lunch, coffee breaks</p>
         </div>
-        <div class="reg-box">
+        <div class="reg-box featured reveal reveal-delay-1">
           <h4>Regular</h4>
-          <div class="reg-fee">TBA</div>
-          <p style="color:var(--ink-lt);">After early bird deadline</p>
-          <p style="font-size:0.9rem;color:var(--ink-xlt);">Includes materials, lunch, coffee breaks</p>
+          <div class="reg-fee"><span class="currency">TBA</span></div>
+          <p class="reg-note">After early bird deadline</p>
+          <p style="font-size:0.85rem;color:var(--ink-xlt);">Includes materials, lunch, coffee breaks</p>
         </div>
-        <div class="reg-box">
+        <div class="reg-box reveal reveal-delay-2">
           <h4>Student</h4>
-          <div class="reg-fee">TBA</div>
-          <p style="color:var(--ink-lt);">Valid student ID required</p>
-          <p style="font-size:0.9rem;color:var(--ink-xlt);">Includes materials, coffee breaks</p>
+          <div class="reg-fee"><span class="currency">TBA</span></div>
+          <p class="reg-note">Valid student ID required</p>
+          <p style="font-size:0.85rem;color:var(--ink-xlt);">Includes materials, coffee breaks</p>
         </div>
       </div>
 
-      <div style="max-width:600px; margin:var(--space-xl) auto 0; text-align:center;">
+      <div class="text-center mt-2xl max-w-md mx-auto">
         <h4>How to Register</h4>
-        <p style="color:var(--ink-lt);">Registration form will be available online (Google Forms)</p>
-        <p style="color:var(--ink-lt);">Questions? Contact the Secretariat: <a href="mailto:info@ashsa.org">info@ashsa.org</a></p>
+        <p>Registration form will be available online (Google Forms)</p>
+        <p>Questions? Contact the Secretariat: <a href="mailto:info@ashsa.org">info@ashsa.org</a></p>
       </div>
     </div>
   </section>
 
   <footer>
     <div class="container">
-      <div class="footer-btm">
-        <p>&copy; 2025 Asian Sports Health Association. Hosted on GitHub Pages · Cloudflare CDN</p>
+      <div class="footer-grid">
+        <div><h4>Asian Sports Health Association</h4><p>Advancing sports health science across Asia</p></div>
+        <div><h4>Quick Links</h4><ul><li><a href="schedule.html">Program</a></li><li><a href="speakers.html">Speakers</a></li><li><a href="registration.html">Registration</a></li></ul></div>
+        <div><h4>Resources</h4><ul><li><a href="venue.html">Venue &amp; Travel</a></li><li><a href="contact.html">Contact Us</a></li><li><a href="../zh/registration.html">Chinese</a></li></ul></div>
+        <div><h4>Secretariat</h4><p>info@ashsa.org</p></div>
       </div>
+      <div class="footer-btm"><p>&copy; 2025 Asian Sports Health Association. Hosted on GitHub Pages &middot; Accelerated by Cloudflare CDN</p></div>
     </div>
   </footer>
-
   <script src="../js/main.js"></script>
 </body>
 </html>

@@ -5,27 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Asian Sports Health Association | 亚洲体育健康协会</title>
   <meta name="description" content="International Conference Website of the Asian Sports Health Association">
-  <meta http-equiv="refresh" content="0;url=zh/">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="lang-select">
+<body class="lang-select" style="margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;">
+  <div class="lang-geo lang-geo-1"></div>
+  <div class="lang-geo lang-geo-2"></div>
+  <div class="lang-geo lang-geo-3"></div>
+
   <div class="lang-card">
-    <div class="logo-placeholder">A</div>
+    <div class="logo-mark">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <rect width="48" height="48" rx="10" fill="none" stroke="white" stroke-width="2.5"/>
+        <path d="M14 18h20M14 30h20" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="24" cy="12" r="5" fill="white" opacity="0.9"/>
+      </svg>
+    </div>
     <h1>Asian Sports Health Association</h1>
-    <p>亚洲体育健康协会 · 国际会议官网</p>
+    <p class="subtitle">International Conference &middot; Bilingual Website</p>
     <div class="lang-links">
-      <a href="zh/" class="lang-zh">中文<span class="lang-sub">简体中文</span></a>
-      <a href="en/" class="lang-en">English<span class="lang-sub">English</span></a>
+      <a href="zh/" class="lang-zh">
+        中文
+        <span class="lang-sub">Simplified Chinese</span>
+      </a>
+      <a href="en/" class="lang-en">
+        English
+        <span class="lang-sub">English</span>
+      </a>
     </div>
   </div>
 
   <script>
-    // Auto-redirect based on browser language
-    (function() {
+    (function () {
       var lang = navigator.language || navigator.userLanguage || '';
       var target = lang.toLowerCase().startsWith('zh') ? 'zh/' : 'en/';
-      // Only redirect if coming directly to root
-      if (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) {
+      var path = window.location.pathname;
+      if (path === '/' || path.endsWith('/index.html') || path.endsWith('/ashsa/') || path.endsWith('/ashsa/index.html')) {
         window.location.replace(target);
       }
     })();

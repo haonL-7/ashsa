@@ -10,8 +10,13 @@
 
   <nav class="nav">
     <div class="container">
-      <a href="index.html" class="nav-logo"><span>🌏 ASHSA</span></a>
-      <button class="nav-toggle" aria-label="菜单">☰</button>
+      <a href="index.html" class="nav-logo">
+        <span class="logo-icon">
+          <svg width="20" height="20" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="none" stroke="white" stroke-width="3"/><path d="M14 18h20M14 30h20" stroke="white" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="12" r="6" fill="white" opacity="0.9"/></svg>
+        </span>
+        ASHSA
+      </a>
+      <button class="nav-toggle" aria-label="菜单"><span></span><span></span><span></span></button>
       <ul class="nav-links">
         <li><a href="index.html">首页</a></li>
         <li><a href="schedule.html">会议日程</a></li>
@@ -24,55 +29,69 @@
     </div>
   </nav>
 
+  <section class="page-header">
+    <div class="container">
+      <h1>演讲嘉宾</h1>
+      <p>嘉宾名单待确认，诚邀体育健康领域专家学者参会</p>
+    </div>
+  </section>
+
   <section class="section">
     <div class="container">
-      <div class="section-hd">
-        <h2>演讲嘉宾</h2>
-        <p>嘉宾名单待确认，诚邀体育健康领域专家学者参会</p>
-      </div>
-
       <div class="grid-4">
-        <div class="speaker-card">
-          <div class="speaker-avatar">👤</div>
+        <div class="speaker-card reveal">
+          <div class="speaker-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
           <h4>待定</h4>
-          <p class="affiliation">待定</p>
-          <p class="bio">嘉宾信息将于会前公布</p>
+          <p class="speaker-affiliation">待定</p>
+          <p class="speaker-bio">嘉宾信息将于会前公布</p>
         </div>
-        <div class="speaker-card">
-          <div class="speaker-avatar">👤</div>
+        <div class="speaker-card reveal reveal-delay-1">
+          <div class="speaker-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
           <h4>待定</h4>
-          <p class="affiliation">待定</p>
-          <p class="bio">嘉宾信息将于会前公布</p>
+          <p class="speaker-affiliation">待定</p>
+          <p class="speaker-bio">嘉宾信息将于会前公布</p>
         </div>
-        <div class="speaker-card">
-          <div class="speaker-avatar">👤</div>
+        <div class="speaker-card reveal reveal-delay-2">
+          <div class="speaker-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
           <h4>待定</h4>
-          <p class="affiliation">待定</p>
-          <p class="bio">嘉宾信息将于会前公布</p>
+          <p class="speaker-affiliation">待定</p>
+          <p class="speaker-bio">嘉宾信息将于会前公布</p>
         </div>
-        <div class="speaker-card">
-          <div class="speaker-avatar">👤</div>
+        <div class="speaker-card reveal reveal-delay-3">
+          <div class="speaker-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
           <h4>待定</h4>
-          <p class="affiliation">待定</p>
-          <p class="bio">嘉宾信息将于会前公布</p>
+          <p class="speaker-affiliation">待定</p>
+          <p class="speaker-bio">嘉宾信息将于会前公布</p>
         </div>
       </div>
 
-      <div class="section-hd mt-xl">
+      <div class="section-hd mt-2xl">
         <h3>征集演讲嘉宾</h3>
-        <p>欢迎自荐或推荐演讲嘉宾，请<a href="contact.html">联系我们</a></p>
+        <p class="section-desc">欢迎自荐或推荐演讲嘉宾</p>
+        <a href="contact.html" class="btn btn-white mt-lg">联系我们</a>
       </div>
     </div>
   </section>
 
   <footer>
     <div class="container">
-      <div class="footer-btm">
-        <p>&copy; 2025 Asian Sports Health Association. Hosted on GitHub Pages · Cloudflare CDN</p>
+      <div class="footer-grid">
+        <div><h4>亚洲体育健康协会</h4><p>推动亚洲体育健康事业科学发展</p></div>
+        <div><h4>快速链接</h4><ul><li><a href="schedule.html">会议日程</a></li><li><a href="speakers.html">演讲嘉宾</a></li><li><a href="registration.html">注册参会</a></li></ul></div>
+        <div><h4>相关资源</h4><ul><li><a href="venue.html">会场交通</a></li><li><a href="contact.html">联系我们</a></li><li><a href="../en/speakers.html">English</a></li></ul></div>
+        <div><h4>会议秘书处</h4><p>info@ashsa.org</p></div>
       </div>
+      <div class="footer-btm"><p>&copy; 2025 Asian Sports Health Association. Hosted on GitHub Pages &middot; Accelerated by Cloudflare CDN</p></div>
     </div>
   </footer>
-
   <script src="../js/main.js"></script>
 </body>
 </html>

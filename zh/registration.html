@@ -10,8 +10,13 @@
 
   <nav class="nav">
     <div class="container">
-      <a href="index.html" class="nav-logo"><span>🌏 ASHSA</span></a>
-      <button class="nav-toggle" aria-label="菜单">☰</button>
+      <a href="index.html" class="nav-logo">
+        <span class="logo-icon">
+          <svg width="20" height="20" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="none" stroke="white" stroke-width="3"/><path d="M14 18h20M14 30h20" stroke="white" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="12" r="6" fill="white" opacity="0.9"/></svg>
+        </span>
+        ASHSA
+      </a>
+      <button class="nav-toggle" aria-label="菜单"><span></span><span></span><span></span></button>
       <ul class="nav-links">
         <li><a href="index.html">首页</a></li>
         <li><a href="schedule.html">会议日程</a></li>
@@ -24,50 +29,55 @@
     </div>
   </nav>
 
+  <section class="page-header">
+    <div class="container">
+      <h1>注册参会</h1>
+      <p>在线注册将于会前开放，敬请关注</p>
+    </div>
+  </section>
+
   <section class="section">
     <div class="container">
-      <div class="section-hd">
-        <h2>注册参会</h2>
-        <p>在线注册将于会前开放，敬请关注</p>
-      </div>
-
-      <div class="grid-3" style="max-width:960px; margin:0 auto;">
-        <div class="reg-box">
+      <div class="grid-3" style="max-width:960px;margin:0 auto;">
+        <div class="reg-box reveal">
           <h4>早鸟注册</h4>
-          <div class="reg-fee">待定</div>
-          <p style="color:var(--ink-lt);">早鸟截止日期前</p>
-          <p style="font-size:0.9rem;color:var(--ink-xlt);">含会议资料、午餐、茶歇</p>
+          <div class="reg-fee"><span class="currency">待定</span></div>
+          <p class="reg-note">早鸟截止日期前可享优惠价格</p>
+          <p style="font-size:0.85rem;color:var(--ink-xlt);">含会议资料、午餐、茶歇</p>
         </div>
-        <div class="reg-box">
+        <div class="reg-box featured reveal reveal-delay-1">
           <h4>常规注册</h4>
-          <div class="reg-fee">待定</div>
-          <p style="color:var(--ink-lt);">早鸟截止后</p>
-          <p style="font-size:0.9rem;color:var(--ink-xlt);">含会议资料、午餐、茶歇</p>
+          <div class="reg-fee"><span class="currency">待定</span></div>
+          <p class="reg-note">早鸟截止后为标准价格</p>
+          <p style="font-size:0.85rem;color:var(--ink-xlt);">含会议资料、午餐、茶歇</p>
         </div>
-        <div class="reg-box">
+        <div class="reg-box reveal reveal-delay-2">
           <h4>学生注册</h4>
-          <div class="reg-fee">待定</div>
-          <p style="color:var(--ink-lt);">需提供学生证明</p>
-          <p style="font-size:0.9rem;color:var(--ink-xlt);">含会议资料、茶歇</p>
+          <div class="reg-fee"><span class="currency">待定</span></div>
+          <p class="reg-note">需提供有效学生证明</p>
+          <p style="font-size:0.85rem;color:var(--ink-xlt);">含会议资料、茶歇</p>
         </div>
       </div>
 
-      <div style="max-width:600px; margin:var(--space-xl) auto 0; text-align:center;">
+      <div class="text-center mt-2xl max-w-md mx-auto">
         <h4>注册方式</h4>
-        <p style="color:var(--ink-lt);">在线注册表单将于会前上线（Google Forms / 腾讯问卷）</p>
-        <p style="color:var(--ink-lt);">如有疑问，请联系会议秘书处：<a href="mailto:info@ashsa.org">info@ashsa.org</a></p>
+        <p>在线注册表单将于会前上线（Google Forms / 腾讯问卷）</p>
+        <p>如有疑问，请联系会议秘书处：<a href="mailto:info@ashsa.org">info@ashsa.org</a></p>
       </div>
     </div>
   </section>
 
   <footer>
     <div class="container">
-      <div class="footer-btm">
-        <p>&copy; 2025 Asian Sports Health Association. Hosted on GitHub Pages · Cloudflare CDN</p>
+      <div class="footer-grid">
+        <div><h4>亚洲体育健康协会</h4><p>推动亚洲体育健康事业科学发展</p></div>
+        <div><h4>快速链接</h4><ul><li><a href="schedule.html">会议日程</a></li><li><a href="speakers.html">演讲嘉宾</a></li><li><a href="registration.html">注册参会</a></li></ul></div>
+        <div><h4>相关资源</h4><ul><li><a href="venue.html">会场交通</a></li><li><a href="contact.html">联系我们</a></li><li><a href="../en/registration.html">English</a></li></ul></div>
+        <div><h4>会议秘书处</h4><p>info@ashsa.org</p></div>
       </div>
+      <div class="footer-btm"><p>&copy; 2025 Asian Sports Health Association. Hosted on GitHub Pages &middot; Accelerated by Cloudflare CDN</p></div>
     </div>
   </footer>
-
   <script src="../js/main.js"></script>
 </body>
 </html>

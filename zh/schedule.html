@@ -10,8 +10,13 @@
 
   <nav class="nav">
     <div class="container">
-      <a href="index.html" class="nav-logo"><span>🌏 ASHSA</span></a>
-      <button class="nav-toggle" aria-label="菜单">☰</button>
+      <a href="index.html" class="nav-logo">
+        <span class="logo-icon">
+          <svg width="20" height="20" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="none" stroke="white" stroke-width="3"/><path d="M14 18h20M14 30h20" stroke="white" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="12" r="6" fill="white" opacity="0.9"/></svg>
+        </span>
+        ASHSA
+      </a>
+      <button class="nav-toggle" aria-label="菜单"><span></span><span></span><span></span></button>
       <ul class="nav-links">
         <li><a href="index.html">首页</a></li>
         <li><a href="schedule.html" class="active">会议日程</a></li>
@@ -24,97 +29,99 @@
     </div>
   </nav>
 
-  <section class="section">
+  <section class="page-header">
     <div class="container">
-      <div class="section-hd">
-        <h2>会议日程</h2>
-        <p>详细日程将于会前公布，以下为暂定框架</p>
-      </div>
+      <h1>会议日程</h1>
+      <p>详细日程将于会前公布，以下为暂定框架</p>
+    </div>
+  </section>
 
-      <h3 style="margin-bottom:var(--space-lg);">第一天（日期待定）</h3>
+  <section class="section">
+    <div class="container" style="max-width:900px">
+      <h3 style="margin-bottom:var(--space-lg);font-weight:700;">第一天（日期待定）</h3>
       <table class="schedule-table">
         <thead>
           <tr><th>时间</th><th>内容</th><th>地点</th></tr>
         </thead>
         <tbody>
           <tr>
-            <td class="schedule-time">08:00–09:00</td>
+            <td class="schedule-time">08:00&ndash;09:00</td>
             <td>注册签到</td>
             <td>会场大堂</td>
           </tr>
           <tr>
-            <td class="schedule-time">09:00–09:30</td>
-            <td><span class="schedule-tag tag-keynote">开幕</span> 开幕式 & 欢迎致辞</td>
+            <td class="schedule-time">09:00&ndash;09:30</td>
+            <td><span class="schedule-tag tag-keynote">开幕</span> 开幕式 &amp; 欢迎致辞</td>
             <td>主会场</td>
           </tr>
           <tr>
-            <td class="schedule-time">09:30–10:30</td>
+            <td class="schedule-time">09:30&ndash;10:30</td>
             <td><span class="schedule-tag tag-keynote">主旨报告</span> 大会主旨报告（一）</td>
             <td>主会场</td>
           </tr>
           <tr>
-            <td class="schedule-time">10:30–11:00</td>
-            <td><span class="schedule-tag tag-break">茶歇</span> 茶歇 & 交流</td>
+            <td class="schedule-time">10:30&ndash;11:00</td>
+            <td><span class="schedule-tag tag-break">茶歇</span> 茶歇与交流</td>
             <td>展览区</td>
           </tr>
           <tr>
-            <td class="schedule-time">11:00–12:00</td>
+            <td class="schedule-time">11:00&ndash;12:00</td>
             <td><span class="schedule-tag tag-keynote">主旨报告</span> 大会主旨报告（二）</td>
             <td>主会场</td>
           </tr>
           <tr>
-            <td class="schedule-time">12:00–13:30</td>
+            <td class="schedule-time">12:00&ndash;13:30</td>
             <td><span class="schedule-tag tag-break">午餐</span> 午餐</td>
-            <td>—</td>
+            <td>&mdash;</td>
           </tr>
           <tr>
-            <td class="schedule-time">13:30–15:00</td>
-            <td><span class="schedule-tag tag-workshop">分会场</span> 分会场报告（运动健康 / 体能训练 / 体医融合）</td>
+            <td class="schedule-time">13:30&ndash;15:00</td>
+            <td><span class="schedule-tag tag-workshop">分会场</span> 分会场报告</td>
             <td>分会场 A/B/C</td>
           </tr>
           <tr>
-            <td class="schedule-time">15:00–15:30</td>
+            <td class="schedule-time">15:00&ndash;15:30</td>
             <td><span class="schedule-tag tag-break">茶歇</span> 茶歇</td>
             <td>展览区</td>
           </tr>
           <tr>
-            <td class="schedule-time">15:30–17:00</td>
-            <td><span class="schedule-tag tag-poster">墙报</span> 墙报展示 & 交流</td>
+            <td class="schedule-time">15:30&ndash;17:00</td>
+            <td><span class="schedule-tag tag-poster">墙报</span> 墙报展示与交流</td>
             <td>展览区</td>
           </tr>
           <tr>
-            <td class="schedule-time">18:00–20:00</td>
+            <td class="schedule-time">18:00&ndash;20:00</td>
             <td>欢迎晚宴</td>
             <td>待定</td>
           </tr>
         </tbody>
       </table>
 
-      <h3 style="margin:var(--space-xl) 0 var(--space-lg);">第二天（日期待定）</h3>
+      <h3 style="margin:var(--space-xl) 0 var(--space-lg);font-weight:700;">第二天（日期待定）</h3>
       <table class="schedule-table">
         <thead>
           <tr><th>时间</th><th>内容</th><th>地点</th></tr>
         </thead>
         <tbody>
           <tr>
-            <td class="schedule-time">09:00–10:30</td>
+            <td class="schedule-time">09:00&ndash;10:30</td>
             <td><span class="schedule-tag tag-workshop">工作坊</span> 实践工作坊</td>
             <td>分会场</td>
           </tr>
           <tr>
-            <td class="schedule-time">10:30–11:00</td>
+            <td class="schedule-time">10:30&ndash;11:00</td>
             <td><span class="schedule-tag tag-break">茶歇</span> 茶歇</td>
             <td>展览区</td>
           </tr>
           <tr>
-            <td class="schedule-time">11:00–12:00</td>
-            <td>圆桌讨论 & 闭幕式</td>
+            <td class="schedule-time">11:00&ndash;12:00</td>
+            <td>圆桌讨论 &amp; 闭幕式</td>
             <td>主会场</td>
           </tr>
           <tr>
-            <td class="schedule-time">12:00–13:00</td>
-            <td><span class="schedule-tag tag-break">午餐</span> 午餐 & 离会</td>
-            <td>—</td>
+            <td class="schedule-time">12:00&ndash;13:00</td>
+            <td><span class="schedule-tag tag-break">午餐</span> 午餐与离会</td>
+            <td>&mdash;</td>
           </tr>
         </tbody>
       </table>
@@ -123,12 +130,15 @@
 
   <footer>
     <div class="container">
-      <div class="footer-btm">
-        <p>&copy; 2025 Asian Sports Health Association. Hosted on GitHub Pages · Cloudflare CDN</p>
+      <div class="footer-grid">
+        <div><h4>亚洲体育健康协会</h4><p>推动亚洲体育健康事业科学发展</p></div>
+        <div><h4>快速链接</h4><ul><li><a href="schedule.html">会议日程</a></li><li><a href="speakers.html">演讲嘉宾</a></li><li><a href="registration.html">注册参会</a></li></ul></div>
+        <div><h4>相关资源</h4><ul><li><a href="venue.html">会场交通</a></li><li><a href="contact.html">联系我们</a></li><li><a href="../en/schedule.html">English</a></li></ul></div>
+        <div><h4>会议秘书处</h4><p>info@ashsa.org</p></div>
       </div>
+      <div class="footer-btm"><p>&copy; 2025 Asian Sports Health Association. Hosted on GitHub Pages &middot; Accelerated by Cloudflare CDN</p></div>
     </div>
   </footer>
-
   <script src="../js/main.js"></script>
 </body>
 </html>
