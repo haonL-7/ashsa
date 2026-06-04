@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>首页 — 亚洲体育健康协会国际会议</title>
   <meta name="description" content="亚洲体育健康协会国际会议官方网站 — 汇聚亚洲体育健康领域专家学者，推动体医融合发展">
-  <link rel="stylesheet" href="../css/style.css?v=13">
+  <link rel="stylesheet" href="../css/style.css?v=14">
   <link rel="preload" href="../images/icons.svg" as="image" type="image/svg+xml">
 </head>
 <body>
@@ -199,26 +199,21 @@ function drawCons(){
 }
 
 function animate(){
+  try{
   X.clearRect(0,0,W,H);
   DRIFT+=0.00025;
-  // Fade ripple
   if(ripple>0.001)ripple*=0.96;else ripple=0;
-  // Fade label
   if(labelA>0.001&&!label)labelA*=0.96;else if(label&&labelA<1)labelA+=0.02;
-  // Auto-label on long hover
   if(M.on&&M.t&&Date.now()-M.t>1800&&!label){checkLabel(M.x,M.y);M.t=0}
-  // Milky Way
-  X.globalAlpha=0.55;X.drawImage(mwCanvas,0,0);X.globalAlpha=1;
-  // Stars
+  X.globalAlpha=0.75;X.drawImage(mwCanvas,0,0);X.globalAlpha=1;
   for(var i=0;i<stars.length;i++){var a=stars[i].up();stars[i].draw(a)}
-  // Constellations
   drawCons();
-  // Ripple ring
   if(ripple>0.02){X.beginPath();X.arc(rx,ry,(1-ripple)*200,0,Math.PI*2);X.strokeStyle='rgba(200,220,255,'+(ripple*0.3)+')';X.lineWidth=1.5;X.stroke()}
+  }catch(e){}
   A=requestAnimationFrame(animate)
 }
 animate()})();
 </script>
-<script src="../js/main.js?v=13"></script>
+<script src="../js/main.js?v=14"></script>
 </body>
 </html>
