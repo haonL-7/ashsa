@@ -7,6 +7,7 @@
   <meta name="description" content="亚洲体育健康协会国际会议官方网站 — 汇聚亚洲体育健康领域专家学者，推动体医融合发展">
   <link rel="stylesheet" href="../css/style.css?v=17">
   <link rel="preload" href="../images/icons.svg" as="image" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/starfield.css?v=22">
 </head>
 <body>
 
@@ -48,56 +49,8 @@
 
   <!-- ====== HERO ====== -->
   <section class="hero" style="background: linear-gradient(to bottom, #040d1a 0%, #0a1f3a 25%, #0f3055 45%, #1e5580 65%, #5a95ba 82%, #ffffff 100%);">
-    <canvas id="hero-canvas"></canvas>
-<script>
-(function(){
-var C=document.getElementById("hero-canvas");if(!C)return;var X=C.getContext("2d");
-var W,H,img=new Image(),loaded=!1,alpha=0;
-var panX=0,panY=0,autoPan=!0;
-var drag=!1,dx0=0,dy0=0,offX=0,offY=0;
-var zoom=1,zx=W/2,zy=H/2;
-img.onload=function(){loaded=!0};
-img.src="https://cdn.eso.org/images/large/eso0932a.jpg";
-
-function R(){var p=C.parentElement;W=p.offsetWidth||window.innerWidth;H=p.offsetHeight||700;
-C.width=W;C.height=H;C.style.width=W+"px";C.style.height=H+"px"}R();window.addEventListener("resize",R);
-
-C.addEventListener("mousedown",function(e){drag=!0;autoPan=!1;var r=C.getBoundingClientRect();dx0=e.clientX-r.left-offX;dy0=e.clientY-r.top-offY});
-C.addEventListener("mousemove",function(e){if(!drag)return;var r=C.getBoundingClientRect();offX=e.clientX-r.left-dx0;offY=e.clientY-r.top-dy0});
-C.addEventListener("mouseup",function(){drag=!1;setTimeout(function(){autoPan=!0},3000)});
-C.addEventListener("mouseleave",function(){drag=!1});
-C.addEventListener("wheel",function(e){e.preventDefault();zoom*=e.deltaY<0?1.1:0.9;zoom=Math.max(1,Math.min(4,zoom))},{passive:!1});
-C.addEventListener("touchstart",function(e){if(e.touches.length==1){drag=!0;autoPan=!1;var r=C.getBoundingClientRect();dx0=e.touches[0].clientX-r.left-offX;dy0=e.touches[0].clientY-r.top-offY}});
-C.addEventListener("touchmove",function(e){if(!drag||e.touches.length!=1)return;e.preventDefault();var r=C.getBoundingClientRect();offX=e.touches[0].clientX-r.left-dx0;offY=e.touches[0].clientY-r.top-dy0},{passive:!1});
-C.addEventListener("touchend",function(){drag=!1;setTimeout(function(){autoPan=!0},3000)});
-
-function animate(){
-  X.clearRect(0,0,W,H);
-  if(loaded&&alpha<1)alpha+=0.03;
-  if(autoPan){panX+=0.04;panY+=0.02;offX+=Math.sin(panX*0.001)*0.3;offY+=Math.cos(panY*0.0008)*0.2}
-  if(loaded&&alpha>0.01){
-    X.globalAlpha=alpha;
-    var iw=img.naturalWidth,ih=img.naturalHeight;
-    var sc=Math.max(W/iw,H/ih)*1.3*zoom;
-    var sw=W/sc,sh=H/sc;
-    var sx=(iw-sw)/2+offX/sc;
-    var sy=(ih-sh)/2+offY/sc;
-    sx=Math.max(0,Math.min(iw-sw,sx));
-    sy=Math.max(0,Math.min(ih-sh,sy));
-    X.drawImage(img,sx,sy,sw,sh,0,0,W,H);
-    X.globalAlpha=1
-  }else{
-    var bg=X.createLinearGradient(0,0,0,H);
-    bg.addColorStop(0,"#020810");bg.addColorStop(1,"#0d2845");
-    X.fillStyle=bg;X.fillRect(0,0,W,H)
-  }
-  // Subtle credit
-  X.fillStyle="rgba(255,255,255,0.18)";X.font="10px sans-serif";X.textAlign="right";
-  X.fillText("ESO/S. Brunier",W-10,H-8);
-  requestAnimationFrame(animate)
-}
-animate()})();
-</script>
+    <canvas id="hero-bg-canvas"></canvas>
+<canvas id="hero-canvas"></canvas>
 
 
     <div class="container">
@@ -249,6 +202,7 @@ animate()})();
     </div>
   </footer>
 
+  <script src="../js/starfield.js?v=22"></script>
   <script src="../js/main.js?v=17"></script>
 </body>
 </html>
