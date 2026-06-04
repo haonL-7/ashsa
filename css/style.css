@@ -497,16 +497,18 @@ img { max-width: 100%; height: auto; display: block; }
    HERO
    ============================================================ */
 .hero {
-  /* Blue extends downward as the dominant canvas, dissolving gradually */
+  /* White is the base layer. Deep blue spreads downward, gradually thinning into white. */
   background: linear-gradient(to bottom,
     var(--primary) 0%,
-    var(--primary) 45%,
-    var(--primary-lt) 70%,
-    #2a5a8a 85%,
+    var(--primary) 30%,
+    var(--primary-lt) 55%,
+    #205e94 72%,
+    #3a7ab5 84%,
+    #7aadd6 93%,
     var(--bg) 100%
   );
   color: var(--white);
-  padding: var(--space-3xl) 0 240px;
+  padding: var(--space-3xl) 0 300px;
   text-align: center;
   position: relative;
   overflow: hidden;

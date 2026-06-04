@@ -46,8 +46,7 @@
       var particles = [];
       var mouse = { x: -9999, y: -9999, active: false };
       var PARTICLE_COUNT = 100;
-      var INTERACT_RADIUS = 70;
-      var INTERACT_FORCE = 0.008;
+      var INTERACT_FORCE = 0.04;
       var CONNECT_DIST = 80;
       var animId;
 
@@ -113,20 +112,19 @@
           }
         }
 
-        // Mouse interaction — only nearby particles, gentle orbital nudge
+        // Mouse interaction — all particles respond, force fades with distance
         if (mouse.active) {
           var dx = this.x - mouse.x;
           var dy = this.y - mouse.y;
           var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 1) dist = 1;
 
-          if (dist < INTERACT_RADIUS && dist > 1) {
-            var t = 1 - dist / INTERACT_RADIUS;
-            var force = t * t * INTERACT_FORCE;
-            var angle = Math.atan2(dy, dx);
-            // Gentle swirl — tangent dominant, slight repel
-            this.vx += Math.cos(angle) * force * 0.4 + Math.sin(angle) * force * 0.9;
-            this.vy += Math.sin(angle) * force * 0.4 - Math.cos(angle) * force * 0.9;
-          }
+          // Inverse-square falloff — close particles swirl, far ones gently drift
+          var force = INTERACT_FORCE / (dist * 0.06 + 1);
+          var angle = Math.atan2(dy, dx);
+          // Tangential swirl + slight radial component
+          this.vx += Math.cos(angle) * force * 0.15 + Math.sin(angle) * force * 0.6;
+          this.vy += Math.sin(angle) * force * 0.15 - Math.cos(angle) * force * 0.6;
         }
 
         // Move
