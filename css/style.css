@@ -497,18 +497,19 @@ img { max-width: 100%; height: auto; display: block; }
    HERO
    ============================================================ */
 .hero {
-  /* White is the base layer. Deep blue spreads downward, gradually thinning into white. */
+  /* White base — deep blue bleeds down, thinning gradually into the light below */
   background: linear-gradient(to bottom,
-    var(--primary) 0%,
-    var(--primary) 30%,
-    var(--primary-lt) 55%,
-    #205e94 72%,
-    #3a7ab5 84%,
-    #7aadd6 93%,
-    var(--bg) 100%
+    #0a2647 0%,
+    #0a2647 25%,
+    #144272 45%,
+    #1e5488 60%,
+    #2e72a8 75%,
+    #5a9cc8 88%,
+    #a8cce4 95%,
+    #f6f8fb 100%
   );
   color: var(--white);
-  padding: var(--space-3xl) 0 300px;
+  padding: var(--space-3xl) 0 400px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -1116,13 +1117,15 @@ footer ul li { margin-bottom: 0.4rem; }
    ============================================================ */
 .page-header {
   background: linear-gradient(to bottom,
-    var(--primary) 0%,
-    var(--primary) 50%,
-    var(--primary-lt) 75%,
-    var(--bg) 100%
+    #0a2647 0%,
+    #0a2647 30%,
+    #144272 55%,
+    #2e72a8 78%,
+    #a8cce4 93%,
+    #f6f8fb 100%
   );
   color: var(--white);
-  padding: var(--space-2xl) 0 140px;
+  padding: var(--space-2xl) 0 160px;
   text-align: center;
   position: relative;
   overflow: hidden;
