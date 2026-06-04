@@ -586,7 +586,16 @@ img { max-width: 100%; height: auto; display: block; }
   50% { transform: translate(-40px, 30px); opacity: 0.5; }
 }
 
-.hero .container { position: relative; z-index: 2; }
+.hero .container {
+  position: relative;
+  z-index: 2;
+  pointer-events: none; /* let mouse pass through to canvas */
+}
+.hero .container a,
+.hero .container button,
+.hero .container .btn {
+  pointer-events: auto; /* keep buttons clickable */
+}
 
 .hero-eyebrow {
   display: inline-block;

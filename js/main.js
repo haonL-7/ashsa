@@ -52,10 +52,11 @@
 
       function resize() {
         var rect = canvas.parentElement.getBoundingClientRect();
-        canvas.width = rect.width;
-        canvas.height = rect.height;
+        canvas.width = rect.width || canvas.parentElement.offsetWidth;
+        canvas.height = rect.height || canvas.parentElement.offsetHeight || 600;
       }
-      resize();
+      // Delay to ensure hero layout is complete
+      setTimeout(resize, 100);
       window.addEventListener('resize', resize);
 
       // Mouse tracking
