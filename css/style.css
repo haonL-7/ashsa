@@ -680,52 +680,8 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 /* ============================================================
-   CONFERENCE INFO BAR
+   SECTIONS
    ============================================================ */
-.conf-bar {
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  padding: 1rem 0;
-  text-align: center;
-}
-
-.conf-bar .container {
-  display: flex;
-  justify-content: center;
-  gap: var(--space-xl);
-  flex-wrap: wrap;
-}
-
-.conf-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.9rem;
-  color: var(--ink-md);
-  font-weight: 500;
-}
-
-.conf-item .conf-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-sm);
-  background: var(--gold-pale);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.conf-item .conf-icon svg {
-  width: 16px;
-  height: 16px;
-  fill: var(--gold);
-}
-
-@media (max-width: 768px) {
-  .conf-bar .container { flex-direction: column; gap: 0.5rem; }
-  .conf-item { justify-content: center; }
-}
 
 /* ============================================================
    SECTIONS
