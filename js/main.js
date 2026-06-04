@@ -99,6 +99,11 @@
         this.twinkleAmp = Math.random() * 0.5 + 0.3;
         this.phase = Math.random() * Math.PI * 2;
 
+        // Gleam — occasional brilliant flash
+        this.gleamTimer = 100 + Math.random() * 500;  // frames until next gleam
+        this.gleamPower = 0;                           // current gleam intensity (0-1)
+        this.gleamDecay = 0.02 + Math.random() * 0.04; // how fast gleam fades
+
         // Star color temperature
         var temp = Math.random();
         if (temp < 0.08) {
@@ -113,6 +118,19 @@
       Star.prototype.update = function () {
         this.phase += this.twinkleSpeed;
         frame += 0.0001;
+
+        // Gleam countdown — trigger a flash
+        this.gleamTimer--;
+        if (this.gleamTimer <= 0) {
+          this.gleamPower = 0.7 + Math.random() * 0.3; // burst!
+          this.gleamTimer = 200 + Math.random() * 600;  // next flash
+        }
+        // Decay gleam
+        if (this.gleamPower > 0.001) {
+          this.gleamPower *= (1 - this.gleamDecay);
+        } else {
+          this.gleamPower = 0;
+        }
 
         // Gravitational lensing — mouse gently pulls nearby stars
         if (mouse.active) {
@@ -141,10 +159,14 @@
         if (this.oy < -20) this.oy = canvas.height + 20;
         if (this.oy > canvas.height + 20) this.oy = -20;
 
-        // Twinkle
+        // Twinkle + gleam
         var twinkle = 0.5 + 0.5 * Math.sin(this.phase);
         twinkle = this.baseAlpha * (0.6 + this.twinkleAmp * twinkle);
-        return twinkle;
+        // Add gleam — brief intense brightness
+        if (this.gleamPower > 0.001) {
+          twinkle += this.gleamPower * (0.6 + this.baseAlpha * 0.4);
+        }
+        return Math.min(1, twinkle);
       };
 
       Star.prototype.draw = function (alpha) {
