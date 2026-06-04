@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>首页 — 亚洲体育健康协会国际会议</title>
   <meta name="description" content="亚洲体育健康协会国际会议官方网站 — 汇聚亚洲体育健康领域专家学者，推动体医融合发展">
-  <link rel="stylesheet" href="../css/style.css?v=11">
+  <link rel="stylesheet" href="../css/style.css?v=12">
   <link rel="preload" href="../images/icons.svg" as="image" type="image/svg+xml">
 </head>
 <body>
@@ -50,73 +50,192 @@
   <section class="hero" style="background: linear-gradient(to bottom, #040d1a 0%, #0a1f3a 25%, #0f3055 45%, #1e5580 65%, #5a95ba 82%, #ffffff 100%);">
     <canvas id="hero-canvas"></canvas>
 <script>
-(function(){var C=document.getElementById('hero-canvas');if(!C)return;var X=C.getContext('2d');
-var stars=[],M={x:0,y:0,on:0},N=1000,A,frame=0,W,H;
+(function(){
+var C=document.getElementById('hero-canvas');if(!C)return;var X=C.getContext('2d');
+var stars=[],M={x:0,y:0,on:0,t:0},N=1200,A,frame=0,W,H,DRIFT=0,zoom=1,zx=0,zy=0,zoomT=0,label='',labelA=0;
 
 function R(){var p=C.parentElement;W=p.offsetWidth||window.innerWidth;H=p.offsetHeight||700;
 C.width=W;C.height=H;C.style.width=W+'px';C.style.height=H+'px'}R();window.addEventListener('resize',R);
 
-C.addEventListener('mousemove',function(e){var r=C.getBoundingClientRect();M.x=e.clientX-r.left;M.y=e.clientY-r.top;M.on=1});
-C.addEventListener('mouseleave',function(){M.on=0});
-C.addEventListener('touchmove',function(e){e.preventDefault();var r=C.getBoundingClientRect();M.x=e.touches[0].clientX-r.left;M.y=e.touches[0].clientY-r.top;M.on=1},{passive:0});
-C.addEventListener('touchend',function(){M.on=0});
+C.addEventListener('mousemove',function(e){var r=C.getBoundingClientRect();M.x=e.clientX-r.left;M.y=e.clientY-r.top;M.on=1;M.t=Date.now()});
+C.addEventListener('mouseleave',function(){M.on=0;M.t=0});
+C.addEventListener('click',function(e){if(zoomT<0.01){var r=C.getBoundingClientRect();zx=e.clientX-r.left;zy=e.clientY-r.top;zoomT=0.06;checkLabel()}});
+C.addEventListener('touchmove',function(e){e.preventDefault();var r=C.getBoundingClientRect();M.x=e.touches[0].clientX-r.left;M.y=e.touches[0].clientY-r.top;M.on=1;M.t=Date.now()},{passive:0});
+C.addEventListener('touchend',function(){M.on=0;M.t=0});
 
-var GCX=W*0.5,GCY=H*0.4,ANGLE=-0.5,AXIS_A=W*0.65,AXIS_B=H*0.14;
+// === MILKY WAY BAND RENDERING ===
+// Pre-compute band luminance texture
+var bandCanvas=document.createElement('canvas'),bX;
+function buildBand(){
+  bandCanvas.width=W;bandCanvas.height=H;bX=bandCanvas.getContext('2d');
+  var img=bX.createImageData(W,H),d=img.data;
+  for(var y=0;y<H;y++){
+    for(var x=0;x<W;x++){
+      var i=(y*W+x)*4;
+      // Milky Way band: horizontal-ish, slightly tilted, with organic width variation
+      var bandY=H*0.45+Math.sin(x*0.001)*H*0.08+Math.sin(x*0.003+y*0.005)*H*0.15+Math.cos(x*0.0007)*H*0.06;
+      var dist=Math.abs(y-bandY);
+      var sigma=H*0.06+Math.sin(x*0.002)*H*0.03+Math.cos(x*0.0015+y*0.003)*H*0.04;
+      // Bright patches (star clouds)
+      var patch=Math.sin(x*0.004)*0.5+Math.sin(x*0.007+y*0.01)*0.5+Math.cos(x*0.002+y*0.008)*0.5;
+      patch=Math.max(0,patch*0.8+0.2);
+      // Dark rifts (dust lanes)
+      var rift=Math.abs(Math.sin(x*0.005+y*0.02))*0.5;
+      // Combine
+      var intensity=Math.exp(-(dist*dist)/(2*sigma*sigma));
+      intensity*=0.08*(0.5+patch*0.5)*(1-rift*0.6);
+      // Add faint wide halo
+      intensity+=Math.exp(-(dist*dist)/(2*(sigma*3)*(sigma*3)))*0.015;
+      var v=Math.min(255,intensity*255);
+      d[i]=180;d[i+1]=200;d[i+2]=230;d[i+3]=Math.floor(v)
+    }
+  }
+  bX.putImageData(img,0,0)
+}
+buildBand();
+
+// === FAMOUS CONSTELLATIONS ===
+var constellations=[
+  {name:'猎户座 Orion',x:0.65,y:0.32,stars:[
+    [0,0],[8,2],[14,1],[5,8],[-8,15],[-2,3],[3,-5],[18,-8],[-12,10],[20,3]
+  ],lines:[[0,1],[1,2],[3,4],[0,3],[1,4],[0,5],[4,6],[5,6],[7,8],[2,8]]},
+  {name:'北斗七星 Big Dipper',x:0.25,y:0.2,stars:[
+    [0,0],[10,-2],[18,1],[28,5],[22,14],[10,11],[2,8]
+  ],lines:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,0]]},
+  {name:'仙后座 Cassiopeia',x:0.4,y:0.65,stars:[
+    [0,5],[6,0],[12,8],[18,0],[24,5]
+  ],lines:[[0,1],[1,2],[2,3],[3,4]]},
+  {name:'昴星团 Pleiades M45',x:0.72,y:0.35,stars:[
+    [0,0],[3,2],[-1,4],[5,-1],[2,5],[-3,1],[4,3],[-2,-2],[1,-3]
+  ],lines:[]},
+  {name:'仙女座星系 M31',x:0.3,y:0.5,stars:[[0,0]],lines:[],isGalaxy:true}
+];
+
+function drawConstellations(){
+  for(var k=0;k<constellations.length;k++){
+    var c=constellations[k],cx=c.x*W,cy=c.y*H,pts=[];
+    for(var i=0;i<c.stars.length;i++){
+      var sx=cx+c.stars[i][0]*H*0.012, sy=cy+c.stars[i][1]*H*0.012;
+      pts.push([sx,sy]);
+      // Draw constellation star
+      var a=0.35;if(M.on){var d=Math.hypot(M.x-sx,M.y-sy);if(d<60)a=Math.min(1,0.35+0.65*(1-d/60))}
+      var g=X.createRadialGradient(sx,sy,0,sx,sy,6);
+      g.addColorStop(0,'rgba(255,255,255,'+(a*0.9)+')');
+      g.addColorStop(0.3,'rgba(200,220,255,'+(a*0.4)+')');
+      g.addColorStop(1,'rgba(0,0,0,0)');
+      X.beginPath();X.arc(sx,sy,6,0,Math.PI*2);X.fillStyle=g;X.fill()
+    }
+    // Lines
+    if(c.lines&&labelA<0.1){
+      X.strokeStyle='rgba(180,200,240,0.15)';X.lineWidth=0.6;
+      for(var j=0;j<c.lines.length;j++){
+        var l=c.lines[j],p1=pts[l[0]],p2=pts[l[1]];
+        X.beginPath();X.moveTo(p1[0],p1[1]);X.lineTo(p2[0],p2[1]);X.stroke()
+      }
+    }
+    // Galaxy blob
+    if(c.isGalaxy){
+      var g=X.createRadialGradient(cx,cy,0,cx,cy,20);
+      g.addColorStop(0,'rgba(220,210,240,0.2)');g.addColorStop(1,'rgba(0,0,0,0)');
+      X.beginPath();X.ellipse(cx,cy,25,16,-0.3,0,Math.PI*2);X.fillStyle=g;X.fill()
+    }
+    // Label
+    if(label===c.name)drawLabel(cx,cy-20,c.name)
+  }
+}
+
+function checkLabel(){
+  label='';var best=999;
+  for(var k=0;k<constellations.length;k++){
+    var c=constellations[k],cx=c.x*W,cy=c.y*H;
+    var d=Math.hypot(zx-cx,zy-cy);
+    if(d<60&&d<best){best=d;label=c.name}
+  }
+  if(label)labelA=1
+}
+
+function drawLabel(x,y,txt){
+  var a=Math.min(1,labelA);
+  X.save();X.font='13px "PingFang SC","Microsoft YaHei",sans-serif';X.textAlign='center';
+  var w=X.measureText(txt).width+20;
+  X.fillStyle='rgba(0,0,0,'+(a*0.7)+')';
+  X.beginPath();X.roundRect(x-w/2,y-10,w,22,4);X.fill();
+  X.fillStyle='rgba(255,255,255,'+a+')';X.fillText(txt,x,y+5);
+  X.restore()
+}
+
+// Star distribution: dense in band, sparse outside
+function starDensity(x,y){
+  var bandY=H*0.45+Math.sin(x*0.001)*H*0.08+Math.sin(x*0.003+y*0.005)*H*0.15+Math.cos(x*0.0007)*H*0.06;
+  var dist=Math.abs(y-bandY),sigma=H*0.08;
+  return 0.05+0.95*Math.exp(-(dist*dist)/(2*sigma*sigma))
+}
 
 function Star(){
   var ok=0,tt=0;
-  while(!ok&&tt<200){
-    var tx=Math.random()*W,ty=Math.random()*H;
-    var dx=tx-GCX,dy=ty-GCY;
-    var rx=dx*Math.cos(-ANGLE)-dy*Math.sin(-ANGLE);
-    var ry=dx*Math.sin(-ANGLE)+dy*Math.cos(-ANGLE);
-    // Exponential disc: density falls off with distance from center
-    var d=Math.sqrt((rx*rx)/(AXIS_A*AXIS_A)+(ry*ry)/(AXIS_B*AXIS_B));
-    var accept=Math.exp(-d*2.5); // core dense, arms sparse
-    if(Math.random()<accept){this.x=tx;this.y=ty;ok=1}tt++
-  }
+  while(!ok&&tt<300){var tx=Math.random()*W,ty=Math.random()*H;if(Math.random()<starDensity(tx,ty)){this.x=tx;this.y=ty;ok=1}tt++}
   if(!ok){this.x=Math.random()*W;this.y=Math.random()*H}
   this.ox=this.x;this.oy=this.y;
-  var dc=Math.sqrt(dx*dx+dy*dy)/Math.max(W,H);
-  var brightness=Math.exp(-dc*3);
-  var tier=Math.random()*(0.2+brightness*0.8);
-  if(tier<0.55){this.rr=0.25+Math.random()*0.45;this.ba=0.06+Math.random()*0.15}
-  else if(tier<0.82){this.rr=0.5+Math.random()*0.6;this.ba=0.18+Math.random()*0.28}
-  else if(tier<0.95){this.rr=0.9+Math.random()*0.9;this.ba=0.32+Math.random()*0.35}
-  else{this.rr=1.4+Math.random()*1.2;this.ba=0.5+Math.random()*0.5}
-  this.ts=0.003+Math.random()*0.04;this.ta=0.3+Math.random()*0.7;this.ph=Math.random()*Math.PI*2;
-  this.gt=100+Math.random()*400;this.gp=0;this.gd=0.015+Math.random()*0.05;
-  var temp=Math.random(),w=temp<0.04,h=temp<0.15;
-  this.R=w?255:h?175:235;this.G=w?218:h?218:242;this.B=w?148:h?255:255
+  this.rr=0.2+Math.random()*1.8;this.ba=0.06+Math.random()*0.5;
+  this.ts=0.002+Math.random()*0.04;this.ta=0.2+Math.random()*0.8;this.ph=Math.random()*Math.PI*2;
+  this.gt=80+Math.random()*500;this.gp=0;this.gd=0.01+Math.random()*0.06;
+  var t=Math.random();this.R=t<0.04?255:t<0.14?175:235;this.G=t<0.04?218:t<0.14?218:242;this.B=t<0.04?148:t<0.14?255:255
 }
 
-Star.prototype.up=function(){this.ph+=this.ts;frame+=0.00008;
-this.gt--;if(this.gt<=0){this.gp=0.4+Math.random()*0.6;this.gt=150+Math.random()*500}
-this.gp*=this.gp>0.001?1-this.gd:0;
-if(M.on){var dx=M.x-this.x,dy=M.y-this.y,dist=Math.sqrt(dx*dx+dy*dy);
-if(dist<180&&dist>1){var f=(1-dist/180);f=f*f*0.012;this.x+=dx*f;this.y+=dy*f}}
-this.x+=(this.ox-this.x)*0.001;this.y+=(this.oy-this.y)*0.001;
-this.ox+=Math.sin(frame+this.ph)*0.015;this.oy+=Math.cos(frame*0.7+this.ph)*0.01;
-if(this.ox<-30)this.ox=W+30;if(this.ox>W+30)this.ox=-30;if(this.oy<-30)this.oy=H+30;if(this.oy>H+30)this.oy=-30;
-var t=0.5+0.5*Math.sin(this.ph),a=this.ba*(0.45+this.ta*t);
-if(this.gp>0.001)a+=this.gp*(0.35+this.ba*0.5);
-return Math.min(1,a)};
+Star.prototype.up=function(){
+  this.ph+=this.ts;frame+=0.00006;
+  this.gt--;if(this.gt<=0){this.gp=0.3+Math.random()*0.7;this.gt=120+Math.random()*500}
+  this.gp*=this.gp>0.001?1-this.gd:0;
+  // Mouse proximity brightening
+  var nearMouse=0;
+  if(M.on){var dx=M.x-this.x,dy=M.y-this.y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<80)nearMouse=(1-dist/80)}
+  // Self-motion drift
+  this.ox+=Math.cos(DRIFT+this.ph)*0.02;
+  this.oy+=Math.sin(DRIFT*0.7+this.ph)*0.015;
+  if(this.ox<-50)this.ox=W+50;if(this.ox>W+50)this.ox=-50;if(this.oy<-50)this.oy=H+50;if(this.oy>H+50)this.oy=-50;
+  this.x+=(this.ox-this.x)*0.02;this.y+=(this.oy-this.y)*0.02;
+  var a=this.ba*(0.4+this.ta*(0.5+0.5*Math.sin(this.ph)));
+  if(this.gp>0.001)a+=this.gp*(0.3+this.ba*0.4);
+  a=Math.min(1,a+nearMouse*0.5);
+  return a
+};
 
-Star.prototype.draw=function(a){if(a<0.01)return;
-var gr=this.rr*3.5,g=X.createRadialGradient(this.x,this.y,0,this.x,this.y,gr);
+Star.prototype.draw=function(a){if(a<0.008)return;
+var gr=this.rr*3,g=X.createRadialGradient(this.x,this.y,0,this.x,this.y,gr);
 g.addColorStop(0,'rgba('+this.R+','+this.G+','+this.B+','+(a*0.9)+')');
-g.addColorStop(0.2,'rgba('+this.R+','+this.G+','+this.B+','+(a*0.3)+')');
-g.addColorStop(0.6,'rgba('+this.R+','+this.G+','+this.B+','+(a*0.04)+')');
-g.addColorStop(1,'rgba('+this.R+','+this.G+','+this.B+',0)');
-X.beginPath();X.arc(this.x,this.y,gr,0,Math.PI*2);X.fillStyle=g;X.fill();
-if(a>0.25){X.beginPath();X.arc(this.x,this.y,this.rr*0.3,0,Math.PI*2);X.fillStyle='rgba(255,255,255,'+(a*0.7)+')';X.fill()}};
+g.addColorStop(0.25,'rgba('+this.R+','+this.G+','+this.B+','+(a*0.2)+')');
+g.addColorStop(1,'rgba(0,0,0,0)');
+X.beginPath();X.arc(this.x,this.y,gr,0,Math.PI*2);X.fillStyle=g;X.fill()};
 
 for(var i=0;i<N;i++)stars.push(new Star());
+
 function animate(){
   X.clearRect(0,0,W,H);
-  GCX+=Math.sin(frame*0.015)*0.05;GCY+=Math.cos(frame*0.02)*0.03;
-  GCX=Math.max(W*0.25,Math.min(W*0.75,GCX));GCY=Math.max(H*0.2,Math.min(H*0.55,GCY));
+  DRIFT+=0.0003; // slow self-rotation
+
+  // Zoom animation
+  if(zoomT>0.001){zoom+=zoomT*(3-zoom)*0.1;zoomT*=0.92;if(zoomT<0.002)zoomT=0}
+  else if(zoom>1.01){zoom+=(1-zoom)*0.05}
+  // Label fade
+  if(label){labelA*=0.97;if(labelA<0.01){label='';labelA=0}}
+  // Auto-label on long hover
+  if(M.on&&M.t&&Date.now()-M.t>1500&&zoom<1.1){zx=M.x;zy=M.y;zoomT=0.04;checkLabel();M.t=0}
+
+  X.save();
+  if(zoom>1.01){X.translate(W/2,H/2);X.scale(zoom,zoom);X.translate(-W/2,-H/2);
+    X.translate((W/2-zx)*(zoom-1)*0.5,(H/2-zy)*(zoom-1)*0.5)}
+
+  // Milky Way band
+  X.globalAlpha=0.5;X.drawImage(bandCanvas,0,0);
+  X.globalAlpha=1;
+
+  // Stars
   for(var i=0;i<stars.length;i++){var a=stars[i].up();stars[i].draw(a)}
+
+  // Constellations
+  drawConstellations();
+
+  X.restore();
   A=requestAnimationFrame(animate)
 }
 var obs=new IntersectionObserver(function(e){if(e[0].isIntersecting){if(!A)animate()}else{if(A){cancelAnimationFrame(A);A=null}}},{threshold:0});
@@ -272,6 +391,6 @@ obs.observe(C.parentElement);animate()})();
     </div>
   </footer>
 
-  <script src="../js/main.js?v=11"></script>
+  <script src="../js/main.js?v=12"></script>
 </body>
 </html>
