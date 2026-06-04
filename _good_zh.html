@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home — Asian Sports Health Association International Conference</title>
-  <meta name="description" content="ASHSA International Conference — Bringing together leading scholars in sports science, exercise medicine, and health management across Asia">
-  <link rel="stylesheet" href="../css/style.css?v=17">
+  <title>首页 — 亚洲体育健康协会国际会议</title>
+  <meta name="description" content="亚洲体育健康协会国际会议官方网站 — 汇聚亚洲体育健康领域专家学者，推动体医融合发展">
+  <link rel="stylesheet" href="../css/style.css?v=14">
+  <link rel="preload" href="../images/icons.svg" as="image" type="image/svg+xml">
 </head>
-<body class="en">
+<body>
 
+  <!-- ====== NAVIGATION ====== -->
   <nav class="nav">
     <div class="container">
       <a href="index.html" class="nav-logo">
@@ -21,21 +23,21 @@
         </span>
         ASHSA
       </a>
-      <button class="nav-toggle" aria-label="Menu">
+      <button class="nav-toggle" aria-label="菜单">
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links">
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="schedule.html">Program</a></li>
-        <li><a href="speakers.html">Speakers</a></li>
-        <li><a href="registration.html">Registration</a></li>
-        <li><a href="venue.html">Venue</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="index.html" class="active">首页</a></li>
+        <li><a href="schedule.html">会议日程</a></li>
+        <li><a href="speakers.html">演讲嘉宾</a></li>
+        <li><a href="registration.html">注册参会</a></li>
+        <li><a href="venue.html">会场交通</a></li>
+        <li><a href="contact.html">联系我们</a></li>
         <li class="nav-lang">
           <button class="nav-lang-btn">Language <span class="arrow">&#9662;</span></button>
           <div class="nav-lang-menu">
-            <a href="../zh/">中文</a>
-            <a href="index.html" class="active-lang">English</a>
+            <a href="index.html" class="active-lang">中文</a>
+            <a href="../en/">English</a>
             <a href="../ko/">한국어</a>
             <a href="../ja/">日本語</a>
           </div>
@@ -44,6 +46,7 @@
     </div>
   </nav>
 
+  <!-- ====== HERO ====== -->
   <section class="hero" style="background: linear-gradient(to bottom, #040d1a 0%, #0a1f3a 25%, #0f3055 45%, #1e5580 65%, #5a95ba 82%, #ffffff 100%);">
     <canvas id="hero-canvas"></canvas>
 <script>
@@ -211,7 +214,6 @@ function animate(){
 }
 animate()})();
 </script>
-
-
+<script src="../js/main.js?v=14"></script>
 </body>
 </html>

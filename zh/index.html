@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>首页 — 亚洲体育健康协会国际会议</title>
   <meta name="description" content="亚洲体育健康协会国际会议官方网站 — 汇聚亚洲体育健康领域专家学者，推动体医融合发展">
-  <link rel="stylesheet" href="../css/style.css?v=13">
+  <link rel="stylesheet" href="../css/style.css?v=17">
   <link rel="preload" href="../images/icons.svg" as="image" type="image/svg+xml">
 </head>
 <body>
@@ -49,197 +49,172 @@
   <!-- ====== HERO ====== -->
   <section class="hero" style="background: linear-gradient(to bottom, #040d1a 0%, #0a1f3a 25%, #0f3055 45%, #1e5580 65%, #5a95ba 82%, #ffffff 100%);">
     <canvas id="hero-canvas"></canvas>
+<script>
 (function(){
 var C=document.getElementById('hero-canvas');if(!C)return;var X=C.getContext('2d');
-var stars=[],M={x:0,y:0,on:0,t:0},N=1200,A,frame=0,W,H,DRIFT=0,zoom=1,zx=0,zy=0,zoomT=0,label='',labelA=0;
+var stars=[],M={x:-999,y:-999,on:0,t:0},N=1500,A,W,H,DRIFT=0;
+var label='',labelA=0,ripple=0,rx=0,ry=0;
 
 function R(){var p=C.parentElement;W=p.offsetWidth||window.innerWidth;H=p.offsetHeight||700;
-C.width=W;C.height=H;C.style.width=W+'px';C.style.height=H+'px'}R();window.addEventListener('resize',R);
+C.width=W;C.height=H;C.style.width=W+'px';C.style.height=H+'px'}R();window.addEventListener('resize',function(){R();buildMW()});
 
+// Mouse
 C.addEventListener('mousemove',function(e){var r=C.getBoundingClientRect();M.x=e.clientX-r.left;M.y=e.clientY-r.top;M.on=1;M.t=Date.now()});
-C.addEventListener('mouseleave',function(){M.on=0;M.t=0});
-C.addEventListener('click',function(e){if(zoomT<0.01){var r=C.getBoundingClientRect();zx=e.clientX-r.left;zy=e.clientY-r.top;zoomT=0.06;checkLabel()}});
+C.addEventListener('mouseleave',function(){M.on=0});
+C.addEventListener('click',function(e){var r=C.getBoundingClientRect();rx=e.clientX-r.left;ry=e.clientY-r.top;ripple=1;checkLabel(rx,ry)});
 C.addEventListener('touchmove',function(e){e.preventDefault();var r=C.getBoundingClientRect();M.x=e.touches[0].clientX-r.left;M.y=e.touches[0].clientY-r.top;M.on=1;M.t=Date.now()},{passive:0});
-C.addEventListener('touchend',function(){M.on=0;M.t=0});
+C.addEventListener('touchend',function(){M.on=0});
 
-// === MILKY WAY BAND RENDERING ===
-// Pre-compute band luminance texture
-var bandCanvas=document.createElement('canvas'),bX;
-function buildBand(){
-  bandCanvas.width=W;bandCanvas.height=H;bX=bandCanvas.getContext('2d');
-  var img=bX.createImageData(W,H),d=img.data;
-  for(var y=0;y<H;y++){
-    for(var x=0;x<W;x++){
-      var i=(y*W+x)*4;
-      // Milky Way band: horizontal-ish, slightly tilted, with organic width variation
-      var bandY=H*0.45+Math.sin(x*0.001)*H*0.08+Math.sin(x*0.003+y*0.005)*H*0.15+Math.cos(x*0.0007)*H*0.06;
-      var dist=Math.abs(y-bandY);
-      var sigma=H*0.06+Math.sin(x*0.002)*H*0.03+Math.cos(x*0.0015+y*0.003)*H*0.04;
-      // Bright patches (star clouds)
-      var patch=Math.sin(x*0.004)*0.5+Math.sin(x*0.007+y*0.01)*0.5+Math.cos(x*0.002+y*0.008)*0.5;
-      patch=Math.max(0,patch*0.8+0.2);
-      // Dark rifts (dust lanes)
-      var rift=Math.abs(Math.sin(x*0.005+y*0.02))*0.5;
-      // Combine
-      var intensity=Math.exp(-(dist*dist)/(2*sigma*sigma));
-      intensity*=0.08*(0.5+patch*0.5)*(1-rift*0.6);
-      // Add faint wide halo
-      intensity+=Math.exp(-(dist*dist)/(2*(sigma*3)*(sigma*3)))*0.015;
-      var v=Math.min(255,intensity*255);
-      d[i]=180;d[i+1]=200;d[i+2]=230;d[i+3]=Math.floor(v)
+// ===== MILKY WAY — 3-layer offscreen composite =====
+var mwCanvas,mwCtx;
+function buildMW(){
+  if(!W||!H)return;
+  mwCanvas=document.createElement('canvas');mwCanvas.width=W;mwCanvas.height=H;mwCtx=mwCanvas.getContext('2d');
+
+  // Layer 1: Wide soft halo
+  for(var y=0;y<H;y+=3){
+    for(var x=0;x<W;x+=3){
+      var bandY=H*0.42+Math.sin(x*0.0008)*H*0.1+Math.sin(x*0.0025+y*0.004)*H*0.18+Math.cos(x*0.0006)*H*0.05;
+      var dy=y-bandY,sigma=H*0.15+Math.sin(x*0.0015)*H*0.05;
+      var a=Math.exp(-(dy*dy)/(2*sigma*sigma))*0.06;
+      if(a>0.002){mwCtx.fillStyle='rgba(160,190,230,'+a+')';mwCtx.fillRect(x,y,3,3)}
     }
   }
-  bX.putImageData(img,0,0)
-}
-buildBand();
 
-// === FAMOUS CONSTELLATIONS ===
-var constellations=[
-  {name:'猎户座 Orion',x:0.65,y:0.32,stars:[
-    [0,0],[8,2],[14,1],[5,8],[-8,15],[-2,3],[3,-5],[18,-8],[-12,10],[20,3]
-  ],lines:[[0,1],[1,2],[3,4],[0,3],[1,4],[0,5],[4,6],[5,6],[7,8],[2,8]]},
-  {name:'北斗七星 Big Dipper',x:0.25,y:0.2,stars:[
-    [0,0],[10,-2],[18,1],[28,5],[22,14],[10,11],[2,8]
-  ],lines:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,0]]},
-  {name:'仙后座 Cassiopeia',x:0.4,y:0.65,stars:[
-    [0,5],[6,0],[12,8],[18,0],[24,5]
-  ],lines:[[0,1],[1,2],[2,3],[3,4]]},
-  {name:'昴星团 Pleiades M45',x:0.72,y:0.35,stars:[
-    [0,0],[3,2],[-1,4],[5,-1],[2,5],[-3,1],[4,3],[-2,-2],[1,-3]
-  ],lines:[]},
-  {name:'仙女座星系 M31',x:0.3,y:0.5,stars:[[0,0]],lines:[],isGalaxy:true}
-];
-
-function drawConstellations(){
-  for(var k=0;k<constellations.length;k++){
-    var c=constellations[k],cx=c.x*W,cy=c.y*H,pts=[];
-    for(var i=0;i<c.stars.length;i++){
-      var sx=cx+c.stars[i][0]*H*0.012, sy=cy+c.stars[i][1]*H*0.012;
-      pts.push([sx,sy]);
-      // Draw constellation star
-      var a=0.35;if(M.on){var d=Math.hypot(M.x-sx,M.y-sy);if(d<60)a=Math.min(1,0.35+0.65*(1-d/60))}
-      var g=X.createRadialGradient(sx,sy,0,sx,sy,6);
-      g.addColorStop(0,'rgba(255,255,255,'+(a*0.9)+')');
-      g.addColorStop(0.3,'rgba(200,220,255,'+(a*0.4)+')');
-      g.addColorStop(1,'rgba(0,0,0,0)');
-      X.beginPath();X.arc(sx,sy,6,0,Math.PI*2);X.fillStyle=g;X.fill()
+  // Layer 2: Bright core band (narrower)
+  for(var y=0;y<H;y+=2){
+    for(var x=0;x<W;x+=2){
+      var bandY=H*0.43+Math.sin(x*0.0009)*H*0.08+Math.sin(x*0.003+y*0.005)*H*0.12+Math.cos(x*0.0007)*H*0.04;
+      var dy=y-bandY,sigma=H*0.045+Math.sin(x*0.002)*H*0.025;
+      var a=Math.exp(-(dy*dy)/(2*sigma*sigma))*0.1;
+      if(a>0.003){mwCtx.fillStyle='rgba(200,220,250,'+a+')';mwCtx.fillRect(x,y,2,2)}
     }
-    // Lines
-    if(c.lines&&labelA<0.1){
-      X.strokeStyle='rgba(180,200,240,0.15)';X.lineWidth=0.6;
-      for(var j=0;j<c.lines.length;j++){
-        var l=c.lines[j],p1=pts[l[0]],p2=pts[l[1]];
-        X.beginPath();X.moveTo(p1[0],p1[1]);X.lineTo(p2[0],p2[1]);X.stroke()
-      }
-    }
-    // Galaxy blob
-    if(c.isGalaxy){
-      var g=X.createRadialGradient(cx,cy,0,cx,cy,20);
-      g.addColorStop(0,'rgba(220,210,240,0.2)');g.addColorStop(1,'rgba(0,0,0,0)');
-      X.beginPath();X.ellipse(cx,cy,25,16,-0.3,0,Math.PI*2);X.fillStyle=g;X.fill()
-    }
-    // Label
-    if(label===c.name)drawLabel(cx,cy-20,c.name)
   }
-}
 
-function checkLabel(){
-  label='';var best=999;
-  for(var k=0;k<constellations.length;k++){
-    var c=constellations[k],cx=c.x*W,cy=c.y*H;
-    var d=Math.hypot(zx-cx,zy-cy);
-    if(d<60&&d<best){best=d;label=c.name}
+  // Layer 3: Irregular bright star clouds + dust lanes
+  for(var y=0;y<H;y+=2){
+    for(var x=0;x<W;x+=2){
+      var bandY=H*0.43+Math.sin(x*0.001)*H*0.07+Math.sin(x*0.0035+y*0.006)*H*0.14;
+      var dy=y-bandY,sigma=H*0.025;
+      var cloud=Math.sin(x*0.005+y*0.008)*0.5+Math.sin(x*0.009-y*0.006)*0.5+Math.cos(x*0.003+y*0.012)*0.5;
+      cloud=Math.max(0,cloud)*0.7+0.3;
+      var dust=1-Math.abs(Math.sin(x*0.004+y*0.018))*0.7;
+      var a=Math.exp(-(dy*dy)/(2*sigma*sigma))*0.12*cloud*dust;
+      if(a>0.004){mwCtx.fillStyle='rgba(220,235,255,'+a+')';mwCtx.fillRect(x,y,2,2)}
+    }
   }
-  if(label)labelA=1
-}
 
-function drawLabel(x,y,txt){
-  var a=Math.min(1,labelA);
-  X.save();X.font='13px "PingFang SC","Microsoft YaHei",sans-serif';X.textAlign='center';
-  var w=X.measureText(txt).width+20;
-  X.fillStyle='rgba(0,0,0,'+(a*0.7)+')';
-  X.beginPath();X.roundRect(x-w/2,y-10,w,22,4);X.fill();
-  X.fillStyle='rgba(255,255,255,'+a+')';X.fillText(txt,x,y+5);
-  X.restore()
+  // Layer 4: Galactic core glow (one bright region)
+  var coreX=W*0.55,coreY=H*0.43;
+  var g=mwCtx.createRadialGradient(coreX,coreY,0,coreX,coreY,W*0.4);
+  g.addColorStop(0,'rgba(255,240,210,0.1)');g.addColorStop(0.2,'rgba(220,210,180,0.04)');
+  g.addColorStop(0.5,'rgba(180,190,220,0.01)');g.addColorStop(1,'rgba(0,0,0,0)');
+  mwCtx.fillStyle=g;mwCtx.fillRect(0,0,W,H)
 }
+buildMW();
 
-// Star distribution: dense in band, sparse outside
-function starDensity(x,y){
-  var bandY=H*0.45+Math.sin(x*0.001)*H*0.08+Math.sin(x*0.003+y*0.005)*H*0.15+Math.cos(x*0.0007)*H*0.06;
-  var dist=Math.abs(y-bandY),sigma=H*0.08;
-  return 0.05+0.95*Math.exp(-(dist*dist)/(2*sigma*sigma))
-}
+// ===== STARS =====
+function bandCenter(x){return H*0.43+Math.sin(x*0.0009)*H*0.08+Math.sin(x*0.003)*H*0.12+Math.cos(x*0.0007)*H*0.04}
+function starDensity(x,y){var d=Math.abs(y-bandCenter(x))/H;return 0.02+0.98*Math.exp(-d*d*200)}
 
 function Star(){
   var ok=0,tt=0;
   while(!ok&&tt<300){var tx=Math.random()*W,ty=Math.random()*H;if(Math.random()<starDensity(tx,ty)){this.x=tx;this.y=ty;ok=1}tt++}
   if(!ok){this.x=Math.random()*W;this.y=Math.random()*H}
   this.ox=this.x;this.oy=this.y;
-  this.rr=0.2+Math.random()*1.8;this.ba=0.06+Math.random()*0.5;
-  this.ts=0.002+Math.random()*0.04;this.ta=0.2+Math.random()*0.8;this.ph=Math.random()*Math.PI*2;
+  // Brightness: stars nearer the band center are slightly brighter on average
+  var d=Math.abs(this.y-bandCenter(this.x))/H;
+  this.br=Math.exp(-d*8); // 1 at center, ~0 at edge
+  var tier=Math.random()*(0.1+this.br*0.9);
+  if(tier<0.6){this.rr=0.2+Math.random()*0.4;this.ba=0.04+Math.random()*0.12}
+  else if(tier<0.85){this.rr=0.4+Math.random()*0.6;this.ba=0.15+Math.random()*0.25}
+  else if(tier<0.96){this.rr=0.7+Math.random()*0.8;this.ba=0.3+Math.random()*0.35}
+  else{this.rr=1.2+Math.random()*1.2;this.ba=0.5+Math.random()*0.5}
+  this.ph=Math.random()*Math.PI*2;this.ts=0.002+Math.random()*0.04;
   this.gt=80+Math.random()*500;this.gp=0;this.gd=0.01+Math.random()*0.06;
-  var t=Math.random();this.R=t<0.04?255:t<0.14?175:235;this.G=t<0.04?218:t<0.14?218:242;this.B=t<0.04?148:t<0.14?255:255
+  var t=Math.random(),w=t<0.03;
+  this.R=w?255:220;this.G=w?215:235;this.B=w?145:255
 }
 
 Star.prototype.up=function(){
-  this.ph+=this.ts;frame+=0.00006;
-  this.gt--;if(this.gt<=0){this.gp=0.3+Math.random()*0.7;this.gt=120+Math.random()*500}
+  this.ph+=this.ts;
+  this.gt--;if(this.gt<=0){this.gp=0.4+Math.random()*0.6;this.gt=100+Math.random()*500}
   this.gp*=this.gp>0.001?1-this.gd:0;
   // Mouse proximity brightening
-  var nearMouse=0;
-  if(M.on){var dx=M.x-this.x,dy=M.y-this.y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<80)nearMouse=(1-dist/80)}
-  // Self-motion drift
-  this.ox+=Math.cos(DRIFT+this.ph)*0.02;
-  this.oy+=Math.sin(DRIFT*0.7+this.ph)*0.015;
-  if(this.ox<-50)this.ox=W+50;if(this.ox>W+50)this.ox=-50;if(this.oy<-50)this.oy=H+50;if(this.oy>H+50)this.oy=-50;
-  this.x+=(this.ox-this.x)*0.02;this.y+=(this.oy-this.y)*0.02;
-  var a=this.ba*(0.4+this.ta*(0.5+0.5*Math.sin(this.ph)));
-  if(this.gp>0.001)a+=this.gp*(0.3+this.ba*0.4);
-  a=Math.min(1,a+nearMouse*0.5);
-  return a
+  var boost=0;
+  if(M.on){var d=Math.hypot(M.x-this.x,M.y-this.y);if(d<100)boost=(1-d/100)*0.6}
+  // Ripple from click
+  if(ripple>0.01){var rd=Math.hypot(rx-this.x,ry-this.y);boost+=Math.exp(-rd*rd/4000)*ripple*0.5}
+  // Drift
+  this.ox+=Math.cos(DRIFT+this.ph)*0.018;this.oy+=Math.sin(DRIFT*0.7+this.ph)*0.012;
+  if(this.ox<-40)this.ox=W+40;if(this.ox>W+40)this.ox=-40;if(this.oy<-40)this.oy=H+40;if(this.oy>H+40)this.oy=-40;
+  this.x+=(this.ox-this.x)*0.03;this.y+=(this.oy-this.y)*0.03;
+  var a=this.ba*(0.45+0.55*Math.sin(this.ph));
+  if(this.gp>0.001)a+=this.gp*0.3;
+  return Math.min(1,a+boost)
 };
 
-Star.prototype.draw=function(a){if(a<0.008)return;
+Star.prototype.draw=function(a){if(a<0.006)return;
 var gr=this.rr*3,g=X.createRadialGradient(this.x,this.y,0,this.x,this.y,gr);
-g.addColorStop(0,'rgba('+this.R+','+this.G+','+this.B+','+(a*0.9)+')');
-g.addColorStop(0.25,'rgba('+this.R+','+this.G+','+this.B+','+(a*0.2)+')');
+g.addColorStop(0,'rgba('+this.R+','+this.G+','+this.B+','+(a*0.85)+')');
+g.addColorStop(0.3,'rgba('+this.R+','+this.G+','+this.B+','+(a*0.15)+')');
 g.addColorStop(1,'rgba(0,0,0,0)');
 X.beginPath();X.arc(this.x,this.y,gr,0,Math.PI*2);X.fillStyle=g;X.fill()};
 
 for(var i=0;i<N;i++)stars.push(new Star());
 
+// ===== CONSTELLATIONS =====
+var cons=[
+  {n:'猎户座 Orion',x:0.68,y:0.35,s:[[0,0],[9,2],[16,1],[6,9],[-10,17],[-3,4],[4,-6]],ln:[[0,1],[1,2],[3,4],[0,3],[1,4],[5,6]]},
+  {n:'北斗七星 Big Dipper',x:0.22,y:0.22,s:[[0,0],[11,-3],[20,1],[31,6],[25,16],[12,13],[3,9]],ln:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,0]]},
+  {n:'仙后座 Cassiopeia',x:0.38,y:0.62,s:[[0,6],[7,0],[14,9],[21,0],[28,6]],ln:[[0,1],[1,2],[2,3],[3,4]]},
+  {n:'昴星团 M45',x:0.74,y:0.33,s:[[0,0],[3,3],[-2,5],[6,-2],[3,7],[-4,2],[5,4],[-3,-3],[2,-4]],ln:[]},
+  {n:'仙女座星系 M31',x:0.28,y:0.52,s:[[0,0]],ln:[],gx:1}
+];
+
+function checkLabel(cx,cy){
+  label='';labelA=0;var best=60;
+  for(var k=0;k<cons.length;k++){var c=cons[k],px=c.x*W,py=c.y*H;var d=Math.hypot(cx-px,cy-py);if(d<best){best=d;label=c.n}}
+  if(label)labelA=1
+}
+
+function drawCons(){
+  for(var k=0;k<cons.length;k++){
+    var c=cons[k],cx=c.x*W,cy=c.y*H,pts=[],scale=H*0.013;
+    for(var i=0;i<c.s.length;i++){pts.push([cx+c.s[i][0]*scale,cy+c.s[i][1]*scale])}
+    for(var i=0;i<pts.length;i++){
+      var sx=pts[i][0],sy=pts[i][1],a=0.3+labelA*0.7;
+      if(M.on){var d=Math.hypot(M.x-sx,M.y-sy);if(d<60)a=Math.min(1,a+0.5*(1-d/60))}
+      var g=X.createRadialGradient(sx,sy,0,sx,sy,5);
+      g.addColorStop(0,'rgba(255,255,255,'+(a*0.9)+')');g.addColorStop(0.4,'rgba(200,220,255,'+(a*0.3)+')');g.addColorStop(1,'rgba(0,0,0,0)');
+      X.beginPath();X.arc(sx,sy,5,0,Math.PI*2);X.fillStyle=g;X.fill()
+    }
+    if(c.ln&&c.ln.length){
+      X.strokeStyle='rgba(180,200,240,'+(0.1+labelA*0.25)+')';X.lineWidth=0.5;
+      for(var j=0;j<c.ln.length;j++){var l=c.ln[j];X.beginPath();X.moveTo(pts[l[0]][0],pts[l[0]][1]);X.lineTo(pts[l[1]][0],pts[l[1]][1]);X.stroke()}
+    }
+    if(c.gx){var g=X.createRadialGradient(cx,cy,0,cx,cy,22);g.addColorStop(0,'rgba(220,210,240,0.18)');g.addColorStop(1,'rgba(0,0,0,0)');X.beginPath();X.ellipse(cx,cy,24,14,-0.3,0,Math.PI*2);X.fillStyle=g;X.fill()}
+    if(label===c.n){var a=Math.min(1,labelA);X.save();X.font='13px "PingFang SC","Microsoft YaHei",sans-serif';X.textAlign='center';var w=X.measureText(c.n).width+16;X.fillStyle='rgba(0,0,0,'+(a*0.75)+')';X.beginPath();X.roundRect(cx-w/2,cy-28,w,20,3);X.fill();X.fillStyle='rgba(255,255,255,'+a+')';X.fillText(c.n,cx,cy-14);X.restore()}
+  }
+}
+
 function animate(){
+  try{
   X.clearRect(0,0,W,H);
-  DRIFT+=0.0003; // slow self-rotation
-
-  // Zoom animation
-  if(zoomT>0.001){zoom+=zoomT*(3-zoom)*0.1;zoomT*=0.92;if(zoomT<0.002)zoomT=0}
-  else if(zoom>1.01){zoom+=(1-zoom)*0.05}
-  // Label fade
-  if(label){labelA*=0.97;if(labelA<0.01){label='';labelA=0}}
-  // Auto-label on long hover
-  if(M.on&&M.t&&Date.now()-M.t>1500&&zoom<1.1){zx=M.x;zy=M.y;zoomT=0.04;checkLabel();M.t=0}
-
-  X.save();
-  if(zoom>1.01){X.translate(W/2,H/2);X.scale(zoom,zoom);X.translate(-W/2,-H/2);
-    X.translate((W/2-zx)*(zoom-1)*0.5,(H/2-zy)*(zoom-1)*0.5)}
-
-  // Milky Way band
-  X.globalAlpha=0.5;X.drawImage(bandCanvas,0,0);
-  X.globalAlpha=1;
-
-  // Stars
+  DRIFT+=0.00025;
+  if(ripple>0.001)ripple*=0.96;else ripple=0;
+  if(labelA>0.001&&!label)labelA*=0.96;else if(label&&labelA<1)labelA+=0.02;
+  if(M.on&&M.t&&Date.now()-M.t>1800&&!label){checkLabel(M.x,M.y);M.t=0}
+  X.globalAlpha=0.75;X.drawImage(mwCanvas,0,0);X.globalAlpha=1;
   for(var i=0;i<stars.length;i++){var a=stars[i].up();stars[i].draw(a)}
-
-  // Constellations
-  drawConstellations();
-
-  X.restore();
+  drawCons();
+  if(ripple>0.02){X.beginPath();X.arc(rx,ry,(1-ripple)*200,0,Math.PI*2);X.strokeStyle='rgba(200,220,255,'+(ripple*0.3)+')';X.lineWidth=1.5;X.stroke()}
+  }catch(e){}
   A=requestAnimationFrame(animate)
 }
-var obs=new IntersectionObserver(function(e){if(e[0].isIntersecting){if(!A)animate()}else{if(A){cancelAnimationFrame(A);A=null}}},{threshold:0});
-obs.observe(C.parentElement);animate()})();
+animate()})();
 </script>
+
 
     <div class="container">
       <div class="hero-eyebrow">International Conference</div>
@@ -390,6 +365,6 @@ obs.observe(C.parentElement);animate()})();
     </div>
   </footer>
 
-  <script src="../js/main.js?v=13"></script>
+  <script src="../js/main.js?v=17"></script>
 </body>
 </html>
