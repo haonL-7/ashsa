@@ -623,19 +623,6 @@ img { max-width: 100%; height: auto; display: block; }
   50% { transform: translate(-40px, 30px); opacity: 0.5; }
 }
 
-/* Grid pattern overlay */
-.hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-  z-index: 0;
-  pointer-events: none;
-}
-
 .hero .container { position: relative; z-index: 2; }
 
 .hero-eyebrow {
