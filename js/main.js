@@ -38,6 +38,26 @@
     }
 
     // ============================================================
+    // STARFIELD — cosmic depth particles
+    // ============================================================
+    var starContainer = document.querySelector('.hero-stars');
+    if (starContainer) {
+      var fragment = document.createDocumentFragment();
+      for (var i = 0; i < 60; i++) {
+        var star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDuration = (6 + Math.random() * 14) + 's';
+        star.style.animationDelay = Math.random() * 12 + 's';
+        star.style.width = (1 + Math.random() * 2) + 'px';
+        star.style.height = star.style.width;
+        fragment.appendChild(star);
+      }
+      starContainer.appendChild(fragment);
+    }
+
+    // ============================================================
     // NAV SCROLL SHADOW
     // ============================================================
     var nav = document.querySelector('.nav');

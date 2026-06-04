@@ -499,27 +499,79 @@ img { max-width: 100%; height: auto; display: block; }
 .hero {
   background: var(--primary);
   color: var(--white);
-  padding: var(--space-3xl) 0 var(--space-2xl);
+  padding: var(--space-3xl) 0 200px;
   text-align: center;
   position: relative;
   overflow: hidden;
   isolation: isolate;
 }
 
-/* Gradient fade at bottom of hero — smooth transition to next section */
+/* Cosmic gradient — blue canvas dissolving downward into space */
 .hero::before {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 40%;
-  background: linear-gradient(to bottom, transparent, var(--bg));
+  height: 320px;
+  background:
+    linear-gradient(to bottom,
+      transparent 0%,
+      transparent 10%,
+      rgba(20,66,114,0.3) 30%,
+      rgba(44,116,179,0.15) 50%,
+      rgba(246,248,251,0.05) 70%,
+      var(--bg) 100%
+    );
   z-index: 1;
   pointer-events: none;
 }
 
-/* Dynamic geometric background */
+/* 4D depth field — layered color washes */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 120% 50% at 30% 50%, rgba(44,116,179,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 30% at 70% 30%, rgba(196,167,71,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 100% at 50% 100%, rgba(255,255,255,0.06) 0%, transparent 50%);
+  z-index: 0;
+  pointer-events: none;
+  animation: depthShift 10s ease-in-out infinite;
+}
+
+@keyframes depthShift {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* Starfield — micro particles for cosmic depth */
+.hero-stars {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-stars .star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 50%;
+  animation: starDrift linear infinite;
+}
+
+@keyframes starDrift {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.2; }
+  100% { transform: translateY(-400px) translateX(20px); opacity: 0; }
+}
+
+/* Dynamic geometric background — orbs */
 .hero-bg {
   position: absolute;
   inset: 0;
@@ -530,45 +582,45 @@ img { max-width: 100%; height: auto; display: block; }
 .hero-bg .orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.15;
+  filter: blur(100px);
+  opacity: 0.1;
 }
 
 .hero-bg .orb-1 {
-  width: 500px; height: 500px;
+  width: 600px; height: 600px;
   background: var(--accent);
-  top: -200px; right: -100px;
-  animation: orbFloat1 15s ease-in-out infinite;
+  top: -250px; right: -150px;
+  animation: orbFloat1 18s ease-in-out infinite;
 }
 
 .hero-bg .orb-2 {
-  width: 400px; height: 400px;
+  width: 500px; height: 500px;
   background: var(--gold-lt);
-  bottom: -150px; left: -100px;
-  animation: orbFloat2 18s ease-in-out infinite;
+  bottom: -200px; left: -150px;
+  animation: orbFloat2 22s ease-in-out infinite;
 }
 
 .hero-bg .orb-3 {
-  width: 200px; height: 200px;
-  background: var(--accent-lt);
-  top: 50%; left: 60%;
-  animation: orbFloat3 12s ease-in-out infinite;
+  width: 250px; height: 250px;
+  background: rgba(255,255,255,0.3);
+  top: 40%; left: 55%;
+  animation: orbFloat3 14s ease-in-out infinite;
 }
 
 @keyframes orbFloat1 {
-  0%, 100% { transform: translate(0, 0); }
-  33% { transform: translate(-40px, 30px); }
-  66% { transform: translate(20px, -20px); }
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-60px, 40px) scale(1.1); }
+  66% { transform: translate(30px, -30px) scale(0.9); }
 }
 
 @keyframes orbFloat2 {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(30px, -40px); }
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, -50px) scale(1.15); }
 }
 
 @keyframes orbFloat3 {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(-30px, 20px); }
+  0%, 100% { transform: translate(0, 0); opacity: 0.3; }
+  50% { transform: translate(-40px, 30px); opacity: 0.5; }
 }
 
 /* Grid pattern overlay */
@@ -1106,7 +1158,7 @@ footer ul li { margin-bottom: 0.4rem; }
 .page-header {
   background: var(--primary);
   color: var(--white);
-  padding: var(--space-2xl) 0;
+  padding: var(--space-2xl) 0 120px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -1118,8 +1170,14 @@ footer ul li { margin-bottom: 0.4rem; }
   bottom: 0;
   left: 0;
   right: 0;
-  height: 40%;
-  background: linear-gradient(to bottom, transparent, var(--bg));
+  height: 200px;
+  background:
+    linear-gradient(to bottom,
+      transparent 0%,
+      rgba(20,66,114,0.3) 40%,
+      rgba(44,116,179,0.12) 65%,
+      var(--bg) 100%
+    );
   z-index: 1;
   pointer-events: none;
 }
