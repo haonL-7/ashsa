@@ -45,10 +45,10 @@
       var ctx = canvas.getContext('2d');
       var particles = [];
       var mouse = { x: -9999, y: -9999, active: false };
-      var PARTICLE_COUNT = 100;
-      var MOUSE_RADIUS = 140;
-      var MOUSE_FORCE = 0.015;
-      var CONNECT_DIST = 90;
+      var PARTICLE_COUNT = 120;
+      var MOUSE_RADIUS = 160;
+      var MOUSE_FORCE = 0.025;
+      var CONNECT_DIST = 100;
       var animId;
 
       function resize() {
@@ -87,8 +87,8 @@
         this.y = Math.random() * canvas.height;
         this.vx = (Math.random() - 0.5) * 0.3;
         this.vy = -(Math.random() * 0.4 + 0.1); // gentle upward drift
-        this.radius = Math.random() * 1.8 + 0.6;
-        this.baseOpacity = Math.random() * 0.4 + 0.2;
+        this.radius = Math.random() * 2.2 + 1;
+        this.baseOpacity = Math.random() * 0.5 + 0.35;
         this.opacity = this.baseOpacity;
         this.twinkleSpeed = Math.random() * 0.02 + 0.005;
         this.twinkleOffset = Math.random() * Math.PI * 2;
@@ -170,12 +170,12 @@
             var dy = particles[i].y - particles[j].y;
             var dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < CONNECT_DIST) {
-              var alpha = (1 - dist / CONNECT_DIST) * 0.06;
+              var alpha = (1 - dist / CONNECT_DIST) * 0.08;
               ctx.beginPath();
               ctx.moveTo(particles[i].x, particles[i].y);
               ctx.lineTo(particles[j].x, particles[j].y);
               ctx.strokeStyle = 'rgba(180,210,240,' + alpha + ')';
-              ctx.lineWidth = 0.4;
+              ctx.lineWidth = 0.5;
               ctx.stroke();
             }
           }
@@ -194,6 +194,8 @@
         ctx.fillStyle = glow;
         ctx.fill();
       }
+
+      console.log('Particle field init: ' + PARTICLE_COUNT + ' particles, canvas ' + canvas.width + 'x' + canvas.height);
 
       // Animation loop
       function animate() {
