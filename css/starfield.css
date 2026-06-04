@@ -1,8 +1,10 @@
-/* Starfield — interactive particle network */
+/* Starfield layers */
 #hero-bg-canvas,
-#hero-canvas {
+#hero-canvas,
+#hero-ui-canvas {
   position: absolute;
   inset: 0;
 }
 #hero-bg-canvas { z-index: 0; pointer-events: none; }
-#hero-canvas { z-index: 1; pointer-events: auto; }
+#hero-canvas    { z-index: 1; pointer-events: auto; }
+#hero-ui-canvas { z-index: 2; pointer-events: auto; }
