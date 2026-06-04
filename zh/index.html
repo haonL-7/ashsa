@@ -52,13 +52,13 @@
 
     <script>
 (function(){var c=document.getElementById('hero-canvas');if(!c)return;var ctx=c.getContext('2d');var stars=[],mouse={x:-9999,y:-9999,active:!1},STAR_COUNT=250,animId,frame=0;
-function resize(){var r=c.parentElement.getBoundingClientRect();c.width=r.width||c.parentElement.offsetWidth||1200;c.height=r.height||c.parentElement.offsetHeight||700}
-setTimeout(resize,100);window.addEventListener('resize',resize);
+function resize(){var p=c.parentElement;c.width=p.offsetWidth||p.clientWidth||window.innerWidth;c.height=p.offsetHeight||p.clientHeight||700}
+resize();window.addEventListener('resize',resize);
 c.addEventListener('mousemove',function(e){var r=c.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;mouse.active=!0});
 c.addEventListener('mouseleave',function(){mouse.active=!1});
 c.addEventListener('touchmove',function(e){e.preventDefault();var r=c.getBoundingClientRect();mouse.x=e.touches[0].clientX-r.left;mouse.y=e.touches[0].clientY-r.top;mouse.active=!0},{passive:!1});
 c.addEventListener('touchend',function(){mouse.active=!1});
-function Star(){this.x=Math.random()*(c.width||1200);this.y=Math.random()*(c.height||700);this.ox=this.x;this.oy=this.y;
+function Star(){this.x=Math.random()*c.width;this.y=Math.random()*c.height;this.ox=this.x;this.oy=this.y;
 var t=Math.random();if(t<0.75){this.radius=Math.random()*0.5+0.2;this.baseAlpha=Math.random()*0.25+0.1}else if(t<0.95){this.radius=Math.random()*0.8+0.5;this.baseAlpha=Math.random()*0.35+0.25}else{this.radius=Math.random()*1.2+0.6;this.baseAlpha=Math.random()*0.5+0.4}
 this.twinkleSpeed=Math.random()*0.03+0.005;this.twinkleAmp=Math.random()*0.5+0.3;this.phase=Math.random()*Math.PI*2;
 this.gleamTimer=100+Math.random()*500;this.gleamPower=0;this.gleamDecay=0.02+Math.random()*0.04;
