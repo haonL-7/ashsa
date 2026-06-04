@@ -39,46 +39,26 @@
 
     // ============================================================
     // ============================================================
-    // NEBULA PARTICLE FIELD — dispersing/coalescing cloud clusters
+    // DEEP SPACE STARFIELD — stars scattered in cosmic void
     // ============================================================
     var canvas = document.querySelector('.hero-canvas');
     if (canvas && canvas.getContext) {
       var ctx = canvas.getContext('2d');
-      var particles = [];
-      var nebulae = [];
+      var stars = [];
       var mouse = { x: -9999, y: -9999, active: false };
-      var PARTICLE_COUNT = 150;
-      var MOUSE_PULL = 0.003;
+      var STAR_COUNT = 250;
       var animId;
-      var time = 0;
+      var frame = 0;
 
       function resize() {
         var rect = canvas.parentElement.getBoundingClientRect();
         canvas.width = rect.width || canvas.parentElement.offsetWidth || 1200;
         canvas.height = rect.height || canvas.parentElement.offsetHeight || 700;
-        // Reposition nebulae on resize
-        initNebulae();
       }
-
-      // Create nebula core clusters
-      function initNebulae() {
-        nebulae = [];
-        for (var n = 0; n < 4; n++) {
-          nebulae.push({
-            cx: canvas.width * (0.2 + Math.random() * 0.6),
-            cy: canvas.height * (0.2 + Math.random() * 0.5),
-            driftVx: (Math.random() - 0.5) * 0.15,
-            driftVy: (Math.random() - 0.5) * 0.1,
-            radius: 100 + Math.random() * 160,
-            hue: Math.random() < 0.25 ? 'gold' : 'blue'
-          });
-        }
-      }
-
-      setTimeout(function () { resize(); }, 100);
+      setTimeout(resize, 100);
       window.addEventListener('resize', resize);
 
-      // Mouse tracking
+      // Mouse
       canvas.addEventListener('mousemove', function (e) {
         var rect = canvas.getBoundingClientRect();
         mouse.x = e.clientX - rect.left;
@@ -95,140 +75,114 @@
       }, { passive: false });
       canvas.addEventListener('touchend', function () { mouse.active = false; });
 
-      // Particle orbiting a nebula core
-      function Particle(coreIdx) {
-        this.coreIdx = coreIdx;
-        var core = nebulae[coreIdx];
-        var angle = Math.random() * Math.PI * 2;
-        var dist = Math.random() * core.radius;
-        this.x = core.cx + Math.cos(angle) * dist;
-        this.y = core.cy + Math.sin(angle) * dist;
-        this.orbitAngle = angle;
-        this.orbitDist = dist;
-        this.orbitSpeed = (Math.random() - 0.5) * 0.004;
-        this.radius = Math.random() * 1.6 + 0.3;
-        this.baseAlpha = Math.random() * 0.3 + 0.08;
-        this.alpha = this.baseAlpha;
-        this.phase = Math.random() * Math.PI * 2;
-      }
+      // Star — fixed in space, twinkles independently
+      function Star() {
+        this.x = Math.random() * (canvas.width || 1200);
+        this.y = Math.random() * (canvas.height || 700);
+        this.ox = this.x; // original position (gravitational anchor)
+        this.oy = this.y;
 
-      Particle.prototype.update = function () {
-        time += 0.0003;
-        var core = nebulae[this.coreIdx];
-        if (!core) return 0;
-
-        // Orbit around nebula core with organic wobble
-        this.orbitAngle += this.orbitSpeed + Math.sin(time + this.phase) * 0.002;
-        this.orbitDist += Math.sin(time * 0.7 + this.phase) * 0.3;
-
-        // Clamp orbit distance
-        this.orbitDist = Math.max(8, Math.min(core.radius * 1.3, this.orbitDist));
-
-        var targetX = core.cx + Math.cos(this.orbitAngle) * this.orbitDist;
-        var targetY = core.cy + Math.sin(this.orbitAngle) * this.orbitDist;
-
-        // Mouse pull — particles drift toward cursor
-        if (mouse.active) {
-          var mdx = mouse.x - targetX;
-          var mdy = mouse.y - targetY;
-          var mdist = Math.sqrt(mdx * mdx + mdy * mdy);
-          if (mdist < 300 && mdist > 1) {
-            var pull = MOUSE_PULL * (1 - mdist / 300);
-            targetX += mdx * pull * 40;
-            targetY += mdy * pull * 40;
-            // Boost alpha near mouse
-            this.alpha = Math.min(0.7, this.baseAlpha + pull * 0.5);
-          } else {
-            this.alpha += (this.baseAlpha - this.alpha) * 0.03;
-          }
+        // Size tier: most tiny/distant, some medium, few bright/nearby
+        var tier = Math.random();
+        if (tier < 0.75) {
+          this.radius = Math.random() * 0.5 + 0.2;       // distant
+          this.baseAlpha = Math.random() * 0.25 + 0.1;
+        } else if (tier < 0.95) {
+          this.radius = Math.random() * 0.8 + 0.5;        // mid
+          this.baseAlpha = Math.random() * 0.35 + 0.25;
         } else {
-          this.alpha += (this.baseAlpha - this.alpha) * 0.02;
+          this.radius = Math.random() * 1.2 + 0.6;        // bright nearby
+          this.baseAlpha = Math.random() * 0.5 + 0.4;
         }
 
-        // Smooth movement toward target
-        this.x += (targetX - this.x) * 0.04;
-        this.y += (targetY - this.y) * 0.04;
+        this.twinkleSpeed = Math.random() * 0.03 + 0.005;
+        this.twinkleAmp = Math.random() * 0.5 + 0.3;
+        this.phase = Math.random() * Math.PI * 2;
+
+        // Star color temperature
+        var temp = Math.random();
+        if (temp < 0.08) {
+          this.r = 255; this.g = 220; this.b = 150; // warm gold
+        } else if (temp < 0.2) {
+          this.r = 180; this.g = 210; this.b = 255; // blue-white
+        } else {
+          this.r = 235; this.g = 245; this.b = 255; // pure white
+        }
+      }
+
+      Star.prototype.update = function () {
+        this.phase += this.twinkleSpeed;
+        frame += 0.0001;
+
+        // Gravitational lensing — mouse gently pulls nearby stars
+        if (mouse.active) {
+          var dx = mouse.x - this.x;
+          var dy = mouse.y - this.y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 200 && dist > 2) {
+            var g = (200 - dist) / 200;
+            g = g * g * 0.03;
+            this.x += dx * g;
+            this.y += dy * g;
+          }
+        }
+
+        // Gentle return to original position
+        this.x += (this.ox - this.x) * 0.005;
+        this.y += (this.oy - this.y) * 0.005;
+
+        // Subtle cosmic drift
+        this.ox += Math.sin(frame + this.phase) * 0.015;
+        this.oy += Math.cos(frame * 0.7 + this.phase) * 0.01;
+
+        // Wrap
+        if (this.ox < -20) this.ox = canvas.width + 20;
+        if (this.ox > canvas.width + 20) this.ox = -20;
+        if (this.oy < -20) this.oy = canvas.height + 20;
+        if (this.oy > canvas.height + 20) this.oy = -20;
 
         // Twinkle
-        var twinkle = 1 + Math.sin(time * 3 + this.phase) * 0.3;
-        return Math.max(0, this.alpha * twinkle);
+        var twinkle = 0.5 + 0.5 * Math.sin(this.phase);
+        twinkle = this.baseAlpha * (0.6 + this.twinkleAmp * twinkle);
+        return twinkle;
       };
 
-      Particle.prototype.draw = function (alpha) {
-        if (alpha < 0.015) return;
-        // Soft glow
-        var glow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 4);
-        if (nebulae[this.coreIdx] && nebulae[this.coreIdx].hue === 'gold') {
-          glow.addColorStop(0, 'rgba(255,220,160,' + alpha + ')');
-          glow.addColorStop(1, 'rgba(255,220,160,0)');
-        } else {
-          glow.addColorStop(0, 'rgba(180,210,245,' + alpha + ')');
-          glow.addColorStop(1, 'rgba(180,210,245,0)');
-        }
+      Star.prototype.draw = function (alpha) {
+        if (alpha < 0.03) return;
+
+        // Glow halo
+        var halo = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 3);
+        halo.addColorStop(0, 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + (alpha * 0.9) + ')');
+        halo.addColorStop(0.4, 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + (alpha * 0.3) + ')');
+        halo.addColorStop(1, 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',0)');
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius * 4, 0, Math.PI * 2);
-        ctx.fillStyle = glow;
+        ctx.arc(this.x, this.y, this.radius * 3, 0, Math.PI * 2);
+        ctx.fillStyle = halo;
         ctx.fill();
 
-        // Core dot
+        // Core point
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = nebulae[this.coreIdx].hue === 'gold'
-          ? 'rgba(255,240,200,' + (alpha * 1.2) + ')'
-          : 'rgba(210,230,255,' + (alpha * 1.2) + ')';
+        ctx.arc(this.x, this.y, this.radius * 0.7, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + alpha + ')';
         ctx.fill();
       };
-
-      // Nebula core glow
-      function drawNebulaGlow(core) {
-        var glow = ctx.createRadialGradient(core.cx, core.cy, 0, core.cx, core.cy, core.radius);
-        if (core.hue === 'gold') {
-          glow.addColorStop(0, 'rgba(255,200,120,0.04)');
-          glow.addColorStop(0.5, 'rgba(255,180,100,0.015)');
-        } else {
-          glow.addColorStop(0, 'rgba(150,200,240,0.05)');
-          glow.addColorStop(0.5, 'rgba(130,180,230,0.02)');
-        }
-        glow.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.beginPath();
-        ctx.arc(core.cx, core.cy, core.radius, 0, Math.PI * 2);
-        ctx.fillStyle = glow;
-        ctx.fill();
-
-        // Drift nebulae slowly
-        core.cx += core.driftVx;
-        core.cy += core.driftVy;
-        // Bounce at edges
-        if (core.cx < -50 || core.cx > canvas.width + 50) core.driftVx *= -1;
-        if (core.cy < -50 || core.cy > canvas.height + 50) core.driftVy *= -1;
-        core.cx = Math.max(-50, Math.min(canvas.width + 50, core.cx));
-        core.cy = Math.max(-50, Math.min(canvas.height + 50, core.cy));
-      }
 
       // Init
-      initNebulae();
-      for (var i = 0; i < PARTICLE_COUNT; i++) {
-        particles.push(new Particle(i % nebulae.length));
+      for (var i = 0; i < STAR_COUNT; i++) {
+        stars.push(new Star());
       }
 
       function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw nebula glows
-        for (var n = 0; n < nebulae.length; n++) {
-          drawNebulaGlow(nebulae[n]);
-        }
-
-        // Draw particles
-        for (var i = 0; i < particles.length; i++) {
-          var alpha = particles[i].update();
-          particles[i].draw(alpha);
+        for (var i = 0; i < stars.length; i++) {
+          var alpha = stars[i].update();
+          stars[i].draw(alpha);
         }
 
         animId = requestAnimationFrame(animate);
       }
 
-      // Pause when off-screen
       var heroObserver = new IntersectionObserver(function (entries) {
         if (entries[0].isIntersecting) {
           if (!animId) animate();
