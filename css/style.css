@@ -497,13 +497,26 @@ img { max-width: 100%; height: auto; display: block; }
    HERO
    ============================================================ */
 .hero {
-  background: linear-gradient(to bottom, var(--primary) 0%, var(--primary) 60%, var(--primary-lt) 85%, var(--bg) 100%);
+  background: var(--primary);
   color: var(--white);
   padding: var(--space-3xl) 0 var(--space-2xl);
   text-align: center;
   position: relative;
   overflow: hidden;
   isolation: isolate;
+}
+
+/* Gradient fade at bottom of hero — smooth transition to next section */
+.hero::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, var(--bg));
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* Dynamic geometric background */
@@ -571,7 +584,7 @@ img { max-width: 100%; height: auto; display: block; }
   pointer-events: none;
 }
 
-.hero .container { position: relative; z-index: 1; }
+.hero .container { position: relative; z-index: 2; }
 
 .hero-eyebrow {
   display: inline-block;
@@ -1135,12 +1148,24 @@ footer ul li { margin-bottom: 0.4rem; }
    PAGE HEADER (inner pages)
    ============================================================ */
 .page-header {
-  background: linear-gradient(to bottom, var(--primary) 0%, var(--primary) 55%, var(--primary-lt) 80%, var(--bg) 100%);
+  background: var(--primary);
   color: var(--white);
   padding: var(--space-2xl) 0;
   text-align: center;
   position: relative;
   overflow: hidden;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, var(--bg));
+  z-index: 1;
+  pointer-events: none;
 }
 
 .page-header::after {
@@ -1153,6 +1178,8 @@ footer ul li { margin-bottom: 0.4rem; }
   background-size: 40px 40px;
   pointer-events: none;
 }
+
+.page-header .container { position: relative; z-index: 2; }
 
 .page-header h1 {
   color: var(--white);
