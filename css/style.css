@@ -497,9 +497,9 @@ img { max-width: 100%; height: auto; display: block; }
    HERO
    ============================================================ */
 .hero {
-  background: linear-gradient(to bottom, #0a2647 0%, #0a2647 40%, #2c5f8a 70%, #f4f6f9 100%);
+  background: linear-gradient(to bottom, #0a2647 0%, #0a2647 35%, #1e5a8a 60%, #6aa3c8 80%, #ffffff 100%);
   color: var(--white);
-  padding: var(--space-3xl) 0 400px;
+  padding: var(--space-3xl) 0 450px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -1115,16 +1115,9 @@ footer ul li { margin-bottom: 0.4rem; }
    PAGE HEADER (inner pages)
    ============================================================ */
 .page-header {
-  background: linear-gradient(to bottom,
-    #0a2647 0%,
-    #0a2647 30%,
-    #144272 55%,
-    #2e72a8 78%,
-    #a8cce4 93%,
-    #f6f8fb 100%
-  );
+  background: linear-gradient(to bottom, #0a2647 0%, #0a2647 35%, #1e5a8a 60%, #6aa3c8 80%, #ffffff 100%);
   color: var(--white);
-  padding: var(--space-2xl) 0 160px;
+  padding: var(--space-2xl) 0 180px;
   text-align: center;
   position: relative;
   overflow: hidden;
