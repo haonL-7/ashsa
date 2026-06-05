@@ -101,22 +101,27 @@
 
   function spawnMeteorShower(now) {
     inShower = true;
-    showerEnd = now + 3000;
-    var baseAngle = (Math.random() - 0.5) * 0.2;
-    var count = 12 + Math.floor(Math.random() * 12);
+    showerEnd = now + 3500;
+    // Radiant point — somewhere in upper-right sky
+    var rx = W * (0.7 + Math.random() * 0.3);
+    var ry = H2 * (0.05 + Math.random() * 0.2);
+    var baseAngle = Math.atan2(ry - H2 * 0.8, rx - (-100)); // toward bottom-left
+    var count = 12 + Math.floor(Math.random() * 14);
     for (var i = 0; i < count; i++) {
-      var angle = baseAngle + (Math.random() - 0.5) * 0.15;
-      var speed = 700 + Math.random() * 500;
+      var spread = (Math.random() - 0.5) * 0.5; // spread from radiant
+      var angle = baseAngle + spread;
+      var speed = 500 + Math.random() * 600;
+      var dist = 200 + Math.random() * 400;
       comets.push({
-        x: W + Math.random() * 60,
-        y: Math.random() * H2 * 0.6 + H2 * 0.05,
-        vx: -Math.cos(angle) * speed,
+        x: rx + Math.cos(angle - spread * 0.5) * dist,
+        y: ry + Math.sin(angle - spread * 0.5) * dist * 0.5,
+        vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
         life: 0,
-        maxLife: 0.5 + Math.random() * 0.4,
+        maxLife: 0.5 + Math.random() * 0.5,
         hue: 195 + Math.random() * 35,
         r: 0.8 + Math.random() * 1.2,
-        startTime: now + i * 70,
+        startTime: now + i * 60 + Math.random() * 80,
         tail: []
       });
     }
