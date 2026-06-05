@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>亚洲体育健康协协会 — ASHSA</title>
-  <meta name="description" content="Asian Sports and Health Association �?亚洲体育健康协会官方网站">
-  <link rel="stylesheet" href="../css/style.css?v=41">
-  <link rel="preload" href="../images/icons.svg" as="image" type="image/svg+xml">
-  <link rel="stylesheet" href="../css/starfield.css?v=41">
+  <title>首页 - 亚洲体育健康协会</title>
+  <meta name="description" content="Asian Sports and Health Association — 亚洲体育健康协会官方网站">
+  <link rel="stylesheet" href="../css/style.css?v=42">
   <link rel="icon" href="../images/logo-aasha.jpg" type="image/jpeg">
 </head>
 <body>
@@ -32,76 +30,42 @@
           <div class="nav-lang-menu">
             <a href="index.html" class="active-lang">中文</a>
             <a href="../en/">English</a>
-            <a href="../ko/">한국�?/a>
-            <a href="../ja/">日本�?/a>
+            <a href="../ko/">한국어</a>
+            <a href="../ja/">日本語</a>
           </div>
         </li>
       </ul>
     </div>
   </nav>
 
-  <section class="hero" style="background: linear-gradient(160deg, #1a1f3e 0%, #1e3096 25%, #2b43be 50%, #3d56d4 70%, #5a82e0 85%, #c8d6f5 95%, #ffffff 100%);">
-    <canvas id="hero-bg-canvas"></canvas>
-    <canvas id="hero-canvas"></canvas>
-    <canvas id="hero-ui-canvas"></canvas>
-
-    <div class="container">
-      <div class="hero-eyebrow">Open, Inclusive, Pragmatic, Win-win</div>
-      <h1>亚洲体育健康协会</h1>
-      <p>Asian Sports and Health Association �?推动亚洲体育与健康事业发展/p>
-      <div class="hero-actions">
-        <a href="about.html" class="btn btn-primary">
-          进入官网
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-        <a href="contact.html" class="btn btn-outline">联系我们</a>
+  <!-- ====== BANNER ====== -->
+  <section class="banner">
+    <div class="banner-slide active">
+      <img src="../images/banner1.jpg" alt="Slide 1">
+      <div class="banner-caption">
+        <h1>重新定义体育科学：<br>学术融合的新时代</h1>
+        <p>融合学科，创造影响：体育科学进化的核心</p>
       </div>
     </div>
+    <div class="banner-slide">
+      <img src="../images/banner2.jpg" alt="Slide 2">
+      <div class="banner-caption">
+        <h1>通过创新<br>推动进步</h1>
+        <p>弥合学科之间的鸿沟，共创美好未来</p>
+      </div>
+    </div>
+    <button class="banner-prev" onclick="prevSlide()">&#10094;</button>
+    <button class="banner-next" onclick="nextSlide()">&#10095;</button>
   </section>
 
+  <!-- ====== NOTICE + QUICK LINKS ====== -->
   <section class="section">
     <div class="container">
-      <div class="section-hd reveal">
-        <span class="section-eyebrow">About ASHA</span>
-        <h2>关于协会</h2>
-        <div class="section-divider"></div>
-        <p class="section-desc">开放、包容、务实、共�?/p>
-      </div>
-      <div class="reveal" style="max-width:780px;margin:0 auto;font-size:1.05rem;line-height:2;color:var(--ink-md);text-align:center;">
-        <p>亚洲体育健康协会（Asian Sports and Health Association，简�?ASHA）是致力于推动亚洲地区体育科学与健康事业发展的国际性学术组织�?/p>
-        <p>协会秉承<strong>开放、包容、务实、共�?/strong>的理念，汇聚亚洲各国体育健康领域的专家学者，促进学术交流、科研合作与产业发展�?/p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section-bg">
-    <div class="container">
-      <div class="section-hd reveal">
-        <span class="section-eyebrow">President's Greeting</span>
-        <h2>会长致辞</h2>
-        <div class="section-divider"></div>
-      </div>
-      <div class="reveal" style="max-width:780px;margin:0 auto;font-size:1.05rem;line-height:2;color:var(--ink-md);">
-        <p>欢迎访问亚洲体育健康协会（ASHA）官方网站�?/p>
-        <p>ASHA 致力于搭建亚洲体育健康领域的学术交流与科研合作平台，推动体育科学与健康促进事业的国际化发展。我们汇聚亚洲各国专家学者，共同探索运动促进健康的前沿理论与实践路径�?/p>
-        <p>期待与各界同仁携手，为亚洲体育健康事业贡献力量�?/p>
-        <p style="text-align:right;font-weight:600;color:var(--ink);margin-top:var(--space-lg);">会长 岳海�?/p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <div class="section-hd reveal">
-        <span class="section-eyebrow">Notice &amp; Links</span>
-        <h2>公告通知</h2>
-        <div class="section-divider"></div>
-      </div>
-      <div class="notice-board reveal">
+      <div class="notice-board">
         <div class="notice-card">
           <div class="notice-header">
             <h3>公告通知</h3>
-            <a href="news.html">更多 �?/a>
+            <a href="news.html">更多 &rarr;</a>
           </div>
           <div class="notice-item">
             <div class="notice-date">
@@ -110,36 +74,39 @@
             </div>
             <div>
               <h4>首届亚洲体育健康协会大会即将召开</h4>
-              <p>首届 ASHA 国际学术会议筹备工作全面启动�?/p>
-            </div>
-          </div>
-          <div class="notice-item">
-            <div class="notice-date">
-              <div class="day">—</div>
-              <div class="month">2025</div>
-            </div>
-            <div>
-              <h4>官方网站正式上线</h4>
-              <p>ASHA 官方网站及电子期刊平台正式上线运行�?/p>
             </div>
           </div>
         </div>
 
         <div class="quick-links">
+          <a href="index.html" class="quick-link-card">
+            <span class="ql-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </span>
+            首页
+          </a>
           <a href="about.html" class="quick-link-card">
-            <span class="ql-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span>
+            <span class="ql-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            </span>
             关于协会
           </a>
-          <a href="news.html" class="quick-link-card">
-            <span class="ql-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
-            新闻
-          </a>
           <a href="products.html" class="quick-link-card">
-            <span class="ql-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+            <span class="ql-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            </span>
             电子期刊
           </a>
+          <a href="news.html" class="quick-link-card">
+            <span class="ql-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </span>
+            新闻
+          </a>
           <a href="contact.html" class="quick-link-card">
-            <span class="ql-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+            <span class="ql-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </span>
             联系我们
           </a>
         </div>
@@ -150,13 +117,14 @@
   <!-- ====== OFFICE ENVIRONMENT ====== -->
   <section class="office-section">
     <div class="container">
-      <div class="section-hd reveal">
-        <span class="section-eyebrow">Office Environment</span>
-        <h2>办公环境</h2>
+      <div class="section-hd">
+        <h2 style="font-size:1.5rem;text-transform:uppercase;letter-spacing:0.15em;">
+          <span class="cn">办公环境</span>
+          <span class="en">Office Environment</span>
+        </h2>
         <div class="section-divider"></div>
-        <p class="section-desc">ASHA 总部 �?韩国蔚山广域�?/p>
       </div>
-      <div class="office-grid reveal">
+      <div class="office-grid">
         <div class="office-card">
           <div class="office-img">🏢</div>
           <div class="office-label">ASHA 总部</div>
@@ -176,38 +144,27 @@
   <footer>
     <div class="container">
       <div class="footer-grid">
-        <div>
-          <h4>亚洲体育健康协会</h4>
-          <p>Asian Sports Health Association<br>推动亚洲体育健康事业科学发展</p>
-        </div>
-        <div>
-          <h4>快速链�?/h4>
-          <ul>
-            <li><a href="about.html">关于协会</a></li>
-            <li><a href="news.html">新闻</a></li>
-            <li><a href="products.html">电子期刊</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>相关资源</h4>
-          <ul>
-            <li><a href="contact.html">联系我们</a></li>
-            <li><a href="../en/">English</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>会议秘书�?/h4>
-          <p>info@ashsa.org</p>
-        </div>
+        <div><h4>亚洲体育健康协会</h4><p>Asian Sports Health Association<br>推动亚洲体育健康事业科学发展</p></div>
+        <div><h4>快速链接</h4><ul><li><a href="about.html">关于协会</a></li><li><a href="news.html">新闻</a></li><li><a href="products.html">电子期刊</a></li></ul></div>
+        <div><h4>相关资源</h4><ul><li><a href="contact.html">联系我们</a></li><li><a href="../en/">English</a></li></ul></div>
+        <div><h4>会议秘书处</h4><p>info@ashsa.org</p></div>
       </div>
-      <div class="footer-btm">
-        <p>&copy; 2025 Asian Sports Health Association. Hosted on GitHub Pages &middot; Accelerated by Cloudflare CDN</p>
-      </div>
+      <div class="footer-btm"><p>&copy; 2025 Asian Sports Health Association. Hosted on GitHub Pages</p></div>
     </div>
   </footer>
 
-  <script src="../js/constellations.js?v=41"></script>
-  <script src="../js/starfield.js?v=41"></script>
-  <script src="../js/main.js?v=41"></script>
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.banner-slide');
+    function showSlide(n) {
+      slides.forEach(s => s.classList.remove('active'));
+      currentSlide = (n + slides.length) % slides.length;
+      slides[currentSlide].classList.add('active');
+    }
+    function nextSlide() { showSlide(currentSlide + 1); }
+    function prevSlide() { showSlide(currentSlide - 1); }
+    setInterval(nextSlide, 5000);
+  </script>
+  <script src="../js/main.js?v=42"></script>
 </body>
 </html>
