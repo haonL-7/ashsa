@@ -253,22 +253,11 @@
   }
 
   function drawGradient() {
-    // Glass fade: starts ABOVE the text area, fades down to transparent
-    // Text is centered in H2, so start the fade from ~40% of H2
-    var fadeTop = H2 * 0.35;
-    var grad = ctx.createLinearGradient(0, fadeTop, 0, H);
-    grad.addColorStop(0, 'rgba(255,255,255,0.18)');
-    grad.addColorStop(0.3, 'rgba(255,255,255,0.08)');
-    grad.addColorStop(0.6, 'rgba(255,255,255,0.02)');
-    grad.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, fadeTop, W, H - fadeTop);
-
-    // Final edge blend to page bg
-    var edgeTop = H2 * 0.95;
+    // Bottom edge blend to page bg only — no frosted glass
+    var edgeTop = H2 * 0.92;
     var eg = ctx.createLinearGradient(0, edgeTop, 0, H);
     eg.addColorStop(0, 'rgba(0,0,0,0)');
-    eg.addColorStop(0.6, 'rgba(246,248,251,0.6)');
+    eg.addColorStop(0.5, 'rgba(246,248,251,0.5)');
     eg.addColorStop(1, '#f6f8fb');
     ctx.fillStyle = eg;
     ctx.fillRect(0, edgeTop, W, H - edgeTop);
