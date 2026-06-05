@@ -1,10 +1,52 @@
-/* Starfield layers */
+/* Starfield — fullscreen background layer */
 #hero-bg-canvas,
 #hero-canvas,
 #hero-ui-canvas {
-  position: absolute;
+  position: fixed;
   inset: 0;
+  width: 100vw;
+  height: 100vh;
 }
 #hero-bg-canvas { z-index: 0; pointer-events: none; }
-#hero-canvas    { z-index: 1; pointer-events: auto; }
-#hero-ui-canvas { z-index: 2; pointer-events: auto; }
+#hero-canvas    { z-index: 1; pointer-events: none; }
+#hero-ui-canvas { z-index: 2; pointer-events: none; }
+
+/* Page content scrolls on top */
+.page-overlay {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+}
+
+/* Nav semi-transparent over starfield */
+.page-overlay .nav {
+  background: rgba(10,15,30,0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.page-overlay .nav .nav-links a {
+  color: rgba(255,255,255,0.75);
+}
+.page-overlay .nav .nav-links a:hover,
+.page-overlay .nav .nav-links a.active {
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+}
+.page-overlay .nav-logo {
+  color: #fff;
+}
+
+/* Sections below starfield */
+.page-overlay .section,
+.page-overlay .office-section {
+  background: var(--bg);
+}
+.page-overlay .section-bg {
+  background: var(--white);
+}
+
+/* Footer always dark */
+.page-overlay footer {
+  background: var(--ink);
+}
