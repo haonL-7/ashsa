@@ -81,11 +81,10 @@
     }
     .wave-footer svg { display: block; width: 100%; height: 100%; }
     .wave-footer .parallax use {
-      animation: wvf 12s linear infinite;
+      animation: wvf 20s linear infinite;
     }
-    .wave-footer .parallax use:nth-child(1) { animation-delay: -2s; }
-    .wave-footer .parallax use:nth-child(2) { animation-delay: -2s; animation-duration: 5s; }
-    .wave-footer .parallax use:nth-child(3) { animation-delay: -4s; animation-duration: 3s; }
+    .wave-footer .parallax use:nth-child(1) { animation-delay: -3s; }
+    .wave-footer .parallax use:nth-child(2) { animation-delay: -6s; animation-duration: 8s; }
     @keyframes wvf {
       0% { transform: translate(-90px, 0); }
       100% { transform: translate(85px, 0); }
@@ -170,13 +169,12 @@
   </section>
 
   <div class="wave-footer">
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 50" preserveAspectRatio="none">
       <defs>
         <path id="gw" d="M-160,44.4 C-130,44.4 -102,26.4 -72,26.4 C-42,26.4 -14,44.4 16,44.4 C46,44.4 74,26.4 104,26.4 C134,26.4 162,44.4 192,44.4 L192,78.9 L-160,78.9 Z"/>
       </defs>
       <g class="parallax">
         <use xlink:href="#gw" x="50" y="0" fill="#2b43be"/>
-        <use xlink:href="#gw" x="50" y="4" fill="rgba(61,86,212,0.5)"/>
         <use xlink:href="#gw" x="50" y="8" fill="#1e3096"/>
       </g>
     </svg>
