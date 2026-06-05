@@ -5,110 +5,63 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home - ASIAN SPORTS AND HEALTH ASSOCIATION</title>
   <meta name="description" content="Asian Sports and Health Association — Official Website">
-  <link rel="stylesheet" href="../css/style.css?v=47">
+  <link rel="stylesheet" href="../css/style.css?v=48">
   <link rel="icon" href="../images/logo-aasha.jpg" type="image/jpeg">
   <style>
-    /* --- Starfield Hero --- */
-    .starfield-hero {
-      position: relative;
-      width: 100%;
-      height: 85vh;
-      min-height: 500px;
-      overflow: hidden;
-      background: #0a0f1e;
-    }
-    .starfield-hero canvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-    #hero-bg-canvas { z-index: 1; }
-    #hero-canvas    { z-index: 2; }
-
-    .starfield-overlay {
-      position: absolute;
-      inset: 0;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .hero-simple {
+      background: linear-gradient(160deg, #1a1f3e 0%, #1e3096 30%, #2b43be 60%, #3d56d4 100%);
+      padding: 6rem 0 4rem;
       text-align: center;
-    }
-    .starfield-overlay .hero-eyebrow {
-      display: inline-block;
-      padding: 0.35rem 1.1rem;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 100px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.7);
-      margin-bottom: 2rem;
-    }
-    .starfield-overlay h1 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(2.2rem, 6vw, 4.5rem);
-      font-weight: 700;
       color: #fff;
-      line-height: 1.15;
-      margin-bottom: 1.5rem;
-      text-shadow: 0 2px 40px rgba(0,0,0,0.4);
     }
-    .starfield-overlay p {
+    .hero-simple h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .hero-simple p {
       font-size: 1.1rem;
       max-width: 600px;
       margin: 0 auto 2rem;
       color: rgba(255,255,255,0.75);
-      line-height: 1.7;
     }
-    .starfield-overlay .hero-actions {
+    .hero-simple .hero-actions {
       display: flex;
       gap: 1rem;
       justify-content: center;
       flex-wrap: wrap;
     }
-    .starfield-overlay .btn-outline {
+    .hero-simple .btn-outline {
       background: rgba(255,255,255,0.05);
       backdrop-filter: blur(4px);
       color: #fff !important;
       border: 1.5px solid rgba(255,255,255,0.25);
     }
-    .starfield-overlay .btn-outline:hover {
+    .hero-simple .btn-outline:hover {
       background: rgba(255,255,255,0.12);
       border-color: rgba(255,255,255,0.5);
     }
 
-    /* --- Wave at bottom --- */
+    /* Wave */
     .wave-footer {
       width: 100%;
       height: 15em;
       overflow: hidden;
       line-height: 0;
-      background: #f6f8fb;
     }
-    .wave-footer svg {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
+    .wave-footer svg { display: block; width: 100%; height: 100%; }
     .wave-footer .parallax use {
       animation: wave-forever 12s linear infinite;
-      transform-origin: 50% 50%;
     }
     .wave-footer .parallax use:nth-child(1) { animation-delay: -2s; }
     .wave-footer .parallax use:nth-child(2) { animation-delay: -2s; animation-duration: 5s; }
     .wave-footer .parallax use:nth-child(3) { animation-delay: -4s; animation-duration: 3s; }
-
     @keyframes wave-forever {
-      0%   { transform: translate(-90px, 0%); }
-      100% { transform: translate(85px, 0%); }
+      0% { transform: translate(-90px, 0); }
+      100% { transform: translate(85px, 0); }
     }
-
     @media (max-width: 640px) {
-      .starfield-hero { height: 70vh; min-height: 400px; }
       .wave-footer { height: 8em; }
     }
   </style>
@@ -134,24 +87,18 @@
     </div>
   </nav>
 
-  <!-- Starfield Hero -->
-  <section class="starfield-hero" id="starfield-hero">
-    <canvas id="hero-bg-canvas"></canvas>
-    <canvas id="hero-canvas"></canvas>
-    <div class="starfield-overlay">
-      <div class="container">
-        <div class="hero-eyebrow">Open, Inclusive, Pragmatic, Win-win</div>
-        <h1>Asian Sports<br>Health Association</h1>
-        <p>Advancing sports and health science across Asia through interdisciplinary collaboration</p>
-        <div class="hero-actions">
-          <a href="about.html" class="btn btn-primary">About ASHA</a>
-          <a href="contact.html" class="btn btn-outline">Contact Us</a>
-        </div>
+  <section class="hero-simple">
+    <div class="container">
+      <div class="hero-eyebrow">Open, Inclusive, Pragmatic, Win-win</div>
+      <h1>Asian Sports Health Association</h1>
+      <p>Advancing sports and health science across Asia through interdisciplinary collaboration</p>
+      <div class="hero-actions">
+        <a href="about.html" class="btn btn-primary">About ASHA</a>
+        <a href="contact.html" class="btn btn-outline">Contact Us</a>
       </div>
     </div>
   </section>
 
-  <!-- Notice + Quick Links -->
   <section class="section">
     <div class="container">
       <div class="notice-board reveal">
@@ -173,7 +120,6 @@
     </div>
   </section>
 
-  <!-- Office Environment -->
   <section class="office-section">
     <div class="container">
       <div class="section-hd"><h2 style="font-size:1.5rem;text-transform:uppercase;letter-spacing:0.15em;">Office Environment</h2><div class="section-divider"></div></div>
@@ -185,16 +131,15 @@
     </div>
   </section>
 
-  <!-- Ocean Wave Footer -->
   <div class="wave-footer">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none">
       <defs>
-        <path id="gentle-wave" d="m -160,44.4 c 30,0 58,-18 87.7,-18 30.3,0 58.3,18 87.3,18 30,0 58,-18 88,-18 30,0 58,18 88,18 l 0,34.5 -351,0 z"></path>
+        <path id="gw" d="M-160,44.4 C-130,44.4 -102,26.4 -72,26.4 C-42,26.4 -14,44.4 16,44.4 C46,44.4 74,26.4 104,26.4 C134,26.4 162,44.4 192,44.4 L192,78.9 L-160,78.9 Z"/>
       </defs>
       <g class="parallax">
-        <use href="#gentle-wave" x="50" y="0" fill="#2b43be"></use>
-        <use href="#gentle-wave" x="50" y="4" fill="rgba(43,67,190,0.45)"></use>
-        <use href="#gentle-wave" x="50" y="8" fill="#1e3096"></use>
+        <use xlink:href="#gw" x="50" y="0" fill="#2b43be"/>
+        <use xlink:href="#gw" x="50" y="4" fill="rgba(61,86,212,0.5)"/>
+        <use xlink:href="#gw" x="50" y="8" fill="#1e3096"/>
       </g>
     </svg>
   </div>
@@ -211,104 +156,6 @@
     </div>
   </footer>
 
-  <script>
-  (function(){
-    var bg = document.getElementById('hero-bg-canvas');
-    var sc = document.getElementById('hero-canvas');
-    if (!bg || !sc) return;
-    var ctxBg = bg.getContext('2d');
-    var ctxSc = sc.getContext('2d');
-    var W, H, stars = [], cells = {}, mouse = {x:null,y:null};
-    var MAX_DIST = 90, MOUSE_RADIUS = 200, CELL_SIZE = MAX_DIST;
-    var idleTimer;
-
-    function resize() {
-      var hero = document.getElementById('starfield-hero');
-      W = hero ? hero.offsetWidth : window.innerWidth;
-      H = hero ? hero.offsetHeight : window.innerHeight;
-      bg.width = sc.width = W;
-      bg.height = sc.height = H;
-    }
-
-    function Star(x, y) {
-      this.x = x; this.y = y;
-      this.size = Math.random() * 3.2 + 0.8;
-      this.speedX = (Math.random() - 0.5) * 0.5;
-      this.speedY = (Math.random() - 0.5) * 0.5;
-      this.depth = Math.random();
-      this.size *= this.depth;
-    }
-    Star.prototype.draw = function() {
-      ctxSc.beginPath();
-      ctxSc.fillStyle = '#e0e8ff';
-      ctxSc.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctxSc.fill();
-    };
-
-    function createStars() {
-      resize();
-      stars.length = 0;
-      cells = {};
-      var count = Math.floor(0.0002 * W * H);
-      for (var i = 0; i < count; i++) {
-        var s = new Star(Math.random() * W, Math.random() * H);
-        stars.push(s);
-        var cx = Math.floor(s.x / CELL_SIZE), cy = Math.floor(s.y / CELL_SIZE);
-        if (!cells[cx]) cells[cx] = {};
-        if (!cells[cx][cy]) cells[cx][cy] = [];
-        cells[cx][cy].push(s);
-      }
-    }
-
-    function animate() {
-      ctxSc.clearRect(0, 0, W, H);
-      cells = {};
-      for (var i = 0; i < stars.length; i++) {
-        var s = stars[i];
-        s.x += s.speedX; s.y += s.speedY;
-        if (s.x < 0) s.x = W; if (s.x > W) s.x = 0;
-        if (s.y < 0) s.y = H; if (s.y > H) s.y = 0;
-        s.draw();
-        var cx = Math.floor(s.x / CELL_SIZE), cy = Math.floor(s.y / CELL_SIZE);
-        if (!cells[cx]) cells[cx] = {};
-        if (!cells[cx][cy]) cells[cx][cy] = [];
-        cells[cx][cy].push(s);
-        for (var dx = -1; dx <= 1; dx++) {
-          for (var dy = -1; dy <= 1; dy++) {
-            var nx = cx + dx, ny = cy + dy;
-            if (!cells[nx] || !cells[nx][ny]) continue;
-            for (var j = 0; j < cells[nx][ny].length; j++) {
-              var o = cells[nx][ny][j];
-              var dist = Math.hypot(s.x - o.x, s.y - o.y);
-              var md = mouse.x ? Math.hypot(s.x - mouse.x, s.y - mouse.y) : Infinity;
-              if (dist < MAX_DIST && (md < MOUSE_RADIUS || Math.random() < 0.15)) {
-                var alpha = (MAX_DIST - dist) / MAX_DIST;
-                ctxSc.beginPath();
-                ctxSc.moveTo(s.x, s.y);
-                ctxSc.lineTo(o.x, o.y);
-                ctxSc.strokeStyle = 'rgba(170,200,245,' + alpha.toFixed(2) + ')';
-                ctxSc.lineWidth = 0.6;
-                ctxSc.stroke();
-              }
-            }
-          }
-        }
-      }
-      requestAnimationFrame(animate);
-    }
-
-    window.addEventListener('mousemove', function(e) {
-      var r = sc.getBoundingClientRect();
-      mouse.x = e.clientX - r.left;
-      mouse.y = e.clientY - r.top;
-      clearTimeout(idleTimer);
-      idleTimer = setTimeout(function() { mouse.x = null; mouse.y = null; }, 2500);
-    });
-    window.addEventListener('resize', createStars);
-    createStars();
-    animate();
-  })();
-  </script>
-  <script src="../js/main.js?v=47"></script>
+  <script src="../js/main.js?v=48"></script>
 </body>
 </html>
