@@ -59,7 +59,7 @@
     var hdr = document.querySelector('.starfield-header');
     W = hdr ? hdr.offsetWidth : canvas.parentElement.offsetWidth;
     H2 = hdr ? hdr.offsetHeight : canvas.parentElement.offsetHeight;
-    H = Math.round(H2 * 1.5);
+    H = Math.round(H2 * 1.15);
     canvas.width = W; canvas.height = H;
     canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
   }
@@ -262,14 +262,15 @@
   }
 
   function drawGradient() {
-    // Fade from transparent starfield → page background #f6f8fb
-    var grad = ctx.createLinearGradient(0, H2 * 0.55, 0, H);
+    // Tight fade from starfield → #f6f8fb in final 15% extension
+    var fadeTop = H2 * 0.9;
+    var grad = ctx.createLinearGradient(0, fadeTop, 0, H);
     grad.addColorStop(0, 'rgba(0,0,0,0)');
-    grad.addColorStop(0.3, 'rgba(15,30,55,0.3)');
-    grad.addColorStop(0.6, 'rgba(200,215,230,0.7)');
+    grad.addColorStop(0.4, 'rgba(15,30,55,0.25)');
+    grad.addColorStop(0.8, '#d0dae5');
     grad.addColorStop(1, '#f6f8fb');
     ctx.fillStyle = grad;
-    ctx.fillRect(0, H2 * 0.55, W, H - H2 * 0.55);
+    ctx.fillRect(0, fadeTop, W, H - fadeTop);
   }
 
   function drawConstellations(t) {
