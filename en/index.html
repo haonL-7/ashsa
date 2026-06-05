@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home - ASIAN SPORTS AND HEALTH ASSOCIATION</title>
   <meta name="description" content="Asian Sports and Health Association — Official Website">
-  <link rel="stylesheet" href="../css/style.css?v=46">
-  <link rel="stylesheet" href="../css/wave.css?v=46">
+  <link rel="stylesheet" href="../css/style.css?v=47">
   <link rel="icon" href="../images/logo-aasha.jpg" type="image/jpeg">
   <style>
+    /* --- Starfield Hero --- */
     .starfield-hero {
       position: relative;
       width: 100%;
@@ -22,22 +22,20 @@
       inset: 0;
       width: 100%;
       height: 100%;
+      pointer-events: none;
     }
-    #hero-bg-canvas { z-index: 0; }
-    #hero-canvas    { z-index: 1; }
-    #hero-ui-canvas { z-index: 2; }
+    #hero-bg-canvas { z-index: 1; }
+    #hero-canvas    { z-index: 2; }
 
     .starfield-overlay {
       position: absolute;
       inset: 0;
-      z-index: 10;
+      z-index: 20;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      pointer-events: none;
     }
-    .starfield-overlay .container { pointer-events: auto; }
     .starfield-overlay .hero-eyebrow {
       display: inline-block;
       padding: 0.35rem 1.1rem;
@@ -82,8 +80,36 @@
       background: rgba(255,255,255,0.12);
       border-color: rgba(255,255,255,0.5);
     }
+
+    /* --- Wave at bottom --- */
+    .wave-footer {
+      width: 100%;
+      height: 15em;
+      overflow: hidden;
+      line-height: 0;
+      background: #f6f8fb;
+    }
+    .wave-footer svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .wave-footer .parallax use {
+      animation: wave-forever 12s linear infinite;
+      transform-origin: 50% 50%;
+    }
+    .wave-footer .parallax use:nth-child(1) { animation-delay: -2s; }
+    .wave-footer .parallax use:nth-child(2) { animation-delay: -2s; animation-duration: 5s; }
+    .wave-footer .parallax use:nth-child(3) { animation-delay: -4s; animation-duration: 3s; }
+
+    @keyframes wave-forever {
+      0%   { transform: translate(-90px, 0%); }
+      100% { transform: translate(85px, 0%); }
+    }
+
     @media (max-width: 640px) {
       .starfield-hero { height: 70vh; min-height: 400px; }
+      .wave-footer { height: 8em; }
     }
   </style>
 </head>
@@ -112,7 +138,6 @@
   <section class="starfield-hero" id="starfield-hero">
     <canvas id="hero-bg-canvas"></canvas>
     <canvas id="hero-canvas"></canvas>
-    <canvas id="hero-ui-canvas"></canvas>
     <div class="starfield-overlay">
       <div class="container">
         <div class="hero-eyebrow">Open, Inclusive, Pragmatic, Win-win</div>
@@ -125,20 +150,6 @@
       </div>
     </div>
   </section>
-
-  <!-- Ocean Wave -->
-  <div class="wave-section">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
-      <defs>
-        <path id="gentle-wave" d="m -160,44.4 c 30,0 58,-18 87.7,-18 30.3,0 58.3,18 87.3,18 30,0 58,-18 88,-18 30,0 58,18 88,18 l 0,34.5 -351,0 z"></path>
-      </defs>
-      <g class="wave-parallax">
-        <use href="#gentle-wave" xlink:href="#gentle-wave" x="50" y="0" class="wave-fill-primary"></use>
-        <use href="#gentle-wave" xlink:href="#gentle-wave" x="50" y="3" fill="rgba(43,67,190,0.4)"></use>
-        <use href="#gentle-wave" xlink:href="#gentle-wave" x="50" y="6" class="wave-fill-dark"></use>
-      </g>
-    </svg>
-  </div>
 
   <!-- Notice + Quick Links -->
   <section class="section">
@@ -174,6 +185,20 @@
     </div>
   </section>
 
+  <!-- Ocean Wave Footer -->
+  <div class="wave-footer">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
+      <defs>
+        <path id="gentle-wave" d="m -160,44.4 c 30,0 58,-18 87.7,-18 30.3,0 58.3,18 87.3,18 30,0 58,-18 88,-18 30,0 58,18 88,18 l 0,34.5 -351,0 z"></path>
+      </defs>
+      <g class="parallax">
+        <use href="#gentle-wave" x="50" y="0" fill="#2b43be"></use>
+        <use href="#gentle-wave" x="50" y="4" fill="rgba(43,67,190,0.45)"></use>
+        <use href="#gentle-wave" x="50" y="8" fill="#1e3096"></use>
+      </g>
+    </svg>
+  </div>
+
   <footer>
     <div class="container">
       <div class="footer-grid">
@@ -187,17 +212,12 @@
   </footer>
 
   <script>
-  // ===== STARFIELD — inline for reliability =====
   (function(){
     var bg = document.getElementById('hero-bg-canvas');
     var sc = document.getElementById('hero-canvas');
-    var ui = document.getElementById('hero-ui-canvas');
     if (!bg || !sc) return;
-
     var ctxBg = bg.getContext('2d');
     var ctxSc = sc.getContext('2d');
-    var ctxUi = ui ? ui.getContext('2d') : null;
-
     var W, H, stars = [], cells = {}, mouse = {x:null,y:null};
     var MAX_DIST = 90, MOUSE_RADIUS = 200, CELL_SIZE = MAX_DIST;
     var idleTimer;
@@ -208,7 +228,6 @@
       H = hero ? hero.offsetHeight : window.innerHeight;
       bg.width = sc.width = W;
       bg.height = sc.height = H;
-      if (ui) { ui.width = W; ui.height = H; }
     }
 
     function Star(x, y) {
@@ -219,7 +238,6 @@
       this.depth = Math.random();
       this.size *= this.depth;
     }
-
     Star.prototype.draw = function() {
       ctxSc.beginPath();
       ctxSc.fillStyle = '#e0e8ff';
@@ -244,7 +262,6 @@
 
     function animate() {
       ctxSc.clearRect(0, 0, W, H);
-
       cells = {};
       for (var i = 0; i < stars.length; i++) {
         var s = stars[i];
@@ -252,13 +269,10 @@
         if (s.x < 0) s.x = W; if (s.x > W) s.x = 0;
         if (s.y < 0) s.y = H; if (s.y > H) s.y = 0;
         s.draw();
-
         var cx = Math.floor(s.x / CELL_SIZE), cy = Math.floor(s.y / CELL_SIZE);
         if (!cells[cx]) cells[cx] = {};
         if (!cells[cx][cy]) cells[cx][cy] = [];
         cells[cx][cy].push(s);
-
-        // Connections
         for (var dx = -1; dx <= 1; dx++) {
           for (var dy = -1; dy <= 1; dy++) {
             var nx = cx + dx, ny = cy + dy;
@@ -290,15 +304,11 @@
       clearTimeout(idleTimer);
       idleTimer = setTimeout(function() { mouse.x = null; mouse.y = null; }, 2500);
     });
-
-    window.addEventListener('resize', function() {
-      createStars();
-    });
-
+    window.addEventListener('resize', createStars);
     createStars();
     animate();
   })();
   </script>
-  <script src="../js/main.js?v=46"></script>
+  <script src="../js/main.js?v=47"></script>
 </body>
 </html>
