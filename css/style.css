@@ -1509,3 +1509,209 @@ footer ul li { margin-bottom: 0.4rem; }
   .banner { height: 280px; }
   .banner-prev, .banner-next { padding: 8px 12px; font-size: 1rem; }
 }
+
+/* ============================================================
+   PREMIUM ENHANCEMENTS — awwwards-level polish
+   ============================================================ */
+
+/* --- Glassmorphism Cards --- */
+.glass {
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.6);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.04);
+}
+.glass-hover:hover {
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.08);
+  transform: translateY(-4px);
+}
+
+/* --- Staggered Reveal Delays --- */
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- Card Premium Hover --- */
+.card {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s ease;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.1), 0 4px 16px rgba(0,0,0,0.04);
+  border-color: rgba(var(--primary-rgb), 0.15);
+}
+
+/* --- Section Background Radials --- */
+.section-bg {
+  position: relative;
+}
+.section-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse 60% 40% at 20% 50%, rgba(var(--primary-rgb), 0.03) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 50% at 80% 30%, rgba(196,167,71,0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* --- Office Card Premium Hover --- */
+.office-card {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s ease;
+  cursor: pointer;
+}
+.office-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.12);
+}
+.office-card .office-img {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.office-card:hover .office-img {
+  transform: scale(1.08);
+}
+
+/* --- Quick Link Premium --- */
+.quick-link-card {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.quick-link-card:hover {
+  transform: translateX(6px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  border-color: var(--primary);
+  background: rgba(var(--primary-rgb), 0.02);
+}
+
+/* --- Notice Item Hover --- */
+.notice-item {
+  transition: background 0.2s ease;
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-xs);
+  margin: 0 calc(-1 * var(--space-xs));
+}
+.notice-item:hover {
+  background: rgba(var(--primary-rgb), 0.03);
+}
+
+/* --- Nav Refinements --- */
+.nav {
+  transition: box-shadow 0.4s ease, background 0.4s ease;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.nav.scrolled {
+  box-shadow: 0 2px 24px rgba(0,0,0,0.06);
+}
+
+/* --- Banner Parallax --- */
+.banner-slide img {
+  transition: transform 8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.banner-slide.active img {
+  transform: scale(1.05);
+}
+
+/* --- Button Refinements --- */
+.btn {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-primary {
+  box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.3);
+}
+.btn-primary:hover {
+  box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.45);
+  transform: translateY(-3px);
+}
+
+/* --- Footer Refined --- */
+footer {
+  background: var(--ink);
+  color: rgba(255,255,255,0.7);
+  padding: var(--space-3xl) 0 var(--space-xl);
+}
+footer h4 {
+  color: #fff;
+  margin-bottom: var(--space-md);
+}
+footer a {
+  color: rgba(255,255,255,0.5);
+}
+footer a:hover {
+  color: var(--gold-lt);
+}
+.footer-btm {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: var(--space-lg);
+  margin-top: var(--space-xl);
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.35);
+}
+
+/* --- Section Divider Refined --- */
+.section-divider {
+  width: 48px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--gold-lt));
+  margin: 0 auto var(--space-lg);
+  border-radius: 3px;
+}
+
+/* --- Page Header Overlay --- */
+.page-header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 40% 50% at 80% 20%, rgba(196,167,71,0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+.page-header .container {
+  animation: headerIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes headerIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Banner Caption Animation --- */
+.banner-slide.active .banner-caption h1 {
+  animation: slideUp 0.8s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.banner-slide.active .banner-caption p {
+  animation: slideUp 0.8s 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Selection Style --- */
+::selection {
+  background: rgba(var(--primary-rgb), 0.15);
+  color: var(--primary);
+}
+
+/* --- Scrollbar --- */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-xlt); }

@@ -80,7 +80,7 @@
     // ============================================================
     // SCROLL REVEAL ANIMATIONS (Intersection Observer)
     // ============================================================
-    var revealEls = document.querySelectorAll('.reveal, .card, .speaker-card, .stat-card, .reg-box');
+    var revealEls = document.querySelectorAll('.reveal, .card, .office-card, .speaker-card, .stat-card, .reg-box');
 
     if ('IntersectionObserver' in window) {
       var observer = new IntersectionObserver(function (entries) {
@@ -101,7 +101,9 @@
         if (el.classList.contains('reveal')) {
           observer.observe(el);
         } else if (el.closest('.section') && !el.closest('.hero')) {
-          // Auto-add reveal class to cards in sections (not hero)
+          el.classList.add('reveal');
+          observer.observe(el);
+        } else if (el.classList.contains('office-card')) {
           el.classList.add('reveal');
           observer.observe(el);
         }
