@@ -1,0 +1,44 @@
+/* Ocean Wave — aasha2025 replica */
+.wave-section {
+  position: relative;
+  width: 100%;
+  height: 10em;
+  margin-top: -1px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.wave-section svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.wave-parallax use {
+  animation: wave-forever 12s linear infinite;
+  transform-origin: 50% 50%;
+}
+.wave-parallax use:nth-child(1) {
+  animation-delay: -2s;
+}
+.wave-parallax use:nth-child(2) {
+  animation-delay: -2s;
+  animation-duration: 5s;
+}
+.wave-parallax use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 3s;
+}
+
+@keyframes wave-forever {
+  0%   { transform: translate(-90px, 0%); }
+  100% { transform: translate(85px, 0%); }
+}
+
+/* Wave colors */
+.wave-fill-primary { fill: var(--primary); }
+.wave-fill-dark { fill: var(--primary-md); }
+
+@media (max-width: 640px) {
+  .wave-section { height: 6em; }
+}
