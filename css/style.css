@@ -714,6 +714,7 @@ img { max-width: 100%; height: auto; display: block; }
 .section {
   padding: var(--space-3xl) 0;
   position: relative;
+  z-index: 2;
 }
 
 .section-bg {
@@ -1715,3 +1716,9 @@ footer a:hover {
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--ink-xlt); }
+
+/* --- Parallax Wave above canvas overflow --- */
+.parallax-svg {
+  position: relative;
+  z-index: 3;
+}

@@ -262,10 +262,12 @@
   }
 
   function drawGradient() {
+    // Fade from transparent starfield → page background #f6f8fb
     var grad = ctx.createLinearGradient(0, H2 * 0.55, 0, H);
     grad.addColorStop(0, 'rgba(0,0,0,0)');
-    grad.addColorStop(0.5, 'rgba(4,13,26,0.5)');
-    grad.addColorStop(1, 'rgba(4,13,26,0.75)');
+    grad.addColorStop(0.3, 'rgba(15,30,55,0.3)');
+    grad.addColorStop(0.6, 'rgba(200,215,230,0.7)');
+    grad.addColorStop(1, '#f6f8fb');
     ctx.fillStyle = grad;
     ctx.fillRect(0, H2 * 0.55, W, H - H2 * 0.55);
   }
