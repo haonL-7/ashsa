@@ -1,28 +1,28 @@
 /**
- * Starfield Header — constellation starfield with mouse interaction
+ * Starfield Header v3 — drifting constellations + mouse interaction + gradient bottom
  * Targets .starfield-header container, uses #sf-canvas
  */
 (function () {
   var canvas, ctx, W, H, animId;
-  var stars = [], STAR_COUNT = 280;
+  var stars = [], STAR_COUNT = 300;
   var mouse = { x: -999, y: -999, on: false };
-  var MAX_DIST = 90, MOUSE_RADIUS = 150;
+  var MAX_DIST = 100, MOUSE_RADIUS = 160, time = 0;
 
-  // Constellation definitions
+  // Constellation definitions with drift
   var cons = [
-    { name: 'Orion', x: 0.68, y: 0.4, scale: 0.6,
+    { name: 'Orion', bx: 0.68, by: 0.35, scale: 0.6, driftX: 0.003, driftY: 0.002,
       pts: [[0,0],[9,2],[16,1],[6,9],[-10,17],[-3,4],[4,-6]],
       lines: [[0,1],[1,2],[3,4],[0,3],[1,4],[5,6]] },
-    { name: 'Big Dipper', x: 0.22, y: 0.28, scale: 0.5,
+    { name: 'Big Dipper', bx: 0.22, by: 0.25, scale: 0.5, driftX: -0.002, driftY: 0.003,
       pts: [[0,0],[11,-3],[20,1],[31,6],[25,16],[12,13],[3,9]],
       lines: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,0]] },
-    { name: 'Cassiopeia', x: 0.4, y: 0.65, scale: 0.5,
+    { name: 'Cassiopeia', bx: 0.4, by: 0.6, scale: 0.5, driftX: 0.004, driftY: -0.001,
       pts: [[0,6],[7,0],[14,9],[21,0],[28,6]],
       lines: [[0,1],[1,2],[2,3],[3,4]] },
-    { name: 'Pleiades', x: 0.75, y: 0.35, scale: 0.45,
+    { name: 'Pleiades', bx: 0.75, by: 0.3, scale: 0.45, driftX: -0.003, driftY: -0.002,
       pts: [[0,0],[3,3],[-2,5],[6,-2],[3,7],[-4,2],[5,4],[-3,-3],[2,-4]],
       lines: [] },
-    { name: 'Andromeda', x: 0.3, y: 0.55, scale: 0.5,
+    { name: 'Andromeda', bx: 0.3, by: 0.5, scale: 0.5, driftX: 0.002, driftY: 0.004,
       pts: [[0,0],[4,2],[8,-1],[12,3],[16,1],[20,4]],
       lines: [[0,1],[1,2],[2,3],[3,4],[4,5]] }
   ];
@@ -31,26 +31,32 @@
     canvas = document.getElementById('sf-canvas');
     if (!canvas) return;
     ctx = canvas.getContext('2d');
+
+    // Capture mouse on entire header, not just canvas
+    var header = document.querySelector('.starfield-header');
+    (header || canvas).addEventListener('mousemove', function (e) {
+      var r = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - r.left;
+      mouse.y = e.clientY - r.top;
+      mouse.on = true;
+    });
+    (header || canvas).addEventListener('mouseleave', function () { mouse.on = false; });
+
     resize();
     createStars();
     window.addEventListener('resize', function () { stars.length = 0; resize(); createStars(); });
-    canvas.addEventListener('mousemove', onMouse);
-    canvas.addEventListener('mouseleave', function () { mouse.on = false; });
     animate();
   }
 
   function resize() {
     var hdr = document.querySelector('.starfield-header');
     W = hdr ? hdr.offsetWidth : canvas.parentElement.offsetWidth;
-    H = hdr ? hdr.offsetHeight : canvas.parentElement.offsetHeight;
-    canvas.width = W; canvas.height = H;
-  }
-
-  function onMouse(e) {
-    var r = canvas.getBoundingClientRect();
-    mouse.x = e.clientX - r.left;
-    mouse.y = e.clientY - r.top;
-    mouse.on = true;
+    var h = hdr ? hdr.offsetHeight : canvas.parentElement.offsetHeight;
+    H = Math.round(h * 1.5); // extend 50% for gradient fade
+    canvas.width = W;
+    canvas.height = H;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
   }
 
   function createStars() {
@@ -58,28 +64,42 @@
       stars.push({
         x: Math.random() * W,
         y: Math.random() * H,
-        vx: (Math.random() - 0.5) * 0.25,
-        vy: (Math.random() - 0.5) * 0.25,
+        vx: (Math.random() - 0.5) * 0.2,
+        vy: (Math.random() - 0.5) * 0.2,
         r: Math.random() * 2 + 0.5,
         bright: Math.random() * 0.5 + 0.3,
         twinkle: Math.random() * Math.PI * 2,
-        twinkleSpeed: Math.random() * 0.02 + 0.005
+        twinkleSpeed: Math.random() * 0.015 + 0.004,
+        phase: Math.random() * 0.03
       });
     }
   }
 
-  function drawConstellations() {
+  function drawGradientFade() {
+    // Bottom fade: from transparent to fully faded
+    var fadeStart = H * 0.6;
+    var grad = ctx.createLinearGradient(0, fadeStart, 0, H);
+    grad.addColorStop(0, 'rgba(0,0,0,0)');
+    grad.addColorStop(1, 'rgba(0,0,0,0.55)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, fadeStart, W, H - fadeStart);
+  }
+
+  function drawConstellations(t) {
     for (var k = 0; k < cons.length; k++) {
       var c = cons[k];
-      var cx = c.x * W, cy = c.y * H, sc = H * 0.011 * c.scale;
+      // Drifting base position
+      var cx = (c.bx + Math.sin(t * c.driftX) * 0.04) * W;
+      var cy = (c.by + Math.cos(t * c.driftY) * 0.04) * H;
+      var sc = H * 0.008 * c.scale;
       var pts = [];
       for (var j = 0; j < c.pts.length; j++) {
         pts.push([cx + c.pts[j][0] * sc, cy + c.pts[j][1] * sc]);
       }
 
-      // Draw lines
+      // Connection lines
       if (c.lines && c.lines.length) {
-        ctx.strokeStyle = 'rgba(140,185,230,0.12)';
+        ctx.strokeStyle = 'rgba(140,185,230,0.1)';
         ctx.lineWidth = 0.5;
         for (var j = 0; j < c.lines.length; j++) {
           var l = c.lines[j];
@@ -90,17 +110,17 @@
         }
       }
 
-      // Draw stars
+      // Stars with glow
       for (var j = 0; j < pts.length; j++) {
         var sx = pts[j][0], sy = pts[j][1];
-        var alpha = 0.35;
+        var alpha = 0.3 + Math.sin(t * 1.5 + j) * 0.08;
         if (mouse.on) {
           var d = Math.hypot(mouse.x - sx, mouse.y - sy);
-          if (d < 80) alpha = Math.min(1, alpha + 0.65 * (1 - d / 80));
+          if (d < 100) alpha = Math.min(1, alpha + 0.7 * (1 - d / 100));
         }
         var grad = ctx.createRadialGradient(sx, sy, 0, sx, sy, 4);
-        grad.addColorStop(0, 'rgba(255,255,255,' + (alpha * 0.95) + ')');
-        grad.addColorStop(0.5, 'rgba(180,210,250,' + (alpha * 0.2) + ')');
+        grad.addColorStop(0, 'rgba(255,255,255,' + (alpha * 0.9) + ')');
+        grad.addColorStop(0.5, 'rgba(180,210,250,' + (alpha * 0.18) + ')');
         grad.addColorStop(1, 'rgba(0,0,0,0)');
         ctx.beginPath();
         ctx.arc(sx, sy, 4, 0, Math.PI * 2);
@@ -111,41 +131,40 @@
   }
 
   function animate() {
+    time += 0.016;
     ctx.clearRect(0, 0, W, H);
 
-    // Draw background stars with connections
+    // Stars
     for (var i = 0; i < stars.length; i++) {
       var s = stars[i];
-
-      // Irregular drift
-      s.x += s.vx + Math.sin(Date.now() * 0.0003 + i) * 0.04;
-      s.y += s.vy + Math.cos(Date.now() * 0.0004 + i) * 0.04;
-
-      // Wrap around
+      s.x += s.vx + Math.sin(time * 0.7 + s.phase * 100) * 0.05;
+      s.y += s.vy + Math.cos(time * 0.6 + s.phase * 100) * 0.05;
       if (s.x < -10) s.x = W + 10;
       if (s.x > W + 10) s.x = -10;
       if (s.y < -10) s.y = H + 10;
       if (s.y > H + 10) s.y = -10;
 
-      // Twinkle
       s.twinkle += s.twinkleSpeed;
-      var alpha = s.bright + Math.sin(s.twinkle) * 0.15;
+      var alpha = s.bright + Math.sin(s.twinkle) * 0.12;
 
-      // Boost near mouse
       if (mouse.on) {
         var d = Math.hypot(mouse.x - s.x, mouse.y - s.y);
         if (d < MOUSE_RADIUS) {
-          alpha = Math.min(1, alpha + 0.4 * (1 - d / MOUSE_RADIUS));
+          alpha = Math.min(1, alpha + 0.45 * (1 - d / MOUSE_RADIUS));
+          // Pull toward mouse
+          var force = 0.03 * (1 - d / MOUSE_RADIUS);
+          s.x += (mouse.x - s.x) * force;
+          s.y += (mouse.y - s.y) * force;
         }
       }
 
       ctx.beginPath();
-      ctx.fillStyle = 'rgba(200,220,255,' + alpha + ')';
+      ctx.fillStyle = 'rgba(200,225,255,' + alpha + ')';
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // Draw connections near mouse
+    // Connections near mouse
     if (mouse.on) {
       for (var i = 0; i < stars.length; i++) {
         var si = stars[i];
@@ -157,11 +176,11 @@
           if (dj > MOUSE_RADIUS) continue;
           var dd = Math.hypot(si.x - sj.x, si.y - sj.y);
           if (dd < MAX_DIST) {
-            var a = (1 - dd / MAX_DIST) * (1 - di / MOUSE_RADIUS) * (1 - dj / MOUSE_RADIUS) * 0.4;
+            var a = (1 - dd / MAX_DIST) * (1 - di / MOUSE_RADIUS) * (1 - dj / MOUSE_RADIUS) * 0.5;
             ctx.beginPath();
             ctx.moveTo(si.x, si.y);
             ctx.lineTo(sj.x, sj.y);
-            ctx.strokeStyle = 'rgba(160,200,240,' + a + ')';
+            ctx.strokeStyle = 'rgba(160,205,245,' + a + ')';
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -169,8 +188,11 @@
       }
     }
 
-    // Draw constellations on top
-    drawConstellations();
+    // Constellations
+    drawConstellations(time);
+
+    // Gradient fade at bottom
+    drawGradientFade();
 
     animId = requestAnimationFrame(animate);
   }
