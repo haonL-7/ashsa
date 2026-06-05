@@ -354,7 +354,7 @@
     }
 
     drawConstellations(t);
-    drawComets(t);
+    drawComets(now);
     drawExplosions();
     drawGradient();
     animId = requestAnimationFrame(animate);
