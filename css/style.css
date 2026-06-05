@@ -459,8 +459,8 @@ img { max-width: 100%; height: auto; display: block; }
   cursor: pointer;
   color: var(--ink);
   padding: var(--space-xs);
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   position: relative;
 }
 
