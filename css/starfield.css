@@ -1,52 +1,84 @@
-/* Starfield — fullscreen background layer */
+/* Starfield Hero Section */
+.starfield-hero {
+  position: relative;
+  width: 100%;
+  height: 85vh;
+  min-height: 500px;
+  overflow: hidden;
+  background: #0a0f1e;
+}
+
 #hero-bg-canvas,
 #hero-canvas,
 #hero-ui-canvas {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 }
-#hero-bg-canvas { z-index: 0; pointer-events: none; }
-#hero-canvas    { z-index: 1; pointer-events: none; }
-#hero-ui-canvas { z-index: 2; pointer-events: none; }
+#hero-bg-canvas { z-index: 0; }
+#hero-canvas    { z-index: 1; }
+#hero-ui-canvas { z-index: 2; }
 
-/* Page content scrolls on top */
-.page-overlay {
-  position: relative;
+/* Text overlay on starfield */
+.starfield-overlay {
+  position: absolute;
+  inset: 0;
   z-index: 10;
-  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
 }
-
-/* Nav semi-transparent over starfield */
-.page-overlay .nav {
-  background: rgba(10,15,30,0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+.starfield-overlay .container {
+  pointer-events: auto;
 }
-.page-overlay .nav .nav-links a {
+.starfield-overlay .hero-eyebrow {
+  display: inline-block;
+  padding: 0.35rem 1.1rem;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: var(--space-lg);
+}
+.starfield-overlay h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: var(--space-lg);
+  text-shadow: 0 2px 40px rgba(0,0,0,0.4);
+}
+.starfield-overlay p {
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto var(--space-xl);
   color: rgba(255,255,255,0.75);
+  line-height: 1.7;
 }
-.page-overlay .nav .nav-links a:hover,
-.page-overlay .nav .nav-links a.active {
-  color: #fff;
-  background: rgba(255,255,255,0.08);
+.starfield-overlay .hero-actions {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  flex-wrap: wrap;
 }
-.page-overlay .nav-logo {
-  color: #fff;
+.starfield-overlay .btn-outline {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(4px);
+  color: #fff !important;
+  border: 1.5px solid rgba(255,255,255,0.25);
+}
+.starfield-overlay .btn-outline:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.5);
 }
 
-/* Sections below starfield */
-.page-overlay .section,
-.page-overlay .office-section {
-  background: var(--bg);
-}
-.page-overlay .section-bg {
-  background: var(--white);
-}
-
-/* Footer always dark */
-.page-overlay footer {
-  background: var(--ink);
+@media (max-width: 640px) {
+  .starfield-hero { height: 70vh; min-height: 400px; }
 }

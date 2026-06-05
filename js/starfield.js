@@ -58,10 +58,19 @@ const CELL_SIZE = options.maxDistance;
 let cells = {};
 
 window.addEventListener("resize", function () {
-  stars.length = 0; // Clear the existing stars
-  cells = {}; // Clear the existing cells
-  resizeCanvas();
-  createStars(); // Create new stars according to the new screen size
+  stars.length = 0;
+  cells = {};
+  var sz = getContainerSize();
+  canvasBackground.width = sz.w; canvasBackground.height = sz.h;
+  canvasBackground.style.width = sz.w + 'px'; canvasBackground.style.height = sz.h + 'px';
+  canvasStars.width = sz.w; canvasStars.height = sz.h;
+  canvasStars.style.width = sz.w + 'px'; canvasStars.style.height = sz.h + 'px';
+  if (document.getElementById('hero-ui-canvas')) {
+    var uic = document.getElementById('hero-ui-canvas');
+    uic.width = sz.w; uic.height = sz.h;
+    uic.style.width = sz.w + 'px'; uic.style.height = sz.h + 'px';
+  }
+  createStars();
 });
 
 const stars = [];
@@ -71,8 +80,15 @@ const mouse = { x: null, y: null };
 let animationIdleTimeout = null;
 
 window.addEventListener("mousemove", function (event) {
-  mouse.x = event.x;
-  mouse.y = event.y;
+  var c = document.getElementById('hero-canvas');
+  if (c) {
+    var r = c.getBoundingClientRect();
+    mouse.x = event.clientX - r.left;
+    mouse.y = event.clientY - r.top;
+  } else {
+    mouse.x = event.clientX;
+    mouse.y = event.clientY;
+  }
 
   // Clear any previous timeout
   clearTimeout(animationIdleTimeout);
@@ -84,11 +100,18 @@ window.addEventListener("mousemove", function (event) {
   }, options.idleRestartTime);
 });
 
+function getContainerSize() {
+  var hero = document.querySelector('.starfield-hero');
+  if (hero) return { w: hero.offsetWidth, h: hero.offsetHeight };
+  return { w: window.innerWidth, h: window.innerHeight };
+}
+
 function resizeCanvas() {
-  canvasBackground.width = window.innerWidth;
-  canvasBackground.height = window.innerHeight;
-  canvasStars.width = window.innerWidth;
-  canvasStars.height = window.innerHeight;
+  var sz = getContainerSize();
+  canvasBackground.width = sz.w;
+  canvasBackground.height = sz.h;
+  canvasStars.width = sz.w;
+  canvasStars.height = sz.h;
 
   // Drawing the background
   if (options.canvasGradient) {
@@ -322,8 +345,9 @@ function createStars() {
 
 window.addEventListener("click", function (event) {
   if (!options.interactive) return;
-  const x = event.x;
-  const y = event.y;
+  var c = document.getElementById('hero-canvas');
+  var x = event.clientX, y = event.clientY;
+  if (c) { var r = c.getBoundingClientRect(); x -= r.left; y -= r.top; }
   const star = new Star(x, y);
   stars.push(star);
 });
