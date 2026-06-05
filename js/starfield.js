@@ -1,10 +1,14 @@
-const canvasBackground = document.getElementById("hero-bg-canvas");
-const ctxBackground = canvasBackground ? canvasBackground.getContext("2d") : null;
+var canvasBackground, ctxBackground, canvasStars, ctxStars;
 
-const canvasStars = document.getElementById("hero-canvas");
-const ctxStars = canvasStars ? canvasStars.getContext("2d") : null;
+function refreshCanvasRefs() {
+  canvasBackground = document.getElementById("hero-bg-canvas");
+  ctxBackground = canvasBackground ? canvasBackground.getContext("2d") : null;
+  canvasStars = document.getElementById("hero-canvas");
+  ctxStars = canvasStars ? canvasStars.getContext("2d") : null;
+  return !!(canvasStars && canvasBackground);
+}
 
-if (!canvasStars) throw new Error("hero-canvas not found");
+refreshCanvasRefs();
 
 // Default options — tuned for Milky Way deep space look
 const defaultOptions = {
@@ -324,6 +328,18 @@ window.addEventListener("click", function (event) {
   stars.push(star);
 });
 
-resizeCanvas(); // This will draw the background.
-createStars();
-animateStars();
+function initStarfield() {
+  if (!refreshCanvasRefs()) return false;
+  resizeCanvas();
+  createStars();
+  animateStars();
+  return true;
+}
+
+if (!initStarfield()) {
+  document.addEventListener("DOMContentLoaded", function() {
+    if (!initStarfield()) {
+      setTimeout(initStarfield, 200);
+    }
+  });
+}
