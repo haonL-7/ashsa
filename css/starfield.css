@@ -18,7 +18,7 @@
   height: 115%;
 }
 #sf-bg-canvas { z-index: 0; }
-#sf-canvas    { z-index: 5; pointer-events: none; }
+#sf-canvas    { z-index: 1; pointer-events: none; }
 
 .starfield-header .container {
   position: relative;
