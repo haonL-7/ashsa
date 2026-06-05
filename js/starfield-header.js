@@ -80,20 +80,20 @@
     }
   }
 
-  // ============ COMETS (always visible, big trails) ============
+  // ============ COMETS — shooting stars, right-to-left with tilt ============
 
   function spawnComet(now) {
-    var fromLeft = Math.random() > 0.5;
-    var startX = fromLeft ? -80 : W + 80;
-    var vx = fromLeft ? (180 + Math.random() * 250) : -(180 + Math.random() * 250);
+    var angle = (Math.random() - 0.5) * 0.25; // ±~7° tilt
+    var speed = 800 + Math.random() * 500;    // 800-1300 px/s
     comets.push({
-      x: startX,
-      y: Math.random() * H2 * 0.6 + H2 * 0.05,
-      vx: vx,
-      vy: (Math.random() - 0.5) * 30,
-      life: 0, maxLife: 2 + Math.random(),
-      hue: 195 + Math.random() * 45,
-      r: 2 + Math.random() * 2.5,
+      x: W + 40,
+      y: Math.random() * H2 * 0.7 + H2 * 0.05,
+      vx: -Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 0,
+      maxLife: 0.6 + Math.random() * 0.5,
+      hue: 200 + Math.random() * 30,
+      r: 1 + Math.random(),
       startTime: now,
       tail: []
     });
@@ -101,18 +101,22 @@
 
   function spawnMeteorShower(now) {
     inShower = true;
-    showerEnd = now + 4000;
-    var count = 10 + Math.floor(Math.random() * 15);
+    showerEnd = now + 3000;
+    var baseAngle = (Math.random() - 0.5) * 0.2;
+    var count = 12 + Math.floor(Math.random() * 12);
     for (var i = 0; i < count; i++) {
+      var angle = baseAngle + (Math.random() - 0.5) * 0.15;
+      var speed = 700 + Math.random() * 500;
       comets.push({
-        x: Math.random() * W * 0.25,
-        y: Math.random() * H2 * 0.35,
-        vx: 220 + Math.random() * 200,
-        vy: -20 + Math.random() * 50,
-        life: 0, maxLife: 0.8 + Math.random() * 0.7,
-        hue: 200 + Math.random() * 50,
-        r: 2 + Math.random() * 2,
-        startTime: now + i * 100,
+        x: W + Math.random() * 60,
+        y: Math.random() * H2 * 0.6 + H2 * 0.05,
+        vx: -Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        life: 0,
+        maxLife: 0.5 + Math.random() * 0.4,
+        hue: 195 + Math.random() * 35,
+        r: 0.8 + Math.random() * 1.2,
+        startTime: now + i * 70,
         tail: []
       });
     }
@@ -124,41 +128,51 @@
       if (t < cm.startTime) continue;
       cm.life += 0.016;
       var progress = cm.life / cm.maxLife;
-      if (progress > 1 || cm.x < -200 || cm.x > W + 200 || cm.y < -200 || cm.y > H + 200) {
+      if (progress > 1 || cm.x < -120 || cm.y < -120 || cm.y > H + 120) {
         comets.splice(c, 1); continue;
       }
 
       cm.x += cm.vx * 0.016;
       cm.y += cm.vy * 0.016;
       cm.tail.push({ x: cm.x, y: cm.y });
-      if (cm.tail.length > 50) cm.tail.shift();
+      if (cm.tail.length > 30) cm.tail.shift();
 
-      var headAlpha = progress < 0.1 ? progress / 0.1 : progress > 0.7 ? 1 - (progress - 0.7) / 0.3 : 1;
+      var fadeIn = Math.min(1, progress * 4);
+      var fadeOut = progress > 0.6 ? 1 - (progress - 0.6) / 0.4 : 1;
+      var alpha = fadeIn * fadeOut;
 
-      // Wide glow tail
+      // Elegant thin tail — sharp core + soft glow
       for (var ti = 1; ti < cm.tail.length; ti++) {
         var t0 = cm.tail[ti - 1], t1 = cm.tail[ti];
-        var tailAlpha = (ti / cm.tail.length) * 0.85 * headAlpha;
-        var width = cm.r * (ti / cm.tail.length) * 3.5;
+        var tRatio = ti / cm.tail.length;
+
+        // Soft wide glow
         ctx.beginPath();
         ctx.moveTo(t0.x, t0.y);
         ctx.lineTo(t1.x, t1.y);
-        ctx.strokeStyle = 'hsla(' + cm.hue + ',50%,75%,' + tailAlpha + ')';
-        ctx.lineWidth = width;
+        ctx.strokeStyle = 'hsla(' + cm.hue + ',40%,80%,' + (tRatio * alpha * 0.35) + ')';
+        ctx.lineWidth = cm.r * tRatio * 6;
         ctx.lineCap = 'round';
+        ctx.stroke();
+
+        // Sharp bright core
+        ctx.beginPath();
+        ctx.moveTo(t0.x, t0.y);
+        ctx.lineTo(t1.x, t1.y);
+        ctx.strokeStyle = 'hsla(' + cm.hue + ',20%,95%,' + (tRatio * alpha * 0.7) + ')';
+        ctx.lineWidth = cm.r * tRatio * 1.2;
         ctx.stroke();
         ctx.lineCap = 'butt';
       }
 
-      // Bright head
-      var grad = ctx.createRadialGradient(cm.x, cm.y, 0, cm.x, cm.y, cm.r * 10);
-      grad.addColorStop(0, 'rgba(255,255,255,' + (headAlpha * 0.98) + ')');
-      grad.addColorStop(0.05, 'hsla(' + cm.hue + ',80%,90%,' + (headAlpha * 0.8) + ')');
-      grad.addColorStop(0.2, 'hsla(' + cm.hue + ',60%,75%,' + (headAlpha * 0.35) + ')');
-      grad.addColorStop(0.5, 'hsla(' + cm.hue + ',40%,60%,' + (headAlpha * 0.08) + ')');
+      // Bright point head
+      var grad = ctx.createRadialGradient(cm.x, cm.y, 0, cm.x, cm.y, cm.r * 5);
+      grad.addColorStop(0, 'rgba(255,255,255,' + (alpha * 0.95) + ')');
+      grad.addColorStop(0.15, 'hsla(' + cm.hue + ',60%,90%,' + (alpha * 0.5) + ')');
+      grad.addColorStop(0.5, 'hsla(' + cm.hue + ',40%,70%,' + (alpha * 0.1) + ')');
       grad.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.beginPath();
-      ctx.arc(cm.x, cm.y, cm.r * 10, 0, Math.PI * 2);
+      ctx.arc(cm.x, cm.y, cm.r * 5, 0, Math.PI * 2);
       ctx.fillStyle = grad;
       ctx.fill();
     }
