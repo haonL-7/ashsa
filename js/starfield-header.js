@@ -1,28 +1,33 @@
 /**
- * Starfield Header v3 — drifting constellations + mouse interaction + gradient bottom
- * Targets .starfield-header container, uses #sf-canvas
+ * Starfield Header v4 — premium parallax starfield
+ * 3 depth layers, mouse parallax, constellation glows, no game-like interactions
  */
 (function () {
-  var canvas, ctx, W, H, animId;
-  var stars = [], STAR_COUNT = 300;
-  var mouse = { x: -999, y: -999, on: false };
-  var MAX_DIST = 100, MOUSE_RADIUS = 160, time = 0;
+  var canvas, ctx, W, H, H2, animId;
+  var mouse = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
 
-  // Constellation definitions with drift
+  // 3 parallax layers
+  var layers = [
+    { count: 200, speed: 0.06, rMin: 0.4, rMax: 1.2, alpha: 0.6, parallax: 0.5, stars: [] },
+    { count: 100, speed: 0.03, rMin: 0.8, rMax: 2.2, alpha: 0.7, parallax: 0.3, stars: [] },
+    { count: 40,  speed: 0.01, rMin: 1.5, rMax: 3.0, alpha: 0.8, parallax: 0.12, stars: [] }
+  ];
+
+  // Constellations (fixed in sky, subtle glow + twinkle)
   var cons = [
-    { name: 'Orion', bx: 0.68, by: 0.35, scale: 0.6, driftX: 0.003, driftY: 0.002,
+    { name: 'Orion', bx: 0.68, by: 0.33, scale: 0.55,
       pts: [[0,0],[9,2],[16,1],[6,9],[-10,17],[-3,4],[4,-6]],
       lines: [[0,1],[1,2],[3,4],[0,3],[1,4],[5,6]] },
-    { name: 'Big Dipper', bx: 0.22, by: 0.25, scale: 0.5, driftX: -0.002, driftY: 0.003,
+    { name: 'Big Dipper', bx: 0.22, by: 0.22, scale: 0.45,
       pts: [[0,0],[11,-3],[20,1],[31,6],[25,16],[12,13],[3,9]],
       lines: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,0]] },
-    { name: 'Cassiopeia', bx: 0.4, by: 0.6, scale: 0.5, driftX: 0.004, driftY: -0.001,
+    { name: 'Cassiopeia', bx: 0.4, by: 0.58, scale: 0.45,
       pts: [[0,6],[7,0],[14,9],[21,0],[28,6]],
       lines: [[0,1],[1,2],[2,3],[3,4]] },
-    { name: 'Pleiades', bx: 0.75, by: 0.3, scale: 0.45, driftX: -0.003, driftY: -0.002,
+    { name: 'Pleiades', bx: 0.75, by: 0.28, scale: 0.4,
       pts: [[0,0],[3,3],[-2,5],[6,-2],[3,7],[-4,2],[5,4],[-3,-3],[2,-4]],
       lines: [] },
-    { name: 'Andromeda', bx: 0.3, by: 0.5, scale: 0.5, driftX: 0.002, driftY: 0.004,
+    { name: 'Andromeda', bx: 0.3, by: 0.48, scale: 0.45,
       pts: [[0,0],[4,2],[8,-1],[12,3],[16,1],[20,4]],
       lines: [[0,1],[1,2],[2,3],[3,4],[4,5]] }
   ];
@@ -32,75 +37,76 @@
     if (!canvas) return;
     ctx = canvas.getContext('2d');
 
-    // Capture mouse on entire header, not just canvas
     var header = document.querySelector('.starfield-header');
     (header || canvas).addEventListener('mousemove', function (e) {
       var r = canvas.getBoundingClientRect();
-      mouse.x = e.clientX - r.left;
-      mouse.y = e.clientY - r.top;
-      mouse.on = true;
+      mouse.tx = (e.clientX - r.left) / W;
+      mouse.ty = (e.clientY - r.top) / H2;
     });
-    (header || canvas).addEventListener('mouseleave', function () { mouse.on = false; });
 
     resize();
-    createStars();
-    window.addEventListener('resize', function () { stars.length = 0; resize(); createStars(); });
+    for (var l = 0; l < layers.length; l++) createStars(l);
+    window.addEventListener('resize', function () {
+      for (var l = 0; l < layers.length; l++) layers[l].stars.length = 0;
+      resize();
+      for (var l = 0; l < layers.length; l++) createStars(l);
+    });
     animate();
   }
 
   function resize() {
     var hdr = document.querySelector('.starfield-header');
     W = hdr ? hdr.offsetWidth : canvas.parentElement.offsetWidth;
-    var h = hdr ? hdr.offsetHeight : canvas.parentElement.offsetHeight;
-    H = Math.round(h * 1.5); // extend 50% for gradient fade
+    H2 = hdr ? hdr.offsetHeight : canvas.parentElement.offsetHeight;
+    H = Math.round(H2 * 1.5);
     canvas.width = W;
     canvas.height = H;
     canvas.style.width = W + 'px';
     canvas.style.height = H + 'px';
   }
 
-  function createStars() {
-    for (var i = 0; i < STAR_COUNT; i++) {
-      stars.push({
+  function createStars(layerIdx) {
+    var layer = layers[layerIdx];
+    for (var i = 0; i < layer.count; i++) {
+      layer.stars.push({
         x: Math.random() * W,
         y: Math.random() * H,
-        vx: (Math.random() - 0.5) * 0.2,
-        vy: (Math.random() - 0.5) * 0.2,
-        r: Math.random() * 2 + 0.5,
-        bright: Math.random() * 0.5 + 0.3,
+        r: Math.random() * (layer.rMax - layer.rMin) + layer.rMin,
         twinkle: Math.random() * Math.PI * 2,
-        twinkleSpeed: Math.random() * 0.015 + 0.004,
-        phase: Math.random() * 0.03
+        ts: Math.random() * 0.01 + 0.003,
+        hue: Math.random() < 0.08 ? 40 + Math.random() * 20 : 210 + Math.random() * 30 // 8% warm gold stars
       });
     }
   }
 
-  function drawGradientFade() {
-    // Bottom fade: from transparent to fully faded
-    var fadeStart = H * 0.6;
-    var grad = ctx.createLinearGradient(0, fadeStart, 0, H);
+  function drawGradient() {
+    var grad = ctx.createLinearGradient(0, H2 * 0.55, 0, H);
     grad.addColorStop(0, 'rgba(0,0,0,0)');
-    grad.addColorStop(1, 'rgba(0,0,0,0.55)');
+    grad.addColorStop(0.5, 'rgba(4,13,26,0.5)');
+    grad.addColorStop(1, 'rgba(4,13,26,0.75)');
     ctx.fillStyle = grad;
-    ctx.fillRect(0, fadeStart, W, H - fadeStart);
+    ctx.fillRect(0, H2 * 0.55, W, H - H2 * 0.55);
   }
 
   function drawConstellations(t) {
+    var px = (mouse.x - 0.5) * 20;
+    var py = (mouse.y - 0.5) * 20;
+
     for (var k = 0; k < cons.length; k++) {
       var c = cons[k];
-      // Drifting base position
-      var cx = (c.bx + Math.sin(t * c.driftX) * 0.04) * W;
-      var cy = (c.by + Math.cos(t * c.driftY) * 0.04) * H;
-      var sc = H * 0.008 * c.scale;
+      var cx = c.bx * W + px * 0.3;
+      var cy = c.by * H + py * 0.3;
+      var sc = H * 0.007 * c.scale;
       var pts = [];
+
       for (var j = 0; j < c.pts.length; j++) {
         pts.push([cx + c.pts[j][0] * sc, cy + c.pts[j][1] * sc]);
       }
 
-      // Connection lines
+      // Very subtle lines
       if (c.lines && c.lines.length) {
-        ctx.strokeStyle = 'rgba(140,185,230,0.1)';
-        ctx.lineWidth = 0.5;
+        ctx.strokeStyle = 'rgba(140,185,230,0.08)';
+        ctx.lineWidth = 0.4;
         for (var j = 0; j < c.lines.length; j++) {
           var l = c.lines[j];
           ctx.beginPath();
@@ -110,20 +116,17 @@
         }
       }
 
-      // Stars with glow
+      // Stars with soft glow
       for (var j = 0; j < pts.length; j++) {
         var sx = pts[j][0], sy = pts[j][1];
-        var alpha = 0.3 + Math.sin(t * 1.5 + j) * 0.08;
-        if (mouse.on) {
-          var d = Math.hypot(mouse.x - sx, mouse.y - sy);
-          if (d < 100) alpha = Math.min(1, alpha + 0.7 * (1 - d / 100));
-        }
-        var grad = ctx.createRadialGradient(sx, sy, 0, sx, sy, 4);
-        grad.addColorStop(0, 'rgba(255,255,255,' + (alpha * 0.9) + ')');
-        grad.addColorStop(0.5, 'rgba(180,210,250,' + (alpha * 0.18) + ')');
+        var twinkle = 0.35 + Math.sin(t * 2 + j * 0.7) * 0.06;
+        var grad = ctx.createRadialGradient(sx, sy, 0, sx, sy, 5);
+        grad.addColorStop(0, 'rgba(255,255,255,' + (twinkle * 0.9) + ')');
+        grad.addColorStop(0.3, 'rgba(190,215,250,' + (twinkle * 0.15) + ')');
+        grad.addColorStop(0.7, 'rgba(100,150,200,' + (twinkle * 0.04) + ')');
         grad.addColorStop(1, 'rgba(0,0,0,0)');
         ctx.beginPath();
-        ctx.arc(sx, sy, 4, 0, Math.PI * 2);
+        ctx.arc(sx, sy, 5, 0, Math.PI * 2);
         ctx.fillStyle = grad;
         ctx.fill();
       }
@@ -131,68 +134,62 @@
   }
 
   function animate() {
-    time += 0.016;
+    var t = performance.now() * 0.001;
+
+    // Smooth mouse interpolation
+    mouse.x += (mouse.tx - mouse.x) * 0.05;
+    mouse.y += (mouse.ty - mouse.y) * 0.05;
+
     ctx.clearRect(0, 0, W, H);
 
-    // Stars
-    for (var i = 0; i < stars.length; i++) {
-      var s = stars[i];
-      s.x += s.vx + Math.sin(time * 0.7 + s.phase * 100) * 0.05;
-      s.y += s.vy + Math.cos(time * 0.6 + s.phase * 100) * 0.05;
-      if (s.x < -10) s.x = W + 10;
-      if (s.x > W + 10) s.x = -10;
-      if (s.y < -10) s.y = H + 10;
-      if (s.y > H + 10) s.y = -10;
+    // Draw all layers
+    for (var l = 0; l < layers.length; l++) {
+      var layer = layers[l];
+      var parallaxX = (mouse.x - 0.5) * 30 * layer.parallax;
+      var parallaxY = (mouse.y - 0.5) * 30 * layer.parallax;
 
-      s.twinkle += s.twinkleSpeed;
-      var alpha = s.bright + Math.sin(s.twinkle) * 0.12;
+      for (var i = 0; i < layer.stars.length; i++) {
+        var s = layer.stars[i];
 
-      if (mouse.on) {
-        var d = Math.hypot(mouse.x - s.x, mouse.y - s.y);
-        if (d < MOUSE_RADIUS) {
-          alpha = Math.min(1, alpha + 0.45 * (1 - d / MOUSE_RADIUS));
-          // Pull toward mouse
-          var force = 0.03 * (1 - d / MOUSE_RADIUS);
-          s.x += (mouse.x - s.x) * force;
-          s.y += (mouse.y - s.y) * force;
+        // Very slow drift
+        s.x += Math.sin(t * 0.3 + i) * 0.008;
+        s.y += Math.cos(t * 0.4 + i) * 0.008;
+        if (s.x < -20) s.x = W + 20;
+        if (s.x > W + 20) s.x = -20;
+        if (s.y < -20) s.y = H + 20;
+        if (s.y > H + 20) s.y = -20;
+
+        // Render position = real position + parallax offset
+        var rx = s.x + parallaxX;
+        var ry = s.y + parallaxY;
+
+        s.twinkle += s.ts;
+        var alpha = layer.alpha * (0.7 + 0.3 * Math.sin(s.twinkle));
+        var hue = s.hue;
+
+        // Subtle glow for larger stars in top layers
+        if (l >= 1 && s.r > 1.5) {
+          var grad = ctx.createRadialGradient(rx, ry, 0, rx, ry, s.r * 2.5);
+          grad.addColorStop(0, 'hsla(' + hue + ',40%,85%,' + (alpha * 0.5) + ')');
+          grad.addColorStop(1, 'rgba(0,0,0,0)');
+          ctx.beginPath();
+          ctx.arc(rx, ry, s.r * 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = grad;
+          ctx.fill();
         }
-      }
 
-      ctx.beginPath();
-      ctx.fillStyle = 'rgba(200,225,255,' + alpha + ')';
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Connections near mouse
-    if (mouse.on) {
-      for (var i = 0; i < stars.length; i++) {
-        var si = stars[i];
-        var di = Math.hypot(mouse.x - si.x, mouse.y - si.y);
-        if (di > MOUSE_RADIUS) continue;
-        for (var j = i + 1; j < stars.length; j++) {
-          var sj = stars[j];
-          var dj = Math.hypot(mouse.x - sj.x, mouse.y - sj.y);
-          if (dj > MOUSE_RADIUS) continue;
-          var dd = Math.hypot(si.x - sj.x, si.y - sj.y);
-          if (dd < MAX_DIST) {
-            var a = (1 - dd / MAX_DIST) * (1 - di / MOUSE_RADIUS) * (1 - dj / MOUSE_RADIUS) * 0.5;
-            ctx.beginPath();
-            ctx.moveTo(si.x, si.y);
-            ctx.lineTo(sj.x, sj.y);
-            ctx.strokeStyle = 'rgba(160,205,245,' + a + ')';
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        }
+        ctx.beginPath();
+        ctx.fillStyle = 'hsla(' + hue + ',30%,85%,' + alpha + ')';
+        ctx.arc(rx, ry, s.r, 0, Math.PI * 2);
+        ctx.fill();
       }
     }
 
-    // Constellations
-    drawConstellations(time);
+    // Constellation overlay (no parallax, subtly anchored)
+    drawConstellations(t);
 
-    // Gradient fade at bottom
-    drawGradientFade();
+    // Bottom gradient fade
+    drawGradient();
 
     animId = requestAnimationFrame(animate);
   }
