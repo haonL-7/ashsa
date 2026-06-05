@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="mul">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asian Sports Health Association</title>
+  <meta name="description" content="Asian Sports and Health Association — International Academic Organization">
+  <link rel="stylesheet" href="../css/style.css?v=43">
+  <link rel="stylesheet" href="../css/starfield.css?v=43">
+  <link rel="icon" href="../images/logo-aasha.jpg" type="image/jpeg">
+  <style>
+    html,body{width:100%;height:100%;margin:0;padding:0;overflow:hidden;background:#0a0f1e}
+    #hero-bg-canvas,#hero-canvas,#hero-ui-canvas{position:fixed;inset:0;width:100vw;height:100vh}
+    #hero-bg-canvas{z-index:0}#hero-canvas{z-index:1}#hero-ui-canvas{z-index:2}
+  </style>
+</head>
+<body>
+  <canvas id="hero-bg-canvas"></canvas>
+  <canvas id="hero-canvas"></canvas>
+  <canvas id="hero-ui-canvas"></canvas>
+
+  <div style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:10;pointer-events:none;">
+    <div class="lang-card" style="pointer-events:auto;">
+      <div class="logo-mark" style="background:transparent;box-shadow:none;width:auto;height:auto;">
+        <img src="../images/logo-aasha.jpg" alt="ASHA" style="width:88px;height:88px;border-radius:16px;object-fit:cover;">
+      </div>
+      <h1>Asian Sports Health Association</h1>
+      <p class="subtitle">Open &middot; Inclusive &middot; Pragmatic &middot; Win-win</p>
+      <p style="color:var(--ink-lt);font-size:0.85rem;margin-bottom:var(--space-xl);">亚洲体育健康协会</p>
+      <div class="lang-links">
+        <a href="index.html" class="lang-en" style="background:var(--primary);color:white!important;min-width:200px;">Enter Site</a>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;">
+        <a href="../zh/home.html" style="font-size:0.82rem;color:var(--ink-lt);padding:4px 10px;">中文</a>
+        <a href="home.html" style="font-size:0.82rem;color:var(--ink-lt);padding:4px 10px;font-weight:600;">English</a>
+        <a href="../ko/" style="font-size:0.82rem;color:var(--ink-lt);padding:4px 10px;">한국어</a>
+        <a href="../ja/" style="font-size:0.82rem;color:var(--ink-lt);padding:4px 10px;">日本語</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/constellations.js?v=43"></script>
+  <script src="../js/starfield.js?v=43"></script>
+  <script>
+    window.addEventListener('load',function(){
+      var cc=[document.getElementById('hero-canvas'),document.getElementById('hero-bg-canvas'),document.getElementById('hero-ui-canvas')];
+      cc.forEach(function(c){
+        c.width=window.innerWidth;c.height=window.innerHeight;
+        c.style.width=window.innerWidth+'px';c.style.height=window.innerHeight+'px';
+      });
+    });
+  </script>
+</body>
+</html>
