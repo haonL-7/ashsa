@@ -5,7 +5,7 @@
   height: 10em;
   margin-top: -1px;
   overflow: hidden;
-  background: var(--bg);
+  background: #f6f8fb;
 }
 
 .wave-section svg {
