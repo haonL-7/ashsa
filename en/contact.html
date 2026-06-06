@@ -5,8 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact — Asian Sports and Health Association</title>
   <meta name="description" content="Contact the Asian Sports and Health Association">
-  <link rel="stylesheet" href="../css/style.css?v=58">
+  <link rel="stylesheet" href="../css/style.css?v=59">
   <link rel="stylesheet" href="../css/starfield.css?v=6">
+  <meta property="og:title" content="Contact — Asian Sports and Health Association">
+  <meta property="og:description" content="Get in touch with the Asian Sports and Health Association.">
+  <meta property="og:image" content="https://haonl-7.github.io/ashsa/images/logo-aasha.jpg">
+  <meta property="og:url" content="https://haonl-7.github.io/ashsa/en/contact.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Contact — Asian Sports and Health Association">
+  <meta name="twitter:description" content="Get in touch with the Asian Sports and Health Association.">
+  <meta name="twitter:image" content="https://haonl-7.github.io/ashsa/images/logo-aasha.jpg">
   <link rel="icon" href="../images/logo-aasha.jpg" type="image/jpeg">
   <style>
     .parallax>use {
@@ -27,15 +36,16 @@
 </head>
 <body class="en">
 
+<a class="skip-link" href="#main-content">Skip to content</a>
   <nav class="nav">
     <div class="container">
       <a href="index.html" class="nav-logo">
         <span class="logo-icon" style="background:transparent;box-shadow:none;width:auto;height:auto;">
           <img src="../images/logo-aasha.jpg" alt="ASHA" style="width:28px;height:28px;border-radius:6px;object-fit:cover;">
         </span>
-        ASHSA
+        ASHA
       </a>
-      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+      <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About ASHA</a></li>
@@ -46,7 +56,7 @@
     </div>
   </nav>
 
-  <section class="starfield-header">
+  <section id="main-content" class="starfield-header">
     <canvas id="sf-bg-canvas"></canvas>
     <canvas id="sf-canvas"></canvas>
     <div class="container">
@@ -76,47 +86,31 @@
         </div>
       </div>
 
-      <div class="subscribe-box reveal mt-xl" style="max-width:560px;margin:var(--space-xl) auto 0;">
+            <div class="subscribe-box reveal mt-xl" style="max-width:560px;margin:var(--space-xl) auto 0;">
         <h3 style="text-align:center;">Leave Us a Message</h3>
         <p style="text-align:center;color:var(--ink-lt);">We'd love to hear from you</p>
-        <form style="display:flex;flex-direction:column;gap:var(--space-md);margin-top:var(--space-lg);">
-          <input type="email" placeholder="Email *" required style="padding:0.7rem 1rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.95rem;font-family:inherit;">
-          <input type="tel" placeholder="Phone (optional)" style="padding:0.7rem 1rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.95rem;font-family:inherit;">
-          <input type="text" placeholder="Subject (optional)" style="padding:0.7rem 1rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.95rem;font-family:inherit;">
-          <textarea placeholder="Message" rows="4" style="padding:0.7rem 1rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.95rem;font-family:inherit;resize:vertical;"></textarea>
-          <button type="submit" class="btn btn-primary" style="align-self:flex-start;">Submit</button>
+        <form id="contact-form" action="https://formsubmit.co/info@ashsa.org" method="POST" style="display:flex;flex-direction:column;gap:var(--space-md);margin-top:var(--space-lg);">
+          <input type="hidden" name="_subject" value="New ASHA Contact Message">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          <div>
+            <label for="cf-email" style="display:block;font-size:0.85rem;font-weight:600;margin-bottom:4px;color:var(--ink);">Email <span style="color:var(--primary);">*</span></label>
+            <input type="email" id="cf-email" name="email" placeholder="your@email.com" required style="width:100%;padding:0.7rem 1rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.95rem;font-family:inherit;">
+          </div>
+          <div>
+            <label for="cf-name" style="display:block;font-size:0.85rem;font-weight:600;margin-bottom:4px;color:var(--ink);">Name</label>
+            <input type="text" id="cf-name" name="name" placeholder="Your name" style="width:100%;padding:0.7rem 1rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.95rem;font-family:inherit;">
+          </div>
+          <div>
+            <label for="cf-subject" style="display:block;font-size:0.85rem;font-weight:600;margin-bottom:4px;color:var(--ink);">Subject</label>
+            <input type="text" id="cf-subject" name="subject" placeholder="What is this about?" style="width:100%;padding:0.7rem 1rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.95rem;font-family:inherit;">
+          </div>
+          <div>
+            <label for="cf-message" style="display:block;font-size:0.85rem;font-weight:600;margin-bottom:4px;color:var(--ink);">Message <span style="color:var(--primary);">*</span></label>
+            <textarea id="cf-message" name="message" placeholder="Your message..." rows="4" required style="width:100%;padding:0.7rem 1rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.95rem;font-family:inherit;resize:vertical;"></textarea>
+          </div>
+          <button type="submit" id="cf-submit" class="btn btn-primary" style="align-self:flex-start;">Send Message</button>
+          <div id="cf-status" style="display:none;padding:12px;border-radius:var(--radius);font-size:0.9rem;margin-top:8px;"></div>
         </form>
-        <p style="font-size:0.8rem;color:var(--ink-xlt);margin-top:var(--space-sm);text-align:center;">For urgent inquiries, email info@ashsa.org directly</p>
+        <p style="font-size:0.8rem;color:var(--ink-xlt);margin-top:var(--space-sm);text-align:center;">For urgent inquiries, email <a href="mailto:info@ashsa.org">info@ashsa.org</a> directly</p>
       </div>
-    </div>
-  </section>
-
-  <svg class="parallax-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none" style="display:block;width:100%;height:13em;margin-top:-1px;background:#f6f8fb;">
-    <defs>
-      <path id="gentle-wave" d="m -160,44.4 c 30,0 58,
-        -18 87.7,-18 30.3,0 58.3,
-        18 87.3,18 30,0 58,-18 88,
-        -18 30,0 58,18 88,18 l 0,
-        34.5 -351,0 z"></path>
-    </defs>
-    <g class="parallax">
-      <use href="#gentle-wave" x="50" y="0" fill="#2b43be"></use>
-      <use href="#gentle-wave" x="50" y="6" fill="#1e3096"></use>
-    </g>
-  </svg>
-
-  <footer style="background:#1e3096;color:#fff;">
-    <div class="container">
-      <div class="footer-grid">
-        <div><h4 style="color:#fff;">Asian Sports Health Association</h4><p>Advancing sports health science across Asia</p></div>
-        <div><h4 style="color:#fff;">Quick Links</h4><ul><li><a href="about.html">About ASHA</a></li><li><a href="news.html">News</a></li><li><a href="products.html">E-Journal</a></li></ul></div>
-        <div><h4 style="color:#fff;">Resources</h4><ul><li><a href="contact.html">Contact</a></li><li><a href="../zh/">中文</a></li></ul></div>
-        <div><h4 style="color:#fff;">Secretariat</h4><p>info@ashsa.org</p></div>
-      </div>
-      <div class="footer-btm"><p>&copy; 2025 Asian Sports Health Association. Hosted on GitHub Pages &middot; Accelerated by Cloudflare CDN</p></div>
-    </div>
-  </footer>
-  <script src="../js/main.js?v=41"></script>
-  <script src="../js/starfield-header.js?v=14"></script>
-</body>
-</html>

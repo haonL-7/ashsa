@@ -3,9 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home - ASIAN SPORTS AND HEALTH ASSOCIATION</title>
+  <title>Home — Asian Sports and Health Association</title>
   <meta name="description" content="Asian Sports and Health Association — Official Website">
-  <link rel="stylesheet" href="../css/style.css?v=58">
+  <link rel="stylesheet" href="../css/style.css?v=59">
+  <meta property="og:title" content="Home — Asian Sports and Health Association">
+  <meta property="og:description" content="Asian Sports and Health Association — Official Website. Advancing sports and health science across Asia.">
+  <meta property="og:image" content="https://haonl-7.github.io/ashsa/images/logo-aasha.jpg">
+  <meta property="og:url" content="https://haonl-7.github.io/ashsa/en/index.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Home — Asian Sports and Health Association">
+  <meta name="twitter:description" content="Asian Sports and Health Association — Official Website. Advancing sports and health science across Asia.">
+  <meta name="twitter:image" content="https://haonl-7.github.io/ashsa/images/logo-aasha.jpg">
   <link rel="icon" href="../images/logo-aasha.jpg" type="image/jpeg">
   <style>
     .banner {
@@ -91,15 +100,16 @@
 </head>
 <body class="en">
 
+<a class="skip-link" href="#main-content">Skip to content</a>
   <nav class="nav">
     <div class="container">
       <a href="index.html" class="nav-logo">
         <span class="logo-icon" style="background:transparent;box-shadow:none;width:auto;height:auto;">
           <img src="../images/logo-aasha.jpg" alt="ASHA" style="width:28px;height:28px;border-radius:6px;object-fit:cover;">
         </span>
-        ASHSA
+        ASHA
       </a>
-      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+      <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
       <ul class="nav-links">
         <li><a href="index.html" class="active">Home</a></li>
         <li><a href="about.html">About ASHA</a></li>
@@ -110,7 +120,7 @@
     </div>
   </nav>
 
-  <section class="banner">
+  <section id="main-content" class="banner">
     <div class="banner-slide active">
       <img src="../images/banner1.jpg" alt="Redefining Sports Science">
       <div class="banner-caption">
@@ -182,7 +192,7 @@
         <div><h4 style="color:#fff;">Resources</h4><ul><li><a href="contact.html" style="color:rgba(255,255,255,0.6);">Contact</a></li></ul></div>
         <div><h4 style="color:#fff;">Secretariat</h4><p style="color:rgba(255,255,255,0.7);">info@ashsa.org</p></div>
       </div>
-      <div class="footer-btm"><p style="color:rgba(255,255,255,0.35);">&copy; 2025 Asian Sports Health Association. Hosted on GitHub Pages</p></div>
+      <div class="footer-btm"><p style="color:rgba(255,255,255,0.35);"><span id="copy-year">2025</span> Asian Sports Health Association. Hosted on GitHub Pages</p></div>
     </div>
   </footer>
 
@@ -192,6 +202,7 @@
     function nextSlide(){ss(cs+1)}function prevSlide(){ss(cs-1)}
     setInterval(nextSlide,5000);
   </script>
-  <script src="../js/main.js?v=49"></script>
+  <script src="../js/main.js?v=60"></script>
+  <script>document.getElementById('copy-year').textContent=new Date().getFullYear()</script>
 </body>
 </html>
